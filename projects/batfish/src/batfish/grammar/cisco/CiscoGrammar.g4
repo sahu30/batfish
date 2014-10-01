@@ -62,6 +62,11 @@ ip_default_gateway_stanza
 
 ip_route_stanza
 :
+   ip_route_stanza_tail
+;
+
+ip_route_stanza_tail
+:
    IP ROUTE
    (
       (
@@ -864,10 +869,12 @@ switching_mode_stanza
 
 vrf_context_stanza
 :
-   VRF CONTEXT ~NEWLINE NEWLINE
-   (
-      IP ROUTE ~NEWLINE NEWLINE
-   )*
+   VRF CONTEXT ~NEWLINE NEWLINE vrf_context_stanza_tail*
+;
+
+vrf_context_stanza_tail
+:
+   ip_route_stanza_tail
 ;
 
 vrf_stanza

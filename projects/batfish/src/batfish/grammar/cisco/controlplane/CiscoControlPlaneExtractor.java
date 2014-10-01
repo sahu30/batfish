@@ -889,38 +889,39 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
 
    @Override
    public void exitIp_route_stanza(Ip_route_stanzaContext ctx) {
+      Ip_route_stanza_tailContext tailCtx = ctx.ip_route_stanza_tail();
       Ip prefix;
       Ip mask;
-      if (ctx.prefix != null) {
-         prefix = getPrefixIp(ctx.prefix);
-         int prefixLength = getPrefixLength(ctx.prefix);
+      if (tailCtx.prefix != null) {
+         prefix = getPrefixIp(tailCtx.prefix);
+         int prefixLength = getPrefixLength(tailCtx.prefix);
          long maskLong = Util.numSubnetBitsToSubnetLong(prefixLength);
          mask = new Ip(maskLong);
       }
       else {
-         prefix = toIp(ctx.address);
-         mask = toIp(ctx.mask);
+         prefix = toIp(tailCtx.address);
+         mask = toIp(tailCtx.mask);
       }
       Ip nextHopIp = null;
       String nextHopInterface = null;
       int distance = DEFAULT_STATIC_ROUTE_DISTANCE;
       Integer tag = null;
       Integer track = null;
-      boolean permanent = ctx.perm != null;
-      if (ctx.nexthopip != null) {
-         nextHopIp = toIp(ctx.nexthopip);
+      boolean permanent = tailCtx.perm != null;
+      if (tailCtx.nexthopip != null) {
+         nextHopIp = toIp(tailCtx.nexthopip);
       }
-      if (ctx.nexthopint != null) {
-         nextHopInterface = ctx.nexthopint.getText();
+      if (tailCtx.nexthopint != null) {
+         nextHopInterface = tailCtx.nexthopint.getText();
       }
-      if (ctx.distance != null) {
-         distance = toInteger(ctx.distance);
+      if (tailCtx.distance != null) {
+         distance = toInteger(tailCtx.distance);
       }
-      if (ctx.tag != null) {
-         tag = toInteger(ctx.tag);
+      if (tailCtx.tag != null) {
+         tag = toInteger(tailCtx.tag);
       }
-      if (ctx.track != null) {
-         track = toInteger(ctx.track);
+      if (tailCtx.track != null) {
+         track = toInteger(tailCtx.track);
       }
       StaticRoute route = new StaticRoute(prefix, mask, nextHopIp,
             nextHopInterface, distance, tag, track, permanent);
