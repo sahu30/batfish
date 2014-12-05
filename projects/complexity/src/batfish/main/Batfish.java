@@ -107,11 +107,11 @@ public class Batfish {
 					complexity.put(currentFile.getName(), extractor.getComplexit());
 					System.out.println("...OK");
 				} else {
-					System.out.print("... not cisco\n");
+					System.out.println("... not cisco\n");
 				}
 			}
 			catch(Exception e){
-				System.out.print("... Error");
+				System.out.println("... Error");
 			}
 
 		}
