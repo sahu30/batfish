@@ -51,11 +51,13 @@ if_stanza
    | switchport_mode_dynamic_auto_stanza
    | switchport_mode_dynamic_desirable_stanza
    | switchport_mode_trunk_stanza
+   | vrf_forwarding_if_stanza
+   | vrf_member_if_stanza
 ;
 
 interface_stanza
 :
-   INTERFACE iname = interface_name MULTIPOINT? (MODULE inum=DEC)? NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
 ;
 
 interface_stanza_tail
@@ -67,7 +69,7 @@ interface_stanza_tail
 
 ip_access_group_if_stanza
 :
-   IP PORT? ACCESS_GROUP name = .
+   IP ACCESS_GROUP name = .
    (
       IN
       | OUT
@@ -139,6 +141,7 @@ null_standalone_if_stanza
       | ASYNC
       | ATM
       | AUTO
+      | AUTOSTATE
       | BANDWIDTH
       | CABLELENGTH
       | CDP
@@ -149,6 +152,7 @@ null_standalone_if_stanza
       | CLOCK
       | COUNTER
       | CRYPTO
+      | DCBX
       |
       (
          DSU BANDWIDTH
@@ -205,6 +209,7 @@ null_standalone_if_stanza
             | UNREACHABLES
             | VERIFY
             | VIRTUAL_REASSEMBLY
+            | VIRTUAL_ROUTER
             | VRF
          )
       )
@@ -218,7 +223,6 @@ null_standalone_if_stanza
       | LOAD_INTERVAL
       | LOGGING
       | LRE
-      | MAC
       | MAC_ADDRESS
       | MACRO
       | MANAGEMENT_ONLY
@@ -226,6 +230,7 @@ null_standalone_if_stanza
       | MDIX
       | MEDIA_TYPE
       | MEMBER
+      | MLAG
       | MLS
       | MOBILITY
       | MOP
@@ -243,10 +248,12 @@ null_standalone_if_stanza
       | PORT_CHANNEL
       | POWER
       | PPP
+      | PRIORITY
+      | PRIORITY_FLOW_CONTROL
       | PRIORITY_QUEUE
       | QOS
       | QUEUE_SET
-      | RATE_MODE
+      | RANDOM_DETECT
       | RCV_QUEUE
       | ROUTE_CACHE
       | SECURITY_LEVEL
@@ -272,6 +279,10 @@ null_standalone_if_stanza
             )
             | NONEGOTIATE
             | PORT_SECURITY
+            |
+            (
+               TRUNK GROUP
+            )
             | VOICE
             | VLAN
          )
@@ -280,9 +291,10 @@ null_standalone_if_stanza
       | TCAM
       | TRUST
       | TUNNEL
+      | TX_QUEUE
+      | UC_TX_QUEUE
       | UDLD
       | VPC
-      | VRF
       | VRRP
       | WRR_QUEUE
       | X25
@@ -343,4 +355,14 @@ switchport_trunk_encapsulation_if_stanza
 switchport_trunk_native_if_stanza
 :
    SWITCHPORT TRUNK NATIVE VLAN vlan = DEC NEWLINE
+;
+
+vrf_forwarding_if_stanza
+:
+   VRF FORWARDING name=~NEWLINE NEWLINE
+;
+
+vrf_member_if_stanza
+:
+   VRF MEMBER name=~NEWLINE NEWLINE
 ;

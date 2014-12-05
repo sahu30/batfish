@@ -35,12 +35,30 @@ exact_match [String matchText]
    )
 ;
 
+exit_line
+:
+   EXIT NEWLINE
+;
+
 interface_name
 :
-   name = VARIABLE
    (
-      FORWARD_SLASH x = DEC
-   )?
+      name_prefix_alpha = M_Interface_PREFIX
+      (
+         name_middle_parts += DEC
+         (
+            name_middle_parts += FORWARD_SLASH
+            | name_middle_parts += PERIOD
+         )
+      )* range
+   )
+   |
+   (
+      name = VARIABLE
+      (
+         FORWARD_SLASH DEC
+      )?
+   )
 ;
 
 port_specifier

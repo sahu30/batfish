@@ -1,7 +1,7 @@
 lexer grammar CiscoGrammarCommonLexer;
 
 options {
-   superClass = 'org.antlr.v4.runtime.Lexer';
+//   superClass = 'batfish.grammar.BatfishLexer';
 }
 
 @header {
@@ -357,11 +357,6 @@ AUTO_COST
    'auto-cost'
 ;
 
-AUTOSELECT
-:
-   'autoselect'
-;
-
 AUTO_SUMMARY
 :
    'auto-summary'
@@ -370,6 +365,16 @@ AUTO_SUMMARY
 AUTO_SYNC
 :
    'auto-sync'
+;
+
+AUTOSELECT
+:
+   'autoselect'
+;
+
+AUTOSTATE
+:
+   'autostate'
 ;
 
 BACKGROUND_ROUTES_ENABLE
@@ -395,6 +400,11 @@ BANNER
       | 'login'
       | 'motd'
    ) -> pushMode(M_BANNER)
+;
+
+BASH
+:
+   'bash'
 ;
 
 BESTPATH
@@ -577,11 +587,6 @@ CHANNELIZED
    'channelized'
 ;
 
-CHAT_SCRIPT
-:
-   'chat-script'
-;
-
 CIPC
 :
    'cipc'
@@ -692,6 +697,11 @@ CONFORM_ACTION
    'conform-action'
 ;
 
+CONGESTION_CONTROL
+:
+   'congestion-control'
+;
+
 CONNECTED
 :
    'connected'
@@ -720,6 +730,11 @@ CONTROL_PLANE
 CONTROLLER
 :
    'controller'
+;
+
+COPY
+:
+   'copy'
 ;
 
 COST
@@ -772,9 +787,19 @@ DBL
    'dbl'
 ;
 
+DCBX
+:
+   'dcbx'
+;
+
 DEAD_INTERVAL
 :
    'dead-interval'
+;
+
+DECAP_GROUP
+:
+   'decap-group'
 ;
 
 DEFAULT
@@ -967,6 +992,11 @@ DOMAIN
    'domain'
 ;
 
+DOMAIN_ID
+:
+   'domain-id'
+;
+
 DOMAIN_LIST
 :
    'domain-list'
@@ -1065,11 +1095,6 @@ ECHO
 ECHO_REPLY
 :
    'echo-reply'
-;
-
-ECHO_REQUEST
-:
-   'echo-request'
 ;
 
 EGP
@@ -1195,6 +1220,11 @@ EXEC_TIMEOUT
 EXECUTE
 :
    'execute'
+;
+
+EXIT
+:
+   'exit'
 ;
 
 EXIT_ADDRESS_FAMILY
@@ -1344,6 +1374,11 @@ FLUSH_AT_ACTIVATION
 FORWARD_PROTOCOL
 :
    'forward-protocol'
+;
+
+FORWARDING
+:
+   'forwarding'
 ;
 
 FQDN
@@ -1640,7 +1675,7 @@ INTERFACE
 :
    'interface'
    { enableIPV6_ADDRESS = false; }
-
+   -> pushMode(M_Interface)
 ;
 
 INTERNAL
@@ -1833,9 +1868,9 @@ LIFETIME
    'lifetime'
 ;
 
-LIMIT_RESOURCE
+LIMIT
 :
-   'limit-resource'
+   'limit'
 ;
 
 LINE
@@ -1876,6 +1911,11 @@ LOCAL
 LOCAL_AS
 :
    'local-as'
+;
+
+LOCAL_INTERFACE
+:
+   'local-interface'
 ;
 
 LOCAL_IP
@@ -2116,21 +2156,6 @@ MLAG
 MLD
 :
    'mld'
-;
-
-MLD_QUERY
-:
-   'mld-query'
-;
-
-MLD_REDUCTION
-:
-   'mld-reduction'
-;
-
-MLD_REPORT
-:
-   'mld-report'
 ;
 
 MLS
@@ -2383,6 +2408,11 @@ NO_ADVERTISE
    'no-advertise'
 ;
 
+NO_BANNER
+:
+   'no' F_Whitespace+ 'banner'
+;
+
 NO_EXPORT
 :
    'no-export'
@@ -2538,6 +2568,11 @@ PATH_JITTER
    'path-jitter'
 ;
 
+PAUSE
+:
+   'pause'
+;
+
 PEER
 :
    'peer'
@@ -2548,19 +2583,14 @@ PEER_GROUP
    'peer-group' -> pushMode(M_NEIGHBOR)
 ;
 
-PEER_SESSION
-:
-   'peer-session'
-;
-
 PERMANENT
 :
    'permanent'
 ;
 
-PEER_CONFIG_CHECK_BYPASS
+PEER_ADDRESS
 :
-   'peer-config-check-bypass'
+   'peer-address'
 ;
 
 PEER_GATEWAY
@@ -2571,6 +2601,11 @@ PEER_GATEWAY
 PEER_KEEPALIVE
 :
    'peer-keepalive'
+;
+
+PEER_LINK
+:
+   'peer-link'
 ;
 
 PERMIT
@@ -2606,6 +2641,11 @@ PIM_AUTO_RP
 PKI
 :
    'pki'
+;
+
+PLAT
+:
+   'plat'
 ;
 
 PLATFORM
@@ -2668,24 +2708,9 @@ POWER
    'power'
 ;
 
-POWEROFF
-:
-   'poweroff'
-;
-
 PPP
 :
    'ppp'
-;
-
-PREEMPT
-:
-   'preempt'
-;
-
-PREPEND
-:
-   'prepend'
 ;
 
 PRE_SHARED_KEY
@@ -2693,24 +2718,9 @@ PRE_SHARED_KEY
    'pre-shared-key'
 ;
 
-PRI_GROUP
+PREEMPT
 :
-   'pri-group'
-;
-
-PRIORITY
-:
-   'priority'
-;
-
-PRIORITY_QUEUE
-:
-   'priority-queue'
-;
-
-PRIVATE_VLAN
-:
-   'private-vlan'
+   'preempt'
 ;
 
 PREFIX
@@ -2723,14 +2733,34 @@ PREFIX_LIST
    'prefix-list'
 ;
 
-PRIORITY_
+PREPEND
+:
+   'prepend'
+;
+
+PRI_GROUP
+:
+   'pri-group'
+;
+
+PRIORITY
 :
    'priority'
 ;
 
-PRIORITY_QUEUE_
+PRIORITY_FLOW_CONTROL
+:
+   'priority-flow-control'
+;
+
+PRIORITY_QUEUE
 :
    'priority-queue'
+;
+
+PRIVATE_VLAN
+:
+   'private-vlan'
 ;
 
 PRIVILEGE
@@ -2828,11 +2858,6 @@ RATE_LIMIT
    'rate-limit'
 ;
 
-RATE_MODE
-:
-   'rate-mode'
-;
-
 RC4_SHA1
 :
    'rc4-sha1'
@@ -2891,6 +2916,11 @@ REDUNDANCY
 REFLECT
 :
    'reflect'
+;
+
+RELOAD_DELAY
+:
+   'reload-delay'
 ;
 
 REMARK
@@ -2968,11 +2998,6 @@ RIP
    'rip'
 ;
 
-RMON
-:
-   'rmon'
-;
-
 ROLE
 :
    'role'
@@ -3013,19 +3038,9 @@ ROUTER
    'router'
 ;
 
-ROUTER_ADVERTISEMENT
-:
-   'router-advertisement'
-;
-
 ROUTER_ID
 :
    'router-id'
-;
-
-ROUTER_SOLICITATION
-:
-   'router-solicitation'
 ;
 
 ROUTING
@@ -3050,7 +3065,7 @@ RST
 
 RULE
 :
-   'rule'
+   'rule' -> pushMode(M_Rule)
 ;
 
 SAME_SECURITY_TRAFFIC
@@ -3380,11 +3395,6 @@ STATIC
    'static'
 ;
 
-STATISTICS
-:
-   'statistics'
-;
-
 STCAPP
 :
    'stcapp'
@@ -3560,6 +3570,11 @@ TEMPLATE
    'template'
 ;
 
+TERMINAL
+:
+   'terminal'
+;
+
 TERMINAL_TYPE
 :
    'terminal-type'
@@ -3700,9 +3715,19 @@ TUNNEL_GROUP_LIST
    'tunnel-group-list'
 ;
 
+TX_QUEUE
+:
+   'tx-queue'
+;
+
 TYPE
 :
    'type'
+;
+
+UC_TX_QUEUE
+:
+   'uc-tx-queue'
 ;
 
 UDLD
@@ -3747,7 +3772,7 @@ UNICAST
 
 UPDATE_SOURCE
 :
-   'update-source'
+   'update-source' -> pushMode(M_Interface)
 ;
 
 UPGRADE
@@ -3775,11 +3800,6 @@ VALIDATION_USAGE
    'validation-usage'
 ;
 
-VDC
-:
-   'vdc'
-;
-
 VERIFY
 :
    'verify'
@@ -3798,6 +3818,11 @@ VIOLATE_ACTION
 VIRTUAL_REASSEMBLY
 :
    'virtual-reassembly'
+;
+
+VIRTUAL_ROUTER
+:
+   'virtual-router'
 ;
 
 VIRTUAL_TEMPLATE
@@ -4543,6 +4568,48 @@ M_DESCRIPTION_NON_NEWLINE
    F_NonNewline+
 ;
 
+mode M_Interface;
+
+M_Interface_PREFIX
+:
+   F_Letter (F_Letter | '-')*
+;
+
+M_Interface_COMMA
+:
+   ',' -> type(COMMA)
+;
+
+M_Interface_DASH
+:
+   '-' -> type(DASH)
+;
+
+M_Interface_NEWLINE
+:
+   F_Newline+ -> type(NEWLINE), popMode
+;
+
+M_Interface_NUMBER
+:
+   DEC -> type(DEC)
+;
+
+M_Interface_PERIOD
+:
+   '.' -> type(PERIOD)
+;
+
+M_Interface_SLASH
+:
+   '/' -> type(FORWARD_SLASH)
+;
+
+M_Interface_WS
+:
+   F_Whitespace+ -> channel(HIDDEN)
+;
+
 mode M_KEY;
 
 M_KEY_NEWLINE
@@ -4719,6 +4786,18 @@ M_REMARK_NEWLINE
 M_REMARK_REMARK
 :
    F_NonNewline+
+;
+
+mode M_Rule;
+
+M_Rule_LINE
+:
+   F_NonNewline+
+;
+
+M_Rule_NEWLINE
+:
+   F_Newline+ -> type(NEWLINE), popMode
 ;
 
 mode M_SHA1;

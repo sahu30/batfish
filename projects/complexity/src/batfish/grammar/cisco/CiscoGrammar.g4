@@ -4,19 +4,13 @@ import
 CiscoGrammarCommonParser, CiscoGrammar_acl, CiscoGrammar_bgp, CiscoGrammar_interface, CiscoGrammar_ospf, CiscoGrammar_rip, CiscoGrammar_routemap;
 
 options {
-   superClass = 'org.antlr.v4.runtime.Parser';
+//   superClass = 'batfish.grammar.BatfishParser';
    tokenVocab = CiscoGrammarCommonLexer;
 }
 
 @header {
 package batfish.grammar.cisco;
 }
-
-address_family_vrf_stanza
-:
-   ADDRESS_FAMILY ~NEWLINE* NEWLINE null_block_substanza* EXIT_ADDRESS_FAMILY
-   NEWLINE
-;
 
 banner_stanza
 :
@@ -64,6 +58,13 @@ ip_route_stanza
 :
    IP ROUTE
    (
+      VRF vrf = ~NEWLINE
+   )? ip_route_tail
+;
+
+ip_route_tail
+:
+   (
       (
          address = IP_ADDRESS mask = IP_ADDRESS
       )
@@ -71,7 +72,6 @@ ip_route_stanza
    )
    (
       nexthopip = IP_ADDRESS
-      | nexthopprefix = IP_PREFIX
       | nexthopint = interface_name
       | distance = DEC
       |
@@ -83,12 +83,22 @@ ip_route_stanza
       (
          TRACK track = DEC
       )
-   )* (NAME ~NEWLINE*)? NEWLINE
+   )* NEWLINE
+;
+
+ip_route_vrfc_stanza
+:
+   IP ROUTE ip_route_tail
 ;
 
 macro_stanza
 :
    MACRO ~NEWLINE* NEWLINE
+;
+
+no_ip_access_list_stanza
+:
+   NO IP ACCESS_LIST ~NEWLINE* NEWLINE
 ;
 
 null_block_stanza
@@ -98,8 +108,11 @@ null_block_stanza
       AAA
       | ARCHIVE
       | ATM
+      | BASH
+      | CLI
       | CONTROL_PLANE
       | CONTROLLER
+      | COPY
       |
       (
          CRYPTO
@@ -113,6 +126,7 @@ null_block_stanza
                   | PROFILE
                )
             )
+            | KEY
             | KEYRING
             | MAP
             | PKI
@@ -139,11 +153,18 @@ null_block_stanza
                ACCESS_LIST LOGGING
             )
             | ACCOUNTING_LIST
+            | DECAP_GROUP
             | DHCP
             | FLOW_TOP_TALKERS
             | INSPECT
             | POLICY_LIST
             | SLA
+            | SOURCE
+            | VIRTUAL_ROUTER
+            |
+            (
+               VRF ~( FORWARDING | NEWLINE )
+            )
          )
       )
       | IPC
@@ -156,7 +177,10 @@ null_block_stanza
       | MANAGEMENT
       | MAP_CLASS
       | MAP_LIST
+      | MLAG
+      | NO_BANNER
       | OPENFLOW
+      | PLAT
       | POLICY_MAP
       | PSEUDOWIRE_CLASS
       | REDUNDANCY
@@ -174,6 +198,7 @@ null_block_stanza
             | SUPPLEMENTARY_SERVICES
          )
       )
+      | TERMINAL
       |
       (
          VLAN DEC
@@ -182,6 +207,10 @@ null_block_stanza
       | VOICE_PORT
       | VPC
       | VPDN_GROUP
+      |
+      (
+         VRF DEFINITION
+      )
    ) ~NEWLINE* NEWLINE
    (
       null_block_substanza
@@ -232,6 +261,7 @@ null_block_substanza
          | CLOCK
          | COLLECT
          | CONFORM_ACTION
+         | CONGESTION_CONTROL
          | CPTONE
          | CRL
          | CRYPTO
@@ -247,6 +277,7 @@ null_block_substanza
          | DESTINATION
          | DIAGNOSTIC
          | DNS_SERVER
+         | DOMAIN_ID
          | DROP
          | DS0_GROUP
          | DOMAIN_NAME
@@ -256,6 +287,7 @@ null_block_substanza
          | EXCEED_ACTION
          | EXEC
          | EXEC_TIMEOUT
+         | EXIT
          | EXPORT_PROTOCOL
          | EXPORTER
          | FABRIC
@@ -277,7 +309,7 @@ null_block_substanza
          | IDLE_TIMEOUT
          | INSPECT
          | INSTANCE
-         | INTERFACE POLICY
+         | INTERFACE
          |
          (
             (
@@ -298,10 +330,10 @@ null_block_substanza
          | KEYPAIR
          | KEYRING
          | L2TP
-         | LENGTH
          | LINE
          | LINECODE
          | LLDP
+         | LOCAL_INTERFACE
          | LOCAL_IP
          | LOCAL_PORT
          | LOCATION
@@ -316,6 +348,7 @@ null_block_substanza
          | MODEM
          | MTU
          | NAME
+         | NEGOTIATE
          | NETWORK
          | NODE
          | NOTIFY
@@ -324,9 +357,11 @@ null_block_substanza
          | PASSWORD
          | PASSWORD_STORAGE
          | PATH_JITTER
-         | PEER_CONFIG_CHECK_BYPASS
+         | PAUSE
+         | PEER_ADDRESS
          | PEER_GATEWAY
          | PEER_KEEPALIVE
+         | PEER_LINK
          | PERMIT
          | PICKUP
          | POLICE
@@ -344,6 +379,7 @@ null_block_substanza
          | RECORD
          | RECORD_ENTRY
          | REDISTRIBUTE
+         | RELOAD_DELAY
          | REMARK
          | REMOTE_IP
          | REMOTE_PORT
@@ -380,6 +416,7 @@ null_block_substanza
          | STP
          | SUBJECT_NAME
          | SWITCHBACK
+         | SWITCHPORT
          | SYNC
          | TB_VLAN1
          | TB_VLAN2
@@ -390,6 +427,8 @@ null_block_substanza
          | TOP
          | TRANSPORT
          | TRIGGER
+         | TRUNK
+         | TUNNEL
          | TUNNEL_GROUP
          | USE_VRF
          | VIOLATE_ACTION
@@ -455,10 +494,8 @@ null_standalone_stanza
       | CCM_MANAGER
       | CDP
       | CFS
-      | CHAT_SCRIPT
       | CIPC
       | CLASS_MAP
-      | CLI
       | CLOCK
       | CLUSTER
       | CNS
@@ -588,10 +625,6 @@ null_standalone_stanza
             | PIM
             | RADIUS
             | RCMD
-            |
-            (
-               ROUTE VRF
-            )
             | ROUTING //might want to use this eventually
 
             | SAP
@@ -605,7 +638,6 @@ null_standalone_stanza
             | TELNET
             | TFTP
             | VERIFY
-            | VRF
          )
       )
       | IP_ADDRESS_LITERAL
@@ -688,7 +720,6 @@ null_standalone_stanza
       | PORT_CHANNEL
       | PORT_OBJECT
       | POWER
-      | POWEROFF
       | PRE_SHARED_KEY
       | PRIORITY
       | PRIORITY_QUEUE
@@ -708,7 +739,6 @@ null_standalone_stanza
       | RESOURCE_POOL
       | REVERSE_ROUTE
       | REVOCATION_CHECK
-      | RMON
       | ROUTE
       | ROUTE_TARGET
       | RSAKEYPAIR
@@ -774,7 +804,6 @@ null_standalone_stanza
       | TAG
       | TAG_SWITCHING
       | TELNET
-      | TEMPLATE
       | TFTP_SERVER
       | THREAT_DETECTION
       | TIMEOUT
@@ -791,13 +820,6 @@ null_standalone_stanza
       | USE_VRF
       | USERNAME
       | VALIDATION_USAGE
-      |
-      (
-         VDC ~NEWLINE* NEWLINE
-         (
-            LIMIT_RESOURCE ~NEWLINE* NEWLINE
-         )*
-      )
       | VERSION
       |
       (
@@ -830,11 +852,10 @@ null_standalone_stanza
 
 null_stanza
 :
-   arp_access_list_stanza
-   | banner_stanza
+   banner_stanza
    | certificate_stanza
-   | mac_access_list_stanza
    | macro_stanza
+   | no_ip_access_list_stanza
    | null_block_stanza
    | null_standalone_stanza
    |
@@ -845,7 +866,6 @@ null_stanza
       ) NEWLINE
    )
    | vrf_context_stanza
-   | vrf_stanza
 ;
 
 stanza
@@ -863,6 +883,7 @@ stanza
    | ipv6_router_ospf_stanza
    | ipx_sap_access_list_stanza
    | nexus_access_list_stanza
+   | nexus_prefix_list_stanza
    | null_stanza
    | protocol_type_code_access_list_stanza
    | route_map_stanza
@@ -878,19 +899,13 @@ switching_mode_stanza
    SWITCHING_MODE ~NEWLINE* NEWLINE
 ;
 
-vrf_context_stanza
+vrfc_stanza
 :
-   VRF CONTEXT ~NEWLINE NEWLINE
-   (
-      IP ROUTE ~NEWLINE* NEWLINE
-      | IP DOMAIN_NAME ~NEWLINE* NEWLINE
-      | IP DOMAIN_LIST ~NEWLINE* NEWLINE
-      | IP NAME_SERVER ~NEWLINE* NEWLINE
-   )*
+   ip_route_vrfc_stanza
 ;
 
-vrf_stanza
+vrf_context_stanza
 :
-   VRF ~(NEWLINE|CONTEXT)* NEWLINE null_block_substanza* address_family_vrf_stanza*
+   VRF CONTEXT name = ~NEWLINE NEWLINE vrfc_stanza*
 ;
 
