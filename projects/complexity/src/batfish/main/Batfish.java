@@ -77,15 +77,21 @@ public class Batfish {
 			parser = new CiscoGrammar((TokenStream) tokens);
 			parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 			CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
-			
-			if (fileText.charAt(0) == '!') {
-				System.out.println("parsing "+currentFile.getName());
-				ParserRuleContext tree = parser.cisco_configuration();
-				ParseTreeWalker walker = new ParseTreeWalker();
-				walker.walk(extractor, tree);
-				complexity.put(currentFile.getName(), extractor.getComplexit());
-			} else {
-				System.out.print("Parsing: \"" + currentPath + "\" ERROR\n");
+
+			System.out.print("parsing "+currentPath);
+			try{
+				if (fileText.charAt(0) == '!') {
+					ParserRuleContext tree = parser.cisco_configuration();
+					ParseTreeWalker walker = new ParseTreeWalker();
+					walker.walk(extractor, tree);
+					complexity.put(currentFile.getName(), extractor.getComplexit());
+					System.out.println("...OK");
+				} else {
+					System.out.print("... not cisco\n");
+				}
+			}
+			catch(Exception e){
+				System.out.print("... Error");
 			}
 
 		}
