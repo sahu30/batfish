@@ -13,8 +13,11 @@ import java.util.TreeMap;
 
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
@@ -24,6 +27,8 @@ import org.apache.commons.io.FileUtils;
 import batfish.grammar.cisco.controlplane.CiscoControlPlaneComplexity;
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+
+
 
 public class Batfish {
 	Map<String, Integer> complexity=new TreeMap<String, Integer>();
@@ -78,6 +83,21 @@ public class Batfish {
 			parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 			CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
 
+			lexer.addErrorListener(new BaseErrorListener() {
+		        @Override
+		        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+		            throw new IllegalStateException("failed to token at line " + line + " due to " + msg, e);
+		        }
+		    });
+			
+			
+			parser.addErrorListener(new BaseErrorListener() {
+		        @Override
+		        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+		            throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
+		        }
+		    });
+			
 			System.out.print("parsing "+currentPath);
 			try{
 				if (fileText.charAt(0) == '!') {
