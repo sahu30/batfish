@@ -10,7 +10,103 @@ options {
 
 @header {
 package batfish.grammar.cisco;
+
+import java.util.HashSet;
+import java.util.Set;
 }
+
+@members {
+
+	enum stanza_type{IFACE, ACL, ROUTEMAP, ROUTER};
+	class stanza{
+		public stanza_type type;
+		public String name;
+		List<reference_to> references;
+		public stanza(stanza_type t){
+			type = t;
+			name = null;
+			references = new ArrayList<reference_to>();
+		}
+		public stanza(stanza_type t, String n){
+			type = t;
+			name = n;
+		}
+		public void AddReference(stanza_type type, String name){
+			references.add(new reference_to(type, name));
+		}
+		@Override
+		public int hashCode(){
+			return type.hashCode()+name.hashCode();
+		}
+		@Override
+		public boolean equals(Object obj){
+			if( obj  instanceof stanza){
+				stanza stanza_obj = (stanza) obj;
+				return stanza_obj.type == this.type && stanza_obj.name.equals(this.name);
+			}
+			return false;
+		}
+		@Override
+		public String toString(){
+			return "stanza:"+name+"("+type.name()+")";
+		}
+	}
+	class reference_to{
+		public stanza_type type;
+		public String name;
+		public reference_to(stanza_type t, String n){
+			type = t;
+			name = n;
+		}
+	}
+	
+
+	Set<stanza> stanzas = new HashSet<stanza>();
+	stanza current = null;
+	
+	public Integer getComplexity(){
+		int totalReferences=0;
+		for(stanza s: stanzas){
+			List<reference_to> references = s.references;
+			for(reference_to to: references){
+				stanza dst = new stanza(to.type, to.name);
+				if(!stanzas.contains(dst)){
+					System.out.println(s+" references to a non-existing stanza: "+dst);
+				}
+				else{
+					totalReferences++;
+				}
+			}
+		}
+		
+		return totalReferences;
+	}
+	
+	private void enterStanza(stanza_type t){
+		if(current !=null){
+			System.out.println("enter a new stanza without exiting the previous, please check. "+current);
+		}
+		current = new stanza(t);
+	}
+	private void exitStanza(String name){
+		if(current == null){
+			System.out.println("exit a null stanza, please check.");
+		}
+		current.name = name;
+		if(stanzas.contains(current)){
+			System.out.println("duplicated stanzas, please check: "+current);
+		}
+		else{
+			stanzas.add(current);
+		}
+		current = null;
+	}
+	private void AddReference(stanza_type type, String name) {
+		current.AddReference(type, name);
+	}
+
+}
+
 
 banner_stanza
 :

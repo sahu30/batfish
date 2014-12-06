@@ -21,10 +21,9 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
-import batfish.grammar.cisco.controlplane.CiscoControlPlaneComplexity;
+
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
 
@@ -81,7 +80,7 @@ public class Batfish {
 			CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
 			parser = new CiscoGrammar((TokenStream) tokens);
 			parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-			CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
+	//		CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
 
 			lexer.addErrorListener(new BaseErrorListener() {
 		        @Override
@@ -102,9 +101,7 @@ public class Batfish {
 			try{
 				if (fileText.charAt(0) == '!') {
 					ParserRuleContext tree = parser.cisco_configuration();
-					ParseTreeWalker walker = new ParseTreeWalker();
-					walker.walk(extractor, tree);
-					complexity.put(currentFile.getName(), extractor.getComplexity());
+					complexity.put(currentFile.getName(), parser.getComplexity());
 					System.out.println("... OK");
 				} else {
 					System.out.println("... non-cisco Error\n");
