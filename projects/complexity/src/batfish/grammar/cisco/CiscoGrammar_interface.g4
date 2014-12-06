@@ -56,6 +56,8 @@ if_stanza
 ;
 
 interface_stanza
+@init{ enterStanza(stanza_type.IFACE); }
+@after{ exitStanza(_localctx.iname.getText(); }
 :
    INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
 ;
