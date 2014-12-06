@@ -15,7 +15,6 @@ import java.util.TreeMap;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenSource;
@@ -100,7 +99,7 @@ public class Batfish {
 			System.out.print("parsing "+currentPath);
 			try{
 				if (fileText.charAt(0) == '!') {
-					ParserRuleContext tree = parser.cisco_configuration();
+					parser.cisco_configuration();
 					complexity.put(currentFile.getName(), parser.getComplexity());
 					System.out.println("... OK");
 				} else {
