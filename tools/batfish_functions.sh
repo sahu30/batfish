@@ -11,7 +11,7 @@ export BATFISH_Z3_DATALOG="$BATFISH_Z3 fixedpoint.engine=datalog fixedpoint.defa
 export COMPLEXITY=$BATFISH_ROOT/projects/complexity/complexity
 
 complexity() {
-   $COMPLEXITY $1
+   $COMPLEXITY $@
 }
 export -f complexity
 

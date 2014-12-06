@@ -65,6 +65,7 @@ import java.util.Set;
 	stanza current = null;
 	
 	public Integer getComplexity(){
+//      return stanzas.size();
 		int totalReferences=0;
 		for(stanza s: stanzas){
 			List<reference_to> references = s.references;
@@ -78,7 +79,6 @@ import java.util.Set;
 				}
 			}
 		}
-		
 		return totalReferences;
 	}
 	
