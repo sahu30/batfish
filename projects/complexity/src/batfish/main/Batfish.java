@@ -104,7 +104,7 @@ public class Batfish {
 					ParserRuleContext tree = parser.cisco_configuration();
 					ParseTreeWalker walker = new ParseTreeWalker();
 					walker.walk(extractor, tree);
-					complexity.put(currentFile.getName(), extractor.getComplexit());
+					complexity.put(currentFile.getName(), extractor.getComplexity());
 					System.out.println("...OK");
 				} else {
 					System.out.println("... not cisco\n");

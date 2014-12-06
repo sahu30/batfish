@@ -273,7 +273,7 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	Set<stanza> stanzas = new HashSet<stanza>();
 	stanza current = null;
 	
-	public Integer getComplexit(){
+	public Integer getComplexity(){
 		int totalReferences=0;
 		for(stanza s: stanzas){
 			List<reference_to> references = s.references;
@@ -311,7 +311,7 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 		current = null;
 	}
 	private void AddReference(stanza_type type, String name) {
-		current.AddReference(type, name);		
+		current.AddReference(type, name);
 	}
 
 	@Override
