@@ -105,13 +105,13 @@ public class Batfish {
 					ParseTreeWalker walker = new ParseTreeWalker();
 					walker.walk(extractor, tree);
 					complexity.put(currentFile.getName(), extractor.getComplexity());
-					System.out.println("...OK");
+					System.out.println("... OK");
 				} else {
-					System.out.println("... not cisco\n");
+					System.out.println("... non-cisco Error\n");
 				}
 			}
 			catch(Exception e){
-				System.out.println("... Error");
+				System.out.println("... parse Error");
 			}
 
 		}
