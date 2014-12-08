@@ -7,6 +7,11 @@ options {
 }
 
 match_as_path_access_list_rm_stanza
+@after{
+	for(Token name: _localctx.name_list){
+		AddReference(stanza_type.ACL, name.getText());
+	}
+}
 :
    MATCH AS_PATH
    (
@@ -15,6 +20,11 @@ match_as_path_access_list_rm_stanza
 ;
 
 match_community_list_rm_stanza
+@after{
+	for(Token name: _localctx.name_list){
+		AddReference(stanza_type.ACL, name.getText());
+	}
+}
 :
    MATCH COMMUNITY
    (
@@ -27,6 +37,11 @@ match_community_list_rm_stanza
 ;
 
 match_ip_access_list_rm_stanza
+@after{
+	for(Token name: _localctx.name_list){
+		AddReference(stanza_type.ACL, name.getText());
+	}
+}
 :
    MATCH IP ADDRESS
    (
@@ -39,6 +54,11 @@ match_ip_access_list_rm_stanza
 ;
 
 match_ip_prefix_list_rm_stanza
+@after{
+	for(Token name: _localctx.name_list){
+		AddReference(stanza_type.ACL, name.getText());
+	}
+}
 :
    MATCH IP ADDRESS PREFIX_LIST
    (
@@ -51,6 +71,7 @@ match_ip_prefix_list_rm_stanza
 ;
 
 match_ipv6_rm_stanza
+@init{ System.out.println("route-map match ipv6, not handled yet."); }
 :
    MATCH IPV6 ~NEWLINE* NEWLINE
 ;
@@ -115,6 +136,8 @@ locals [boolean again]
 ;
 
 route_map_stanza
+@init{ enterStanza(stanza_type.ROUTEMAP); }
+@after{ exitStanza(_localctx.named.name.getText()); }
 :
    named = route_map_named_stanza
 ;
@@ -238,6 +261,7 @@ set_weight_rm_stanza
 ;
 
 set_rm_stanza
+@init{ System.out.println("route-map set stanza, do not consider reference"); }
 :
    set_as_path_prepend_rm_stanza
    | set_comm_list_delete_rm_stanza

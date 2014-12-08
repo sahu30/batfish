@@ -49,6 +49,8 @@ appletalk_access_list_null_tail
 ;
 
 appletalk_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.numbered.name.getText()); }
 :
    numbered = appletalk_access_list_numbered_stanza
 ;
@@ -129,6 +131,15 @@ locals [boolean again]
 ;
 
 extended_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{
+	if(_localctx.numbered!=null){
+		exitStanza(_localctx.numbered.name.getText());
+	}
+	else{
+		exitStanza(_localctx.named.name.getText());
+	}
+}
 :
    named = extended_access_list_named_stanza
    | numbered = extended_access_list_numbered_stanza
@@ -146,6 +157,8 @@ extended_access_list_tail
 ;
 
 ip_as_path_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.numbered.name.getText()); }
 :
    numbered = ip_as_path_numbered_stanza
 ;
@@ -180,6 +193,15 @@ ip_as_path_access_list_tail
 ;
 
 ip_community_list_expanded_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{
+	if(_localctx.numbered!=null){
+		exitStanza(_localctx.numbered.name.getText());
+	}
+	else{
+		exitStanza(_localctx.named.name.getText());
+	}
+}
 :
    named = ip_community_list_expanded_named_stanza
    | numbered = ip_community_list_expanded_numbered_stanza
@@ -238,6 +260,15 @@ ip_community_list_expanded_tail
 ;
 
 ip_community_list_standard_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{
+	if(_localctx.numbered!=null){
+		exitStanza(_localctx.numbered.name.getText());
+	}
+	else{
+		exitStanza(_localctx.named.name.getText());
+	}
+}
 :
    named = ip_community_list_standard_named_stanza
    | numbered = ip_community_list_standard_numbered_stanza
@@ -296,6 +327,8 @@ ip_community_list_standard_tail
 ;
 
 ip_prefix_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.named.name.getText()); }
 :
    named = ip_prefix_list_named_stanza
 ;
@@ -383,6 +416,8 @@ ipx_sap_access_list_null_tail
 ;
 
 ipx_sap_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.numbered.name.getText()); }
 :
    numbered = ipx_sap_access_list_numbered_stanza
 ;
@@ -395,6 +430,8 @@ nexus_access_list_null_tail
 ;
 
 nexus_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.name.getText()); }
 :
    (
       IP
@@ -415,6 +452,8 @@ nexus_access_list_tail
 ;
 
 nexus_prefix_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.name.getText()); }
 :
    (
       IP
@@ -449,6 +488,8 @@ protocol_type_code_access_list_null_tail
 ;
 
 protocol_type_code_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.numbered.name.getText()); }
 :
    numbered = protocol_type_code_access_list_numbered_stanza
 ;
@@ -498,6 +539,15 @@ locals [boolean again]
 ;
 
 standard_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{
+	if(_localctx.numbered!=null){
+		exitStanza(_localctx.numbered.name.getText());
+	}
+	else{
+		exitStanza(_localctx.named.name.getText());
+	}
+}
 :
    named = standard_access_list_named_stanza
    | numbered = standard_access_list_numbered_stanza

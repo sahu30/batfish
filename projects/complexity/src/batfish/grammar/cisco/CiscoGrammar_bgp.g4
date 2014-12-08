@@ -12,6 +12,7 @@ activate_bgp_tail
 ;
 
 address_family_header
+@after{ if(_localctx.vrf_name!=null) System.out.println("BGP reference to VRF, not implemented"); }
 :
    ADDRESS_FAMILY
    (
@@ -137,6 +138,7 @@ default_metric_bgp_tail
 ;
 
 default_originate_bgp_tail
+@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    DEFAULT_ORIGINATE
    (
@@ -188,6 +190,7 @@ neighbor_rb_stanza
 ;
 
 network_bgp_tail
+@after{ if(_localctx.mapname!=null)AddReference(stanza_type.ROUTEMAP, _localctx.mapname.getText()); }
 :
    NETWORK
    (
@@ -361,6 +364,7 @@ peer_group_creation_rb_stanza
 ;
 
 prefix_list_bgp_tail
+@after{ AddReference(stanza_type.ACL, _localctx.list_name.getText()); }
 :
    PREFIX_LIST list_name = VARIABLE
    (
@@ -380,6 +384,7 @@ remove_private_as_bgp_tail
 ;
 
 route_map_bgp_tail
+@after{ AddReference(stanza_type.ROUTEMAP, _localctx.name.getText()); }
 :
    ROUTE_MAP name = VARIABLE
    (
@@ -399,6 +404,7 @@ redistribute_aggregate_bgp_tail
 ;
 
 redistribute_connected_bgp_tail
+@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    REDISTRIBUTE
    (
@@ -417,6 +423,10 @@ redistribute_connected_bgp_tail
 ;
 
 redistribute_ospf_bgp_tail
+@after{ 
+   if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); 
+   AddReference(stanza_type.ROUTER, "ospf_"+_localctx.procnum.getText());
+}
 :
    REDISTRIBUTE OSPF procnum = DEC
    (
@@ -431,6 +441,7 @@ redistribute_ospf_bgp_tail
 ;
 
 redistribute_static_bgp_tail
+@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    REDISTRIBUTE STATIC
    (
@@ -445,6 +456,8 @@ redistribute_static_bgp_tail
 ;
 
 router_bgp_stanza
+@init{ enterStanza(stanza_type.ROUTER); }
+@after{ exitStanza("bgp_"+_localctx.procnum.getText()); }
 :
    ROUTER BGP procnum = DEC NEWLINE
    (
@@ -501,6 +514,7 @@ template_peer_rb_stanza
 ;
 
 update_source_bgp_tail
+@after{ AddReference(stanza_type.IFACE, _localctx.source.getText()); }
 :
    UPDATE_SOURCE source = interface_name NEWLINE
 ;

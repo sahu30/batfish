@@ -70,6 +70,7 @@ interface_stanza_tail
 ;
 
 ip_access_group_if_stanza
+@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
 :
    IP ACCESS_GROUP name = .
    (
@@ -116,6 +117,7 @@ ip_ospf_dead_interval_minimal_if_stanza
 ;
 
 ip_policy_if_stanza
+@after{ AddReference(stanza_type.ROUTEMAP, _localctx.name.getText()); }
 :
    IP POLICY ROUTE_MAP name = ~NEWLINE NEWLINE
 ;
@@ -360,11 +362,13 @@ switchport_trunk_native_if_stanza
 ;
 
 vrf_forwarding_if_stanza
+@after{ System.out.println("VRF reference, not hanled yet."); }
 :
    VRF FORWARDING name=~NEWLINE NEWLINE
 ;
 
 vrf_member_if_stanza
+@after{ System.out.println("VRF reference, not hanled yet."); }
 :
    VRF MEMBER name=~NEWLINE NEWLINE
 ;

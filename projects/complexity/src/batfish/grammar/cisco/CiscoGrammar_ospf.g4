@@ -30,6 +30,7 @@ default_information_ipv6_ro_stanza
 ;
 
 default_information_ro_stanza
+@after{ if(_localctx.map!=null) AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    DEFAULT_INFORMATION ORIGINATE
    (
@@ -56,6 +57,8 @@ ipv6_ro_stanza
 ;
 
 ipv6_router_ospf_stanza
+@init{ enterStanza(stanza_type.ROUTER); }
+@after{ exitStanza("ospf_"+_localctx.procnum.getText()); }
 :
    IPV6 ROUTER OSPF procnum = DEC NEWLINE
    (
@@ -125,11 +128,13 @@ passive_interface_default_ro_stanza
 ;
 
 passive_interface_ro_stanza
+@after{ AddReference(stanza_type.IFACE, _localctx.i.getText()); }
 :
    NO? PASSIVE_INTERFACE i = VARIABLE NEWLINE
 ;
 
 redistribute_bgp_ro_stanza
+@after{ if(_localctx.map!=null) AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    REDISTRIBUTE BGP as = DEC
    (
@@ -158,6 +163,7 @@ redistribute_ipv6_ro_stanza
 ;
 
 redistribute_connected_ro_stanza
+@after{ if(_localctx.map!=null) AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    REDISTRIBUTE CONNECTED
    (
@@ -186,6 +192,7 @@ redistribute_rip_ro_stanza
 ;
 
 redistribute_static_ro_stanza
+@after{ if(_localctx.map!=null) AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
 :
    REDISTRIBUTE STATIC
    (
@@ -235,6 +242,8 @@ router_id_ro_stanza
 ;
 
 router_ospf_stanza
+@init{ enterStanza(stanza_type.ROUTER); }
+@after{ exitStanza("ospf_"+_localctx.procnum.getText()); }
 :
    ROUTER OSPF procnum = DEC NEWLINE router_ospf_stanza_tail
 ;

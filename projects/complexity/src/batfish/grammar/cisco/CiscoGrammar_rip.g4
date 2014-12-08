@@ -32,6 +32,7 @@ redistribute_rr_stanza
 ;
 
 router_rip_stanza
+@init{ System.out.println("enter router_rip, no name to reference."); }
 :
    ROUTER RIP NEWLINE rr_stanza*
 ;
