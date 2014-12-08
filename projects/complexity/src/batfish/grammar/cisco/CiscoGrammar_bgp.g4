@@ -336,6 +336,7 @@ null_bgp_tail
       | FALL_OVER
       | LOG_NEIGHBOR_CHANGES
       | MAXIMUM_PATHS
+      | MAXIMUM_PEERS
       | MAXIMUM_PREFIX
       | MAXIMUM_PREFIX
       | MAXIMUM_ROUTES

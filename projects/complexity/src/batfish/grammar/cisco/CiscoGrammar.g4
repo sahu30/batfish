@@ -103,6 +103,7 @@ import java.util.Set;
 	}
 	private void AddReference(stanza_type type, String name) {
 		current.AddReference(type, name);
+      System.out.println(current.type.name()+" references to "+type.name()+":"+name);
 	}
 
 }
@@ -169,6 +170,7 @@ ip_route_tail
    (
       nexthopip = IP_ADDRESS
       | nexthopint = interface_name
+      | nexthopprefix = IP_PREFIX
       | distance = DEC
       |
       (
@@ -325,6 +327,7 @@ null_block_substanza
          | ACCOUNTING_SERVER_GROUP
          | ACTION
          | ACTIVATION_CHARACTER
+         | ADDRESS_FAMILY
          | ADDRESS_POOL
          | ADMINISTRATIVE_WEIGHT
          | AESA
@@ -384,6 +387,7 @@ null_block_substanza
          | EXEC
          | EXEC_TIMEOUT
          | EXIT
+         | EXIT_ADDRESS_FAMILY
          | EXPORT_PROTOCOL
          | EXPORTER
          | FABRIC
@@ -416,6 +420,7 @@ null_block_substanza
                ACCESS_CLASS
                | ACCESS_GROUP
                | FLOW
+               | VRF
             )
          )
          | IPSEC_UDP
@@ -426,6 +431,7 @@ null_block_substanza
          | KEYPAIR
          | KEYRING
          | L2TP
+         | LENGTH
          | LINE
          | LINECODE
          | LLDP
@@ -491,6 +497,7 @@ null_block_substanza
          | RULE
          | SCHEME
          | SEQUENCE
+         | SERVER
          | SERVER_PRIVATE
          | SERVICE
          | SERVICE_POLICY
@@ -532,6 +539,7 @@ null_block_substanza
          | VPN_FILTER
          | VPN_IDLE_TIMEOUT
          | VPN_TUNNEL_PROTOCOL
+         | VRF
          | WEBVPN
          | WINS_SERVER
          | WITHOUT_CSD
