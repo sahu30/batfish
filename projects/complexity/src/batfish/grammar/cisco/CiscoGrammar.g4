@@ -148,7 +148,8 @@ hostname_stanza
 
 ip_default_gateway_stanza
 :
-   IP DEFAULT_GATEWAY gateway = IP_ADDRESS
+   IP DEFAULT_GATEWAY gateway = IP_ADDRESS  
+//   {System.out.println("ip_default_gateway_stanza");}
 ;
 
 ip_route_stanza
@@ -297,6 +298,7 @@ null_block_stanza
          )
       )
       | TERMINAL
+      | VDC
       |
       (
          VLAN DEC
@@ -432,6 +434,7 @@ null_block_substanza
          | KEYRING
          | L2TP
          | LENGTH
+         | LIMIT_RESOURCE
          | LINE
          | LINECODE
          | LLDP
@@ -846,6 +849,7 @@ null_standalone_stanza
       | RESOURCE_POOL
       | REVERSE_ROUTE
       | REVOCATION_CHECK
+      | RMON
       | ROUTE
       | ROUTE_TARGET
       | RSAKEYPAIR
@@ -979,6 +983,7 @@ null_stanza
 stanza
 :
    appletalk_access_list_stanza
+   | arp_access_list_stanza
    | extended_access_list_stanza
    | hostname_stanza
    | interface_stanza

@@ -90,6 +90,21 @@ extended_access_list_additional_feature
    )
 ;
 
+arp_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); }
+@after{ exitStanza(_localctx.name.getText()); }
+:
+   ARP ACCESS_LIST name = ~NEWLINE NEWLINE
+   (
+      arp_access_list_substanza
+   )+
+;
+
+arp_access_list_substanza
+:
+   num=DEC (PERMIT | DENY) ~NEWLINE* NEWLINE
+;
+
 extended_access_list_named_stanza
 :
    IP ACCESS_LIST EXTENDED name = ~NEWLINE NEWLINE

@@ -56,10 +56,15 @@ if_stanza
 ;
 
 interface_stanza
-@init{ enterStanza(stanza_type.IFACE); }
-@after{ exitStanza(_localctx.iname.getText()); }
+@init{ enterStanza(stanza_type.IFACE); 
+//System.out.println("enter if stanza");
+}
+@after{ exitStanza(_localctx.iname.getText()); 
+//System.out.println("exit if stanza");
+}
 :
-   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
+//   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name ~NEWLINE* NEWLINE interface_stanza_tail
 ;
 
 interface_stanza_tail
@@ -98,7 +103,7 @@ ip_address_if_stanza
 
 ip_address_secondary_if_stanza
 :
-   IP ADDRESS ip = IP_ADDRESS subnet = IP_ADDRESS SECONDARY NEWLINE
+   IP ADDRESS ((ip = IP_ADDRESS subnet = IP_ADDRESS) | IP_PREFIX) SECONDARY NEWLINE
 ;
 
 ip_ospf_cost_if_stanza
@@ -172,13 +177,15 @@ null_standalone_if_stanza
       | HOLD_QUEUE
       |
       (
-         IP
+         IP  
+//         {System.out.println("null_standalone_stanza, IP");}
          (
             ACCOUNTING
             | ARP
             | CGMP
             | DHCP
             | DVMRP
+//            | DEFAULT_GATEWAY {System.out.println("in interface stanza, default-gateway"); }
             |
             (
                DIRECTED_BROADCAST
@@ -258,6 +265,7 @@ null_standalone_if_stanza
       | QOS
       | QUEUE_SET
       | RANDOM_DETECT
+      | RATE_MODE
       | RCV_QUEUE
       | ROUTE_CACHE
       | SECURITY_LEVEL

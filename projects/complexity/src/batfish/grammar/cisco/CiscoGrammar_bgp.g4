@@ -6,6 +6,12 @@ options {
    tokenVocab = CiscoGrammarCommonLexer;
 }
 
+access_list_bgp_tail
+@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+:
+   FILTER_LIST name = ~NEWLINE ( IN | OUT ) NEWLINE
+;
+
 activate_bgp_tail
 :
    ACTIVATE NEWLINE
@@ -91,7 +97,8 @@ bgp_listen_range_rb_stanza
 
 bgp_tail
 :
-   aggregate_address_bgp_tail
+   access_list_bgp_tail
+   | aggregate_address_bgp_tail
    | activate_bgp_tail
    | allowas_in_bgp_tail
    | cluster_id_bgp_tail
@@ -120,17 +127,17 @@ bgp_tail
 
 cluster_id_bgp_tail
 :
-   CLUSTER_ID
+   BGP CLUSTER_ID
    (
       id = DEC
       | id = IP_ADDRESS
    ) NEWLINE
 ;
 
-cluster_id_rb_stanza
-:
-   BGP cluster_id_bgp_tail
-;
+//cluster_id_rb_stanza
+//:
+//   BGP cluster_id_bgp_tail
+//;
 
 default_metric_bgp_tail
 :
@@ -223,7 +230,8 @@ next_hop_self_bgp_tail
 
 nexus_neighbor_address_family
 :
-   address_family_header bgp_tail+ address_family_footer
+//   address_family_header bgp_tail+ address_family_footer
+   address_family_header bgp_tail* address_family_footer
 ;
 
 nexus_neighbor_inherit
@@ -320,7 +328,9 @@ null_bgp_tail
       (
          BGP
          (
-            DAMPENING
+            BESTPATH
+//            | CLUSTER_ID
+            | DAMPENING
             | DEFAULT
             | DETERMINISTIC_MED
             | GRACEFUL_RESTART
