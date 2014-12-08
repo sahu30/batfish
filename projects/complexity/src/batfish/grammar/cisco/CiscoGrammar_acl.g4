@@ -59,6 +59,7 @@ extended_access_list_additional_feature
 :
    (
       ECHO_REPLY
+      | ECHO_REQUEST
       | ECHO
       | ESTABLISHED
       | FRAGMENTS
@@ -66,6 +67,9 @@ extended_access_list_additional_feature
       | HOST_UNREACHABLE
       | LOG
       | LOG_INPUT
+      | MLD_QUERY
+      | MLD_REPORT
+      | MLD_REDUCTION
       | ND_NA
       | ND_NS
       | NETWORK_UNKNOWN
@@ -74,6 +78,8 @@ extended_access_list_additional_feature
       | PARAMETER_PROBLEM
       | PORT_UNREACHABLE
       | REDIRECT
+      | ROUTER_ADVERTISEMENT
+      | ROUTER_SOLICITATION
       | RST
       | SOURCE_QUENCH
       | TIME_EXCEEDED
@@ -422,11 +428,31 @@ ipx_sap_access_list_stanza
    numbered = ipx_sap_access_list_numbered_stanza
 ;
 
+mac_access_list_stanza
+@init{ enterStanza(stanza_type.ACL); System.out.println("Enter mac_access_list_stanza"); }
+@after{ exitStanza(_localctx.name.getText()); }
+:
+   MAC ACCESS_LIST name = ~NEWLINE NEWLINE
+   mac_access_list_stanza_tail*
+;
+
+mac_access_list_stanza_tail
+:
+   num = DEC (PERMIT | DENY) ~NEWLINE* NEWLINE
+;
+
 nexus_access_list_null_tail
 :
    (
-      num = DEC
-   )? REMARK ~NEWLINE* NEWLINE
+      STATISTICS 
+      |
+      (
+         (
+            num = DEC
+         )? REMARK
+      )
+   )
+   ~NEWLINE* NEWLINE
 ;
 
 nexus_access_list_stanza

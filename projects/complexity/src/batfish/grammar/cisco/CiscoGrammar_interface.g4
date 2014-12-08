@@ -72,7 +72,7 @@ interface_stanza_tail
 ip_access_group_if_stanza
 @after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
 :
-   IP ACCESS_GROUP name = .
+   IP PORT? ACCESS_GROUP name = .
    (
       IN
       | OUT

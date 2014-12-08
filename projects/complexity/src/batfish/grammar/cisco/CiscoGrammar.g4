@@ -461,6 +461,7 @@ null_block_substanza
          | PATH_JITTER
          | PAUSE
          | PEER_ADDRESS
+         | PEER_CONFIG_CHECK_BYPASS
          | PEER_GATEWAY
          | PEER_KEEPALIVE
          | PEER_LINK
@@ -598,6 +599,7 @@ null_standalone_stanza
       | CCM_MANAGER
       | CDP
       | CFS
+      | CHAT_SCRIPT
       | CIPC
       | CLASS_MAP
       | CLOCK
@@ -782,6 +784,7 @@ null_standalone_stanza
       | LLDP
       | LOCATION
       | LOGGING
+//      | ( MAC x=~ACCESS_LIST  { System.out.println("MAC in null_standalone_stanza, x is |"+_localctx.x.getText()+"|"); })
       | MAC
       | MAC_ADDRESS_TABLE
       | MAIL_SERVER
@@ -908,6 +911,7 @@ null_standalone_stanza
       | TAG
       | TAG_SWITCHING
       | TELNET
+      | TEMPLATE
       | TFTP_SERVER
       | THREAT_DETECTION
       | TIMEOUT
@@ -986,6 +990,7 @@ stanza
    | ip_route_stanza
    | ipv6_router_ospf_stanza
    | ipx_sap_access_list_stanza
+   | mac_access_list_stanza
    | nexus_access_list_stanza
    | nexus_prefix_list_stanza
    | null_stanza

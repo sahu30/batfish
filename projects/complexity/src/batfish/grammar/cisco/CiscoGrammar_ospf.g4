@@ -49,6 +49,12 @@ default_information_ro_stanza
    )* NEWLINE
 ;
 
+distribute_list_stanza
+@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+:
+   NO? DISTRIBUTE_LIST name = ~NEWLINE ( IN | OUT ) ~NEWLINE
+;
+
 ipv6_ro_stanza
 :
    null_ipv6_ro_stanza
@@ -111,7 +117,7 @@ null_standalone_ro_stanza
       )
       | AUTO_COST
       | BFD
-      | DISTRIBUTE_LIST
+//      | DISTRIBUTE_LIST
       | LOG_ADJACENCY_CHANGES
       | NSF
    ) ~NEWLINE* NEWLINE
@@ -219,6 +225,7 @@ ro_stanza
 :
    area_nssa_ro_stanza
    | default_information_ro_stanza
+   | distribute_list_stanza
    | maximum_paths_ro_stanza
    | network_ro_stanza
    | null_ro_stanza

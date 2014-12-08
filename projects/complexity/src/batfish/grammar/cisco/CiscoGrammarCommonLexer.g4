@@ -587,6 +587,11 @@ CHANNELIZED
    'channelized'
 ;
 
+CHAT_SCRIPT
+:
+   'chat-script'
+;
+
 CIPC
 :
    'cipc'
@@ -1095,6 +1100,11 @@ ECHO
 ECHO_REPLY
 :
    'echo-reply'
+;
+
+ECHO_REQUEST
+:
+   'echo-request'
 ;
 
 EGP
@@ -2158,6 +2168,21 @@ MLD
    'mld'
 ;
 
+MLD_QUERY
+:
+   'mld-query'
+;
+
+MLD_REDUCTION
+:
+   'mld-reduction'
+;
+
+MLD_REPORT
+:
+   'mld-report'
+;
+
 MLS
 :
    'mls'
@@ -2576,6 +2601,11 @@ PAUSE
 PEER
 :
    'peer'
+;
+
+PEER_CONFIG_CHECK_BYPASS
+:
+   'peer-config-check-bypass'
 ;
 
 PEER_GROUP
@@ -3038,9 +3068,19 @@ ROUTER
    'router'
 ;
 
+ROUTER_ADVERTISEMENT
+:
+   'router-advertisement'
+;
+
 ROUTER_ID
 :
    'router-id'
+;
+
+ROUTER_SOLICITATION
+:
+   'router-solicitation'
 ;
 
 ROUTING
@@ -3393,6 +3433,11 @@ STANDBY
 STATIC
 :
    'static'
+;
+
+STATISTICS
+:
+   'statistics'
 ;
 
 STCAPP

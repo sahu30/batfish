@@ -86,7 +86,7 @@ bgp_listen_range_rb_stanza
    (
       IP_PREFIX
       | IPV6_PREFIX
-   ) PEER_GROUP name = ~NEWLINE REMOTE_AS as = DEC NEWLINE
+   ) PEER_GROUP name = ~NEWLINE ( REMOTE_AS as = DEC )? NEWLINE
 ;
 
 bgp_tail
