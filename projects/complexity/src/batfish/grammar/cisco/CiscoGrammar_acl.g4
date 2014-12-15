@@ -444,7 +444,7 @@ ipx_sap_access_list_stanza
 ;
 
 mac_access_list_stanza
-@init{ enterStanza(stanza_type.ACL); System.out.println("Enter mac_access_list_stanza"); }
+@init{ enterStanza(stanza_type.ACL); }
 @after{ exitStanza(_localctx.name.getText()); }
 :
    MAC ACCESS_LIST name = ~NEWLINE NEWLINE

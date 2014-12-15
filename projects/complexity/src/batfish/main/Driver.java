@@ -18,7 +18,8 @@ public class Driver {
 		Map<File, String> configs = b.readConfigurationFiles(path);
 		b.parseVendorConfigurations(configs);
 		
-		b.outputComplexity(path);
+		b.outputIntraFileComplexity(path);
+		b.outputInterFileComplexity(path);
 	}
 	
 	

@@ -2,7 +2,6 @@ package batfish.main;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -29,7 +28,8 @@ import batfish.grammar.cisco.CiscoGrammarCommonLexer;
 
 
 public class Batfish {
-	Map<String, Integer> complexity=new TreeMap<String, Integer>();
+	//Map<String, Integer> complexity=new TreeMap<String, Integer>();
+	Map<String, CiscoGrammar> configs = new TreeMap<String, CiscoGrammar>();
 	private String readFile(File file) throws Exception {
 		String text = null;
 		try {
@@ -96,11 +96,12 @@ public class Batfish {
 		        }
 		    });
 			
-			System.out.print("parsing "+currentPath);
+			System.out.print("parsing "+currentPath+" ");
 			try{
 				if (fileText.charAt(0) == '!') {
 					parser.cisco_configuration();
-					complexity.put(currentFile.getName(), parser.getComplexity());
+					configs.put(currentFile.getName(), parser);
+		//			complexity.put(currentFile.getName(), parser.getComplexity());
 					System.out.println("... OK");
 				} else {
 					System.out.println("... non-cisco Error\n");
@@ -109,23 +110,56 @@ public class Batfish {
 			catch(Exception e){
 				System.out.println("... parse Error");
 			}
-
 		}
 	}
-	public void outputComplexity(String path) throws FileNotFoundException{
-		String file = path+"/"+"complexity.txt";
+	public void outputIntraFileComplexity(String path){
+		String file = path+"/"+"intra_complexity.txt";
 		Writer writer  = null;
 		double total = 0;
 		int count = 0;
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		    for(String net: complexity.keySet()){
-		    	Integer comp= complexity.get(net);
+		    for(String net: configs.keySet()){
+		    	Integer comp= configs.get(net).getComplexity();
 		    	writer.write(net+":"+comp+"\n");
 		    	total += comp;
 		    	count++;
 		    }
 		    writer.write("average:"+(total/count));
+		    writer.close();
+		} catch (Exception ex) {
+		    
+		}
+	}
+	public void outputInterFileComplexity(String path){
+		for(String net: configs.keySet()){
+			CiscoGrammar g = configs.get(net);
+			g.ProcessOspfReferences();
+		}
+		
+		
+		String file = path+"/"+"inter_complexity.txt";
+		Writer writer  = null;
+		int count = 0;
+		
+		for(String net1: configs.keySet()){
+			for(String net2: configs.keySet()){
+				if(net1.equals(net2)) continue;
+				CiscoGrammar g1 = configs.get(net1);
+				CiscoGrammar g2 = configs.get(net2);
+				if(g1.OspfReferenced(g2)){
+					count++;
+					continue;
+				}
+				else if(g1.BgpReferenced(g2)){
+					count++;
+					continue;
+				}
+			}
+		}
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+		    writer.write(count);
 		    writer.close();
 		} catch (Exception ex) {
 		    
