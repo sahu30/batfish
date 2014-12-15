@@ -2000,7 +2000,7 @@ LT
 
 MAC
 :
-   'mac' -> pushMode(M_COMMENT)
+   'mac'
 ;
 
 MAC_ADDRESS
