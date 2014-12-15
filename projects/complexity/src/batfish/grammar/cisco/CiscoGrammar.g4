@@ -182,7 +182,7 @@ ip_route_tail
       (
          TRACK track = DEC
       )
-   )* NEWLINE
+   )* ~NEWLINE* NEWLINE
 ;
 
 ip_route_vrfc_stanza
