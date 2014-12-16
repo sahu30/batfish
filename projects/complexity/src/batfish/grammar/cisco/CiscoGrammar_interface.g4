@@ -41,6 +41,7 @@ if_stanza
    | ip_ospf_dead_interval_if_stanza
    | ip_ospf_dead_interval_minimal_if_stanza
    | ip_policy_if_stanza
+   | mac_access_group_if_stanza
    | no_ip_address_if_stanza
    | null_if_stanza
    | shutdown_if_stanza
@@ -58,16 +59,16 @@ if_stanza
 
 interface_stanza
 @init{ enterStanza(stanza_type.IFACE); 
-//System.out.println("enter if stanza");
+//System.out.println("enter interface stanza");
 }
 @after{ exitStanza(_localctx.iname.getText()); 
 //System.out.println("exit if stanza");
 }
 :
-//   INTERFACE iname = interface_name MULTIPOINT? (MODULE DEC)? NEWLINE interface_stanza_tail
-   INTERFACE iname = interface_name 
-   ( MULTIPOINT | (MODULE DEC) )?
-   NEWLINE interface_stanza_tail
+//   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
+//   INTERFACE iname = interface_name  ~NEWLINE* NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name  (MULTIPOINT | MODULE DEC)? NEWLINE interface_stanza_tail
+//   { System.out.println("interface_stanza,"+_localctx.iname.getText() ); }
 ;
 
 interface_stanza_tail
@@ -130,6 +131,12 @@ ip_policy_if_stanza
    IP POLICY ROUTE_MAP name = ~NEWLINE NEWLINE
 ;
 
+mac_access_group_if_stanza
+@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+:
+   MAC PORT? ACCESS_GROUP name = . NEWLINE
+;
+
 no_ip_address_if_stanza
 :
    NO IP ADDRESS NEWLINE
@@ -138,7 +145,8 @@ no_ip_address_if_stanza
 null_standalone_hsrpc_stanza
 :
    TRACK
-   ~NEWLINE* NEWLINE  { System.out.println("hsrp track substanza"); }
+   ~NEWLINE* NEWLINE  
+//   { System.out.println("hsrp track substanza"); }
 ;
 
 null_if_stanza
@@ -193,7 +201,8 @@ null_standalone_if_stanza
             ACCOUNTING
             | ARP
             | CGMP
-            | DHCP {System.out.println("DHCP in IF null_standalone");}
+            | DHCP 
+//            {System.out.println("DHCP in IF null_standalone");}
             | DVMRP
 //            | DEFAULT_GATEWAY {System.out.println("in interface stanza, default-gateway"); }
             |
@@ -360,6 +369,7 @@ switchport_mode_dynamic_desirable_stanza
 ;
 
 switchport_mode_trunk_stanza
+//@init { System.out.println("switchport mode trunk"); }
 :
    SWITCHPORT MODE TRUNK NEWLINE
 ;

@@ -509,6 +509,11 @@ shutdown_bgp_tail
    SHUTDOWN NEWLINE
 ;
 
+template_inherit
+:
+   INHERIT PEER_SESSION name = VARIABLE NEWLINE
+;
+
 template_peer_address_family
 :
    address_family_header bgp_tail* address_family_footer
@@ -520,6 +525,7 @@ template_peer_rb_stanza
    (
       bgp_tail
       | remote_as_bgp_tail
+      | template_inherit
       | template_peer_address_family
    )+
 ;

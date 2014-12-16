@@ -329,7 +329,8 @@ null_block_stanza
             )
             | ACCOUNTING_LIST
             | DECAP_GROUP
-            | DHCP { System.out.println("IP DHCP in null standalone stanza"); }
+            | DHCP 
+//            { System.out.println("IP DHCP in null standalone stanza"); }
             | FLOW_TOP_TALKERS
             | INSPECT
             | POLICY_LIST
@@ -487,7 +488,7 @@ null_block_substanza
          | IDLE_TIMEOUT
          | INSPECT
          | INSTANCE
-         | INTERFACE {System.out.println("interface in null-block-substanza");}
+ //        | INTERFACE {System.out.println("interface in null-block-substanza" + _input.LA(1));}
          |
          (
             (
@@ -906,6 +907,7 @@ null_standalone_stanza
       | PORT_CHANNEL
       | PORT_OBJECT
       | POWER
+      | POWEROFF
       | PRE_SHARED_KEY
       | PRIORITY
       | PRIORITY_QUEUE

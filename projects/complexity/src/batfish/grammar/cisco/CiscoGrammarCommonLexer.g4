@@ -2643,6 +2643,11 @@ PEER_LINK
    'peer-link'
 ;
 
+PEER_SESSION
+:
+   'peer-session'
+;
+
 PERMIT
 :
    'permit'
@@ -2741,6 +2746,11 @@ PORT_UNREACHABLE
 POWER
 :
    'power'
+;
+
+POWEROFF
+:
+   'poweroff'
 ;
 
 PPP
@@ -4672,7 +4682,7 @@ M_Interface_SLASH
 
 M_Interface_WS
 :
-   F_Whitespace+ -> channel(HIDDEN)
+   F_Whitespace+ -> channel(HIDDEN), popMode
 ;
 
 mode M_KEY;
