@@ -13,10 +13,86 @@ package batfish.grammar.cisco;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.*;
+
+import batfish.representation.*;
 }
 
 @members {
 
+
+	class subnet{
+		public Ip ip, mask;
+		public subnet(String prefix){
+			String tokens[] = prefix.split("/");
+			assert tokens.length == 2;
+			mask = new Ip(Long.parseLong(tokens[1]));
+			ip = new Ip(tokens[0]);
+		}
+		public subnet(String _ip, String _mask){
+			ip = new Ip(_ip);
+			mask = new Ip(_mask);
+		}
+		@Override 
+		public int hashCode(){
+			return ip.hashCode()+mask.hashCode();
+		}
+		@Override 
+		public boolean equals(Object obj){
+			if(!(obj instanceof subnet)){
+				return false;
+			}
+			subnet other = (subnet)obj;
+			return ip==other.ip && mask == other.mask;
+		}
+	}
+	
+	class bgp{
+		public Integer asnum;
+		public Set<Integer> neighbors;
+		public bgp(String as){
+			asnum =Integer.parseInt(as);
+			neighbors = new HashSet<Integer>();
+		}
+		public void AddNeighbor(int as){
+			neighbors.add(as);
+		}
+
+	}
+	
+	Map<String, subnet> iface_subnet = new HashMap<String, subnet>();
+	Map<String, String> ospf_to_iface = new HashMap<String, String>();
+//	Map<String, subnet> ospf_to_subnet = new HashMap<String, subnet>();
+	public Set<subnet> subnet_of_ospf_iface = new HashSet<subnet>();
+	
+	public bgp bgp_router = null;
+	
+	public void ProcessOspfReferences(){
+		subnet_of_ospf_iface.clear();
+		for(String ospf: ospf_to_iface.keySet()){
+			String iface = ospf_to_iface.get(ospf);
+			subnet sub = iface_subnet.get(iface);
+			if( sub != null){
+//				ospf_to_subnet.put(ospf, sub);
+				subnet_of_ospf_iface.add(sub);
+			}
+		}
+	}
+	
+	public boolean BgpReferenced(CiscoGrammar other){
+		if(bgp_router==null || other.bgp_router==null) 
+			return false;
+		return bgp_router.neighbors.contains(other.bgp_router.asnum);
+	}
+	
+	public boolean OspfReferenced(CiscoGrammar other){
+		for(subnet sub: subnet_of_ospf_iface){
+			if(other.subnet_of_ospf_iface.contains(sub))
+				return true;
+		}
+		return false;
+	}
+	
 	enum stanza_type{IFACE, ACL, ROUTEMAP, ROUTER};
 	class stanza{
 		public stanza_type type;
@@ -253,7 +329,7 @@ null_block_stanza
             )
             | ACCOUNTING_LIST
             | DECAP_GROUP
-            | DHCP
+            | DHCP { System.out.println("IP DHCP in null standalone stanza"); }
             | FLOW_TOP_TALKERS
             | INSPECT
             | POLICY_LIST
@@ -411,7 +487,7 @@ null_block_substanza
          | IDLE_TIMEOUT
          | INSPECT
          | INSTANCE
-         | INTERFACE
+         | INTERFACE {System.out.println("interface in null-block-substanza");}
          |
          (
             (

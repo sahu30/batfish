@@ -28,6 +28,7 @@ hsrpc_stanza
    preempt_stanza
    | priority_stanza
    | ip_address_stanza
+   | null_standalone_hsrpc_stanza
 ;
 
 if_stanza
@@ -63,8 +64,10 @@ interface_stanza
 //System.out.println("exit if stanza");
 }
 :
-//   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
-   INTERFACE iname = interface_name ~NEWLINE* NEWLINE interface_stanza_tail
+//   INTERFACE iname = interface_name MULTIPOINT? (MODULE DEC)? NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name 
+   ( MULTIPOINT | (MODULE DEC) )?
+   NEWLINE interface_stanza_tail
 ;
 
 interface_stanza_tail
@@ -132,6 +135,12 @@ no_ip_address_if_stanza
    NO IP ADDRESS NEWLINE
 ;
 
+null_standalone_hsrpc_stanza
+:
+   TRACK
+   ~NEWLINE* NEWLINE  { System.out.println("hsrp track substanza"); }
+;
+
 null_if_stanza
 :
    hsrp_stanza
@@ -162,6 +171,7 @@ null_standalone_if_stanza
       | COUNTER
       | CRYPTO
       | DCBX
+      | DESCRIPTION
       |
       (
          DSU BANDWIDTH
@@ -183,7 +193,7 @@ null_standalone_if_stanza
             ACCOUNTING
             | ARP
             | CGMP
-            | DHCP
+            | DHCP {System.out.println("DHCP in IF null_standalone");}
             | DVMRP
 //            | DEFAULT_GATEWAY {System.out.println("in interface stanza, default-gateway"); }
             |
