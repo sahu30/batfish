@@ -67,7 +67,10 @@ interface_stanza
 :
 //   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
 //   INTERFACE iname = interface_name  ~NEWLINE* NEWLINE interface_stanza_tail
-   INTERFACE iname = interface_name  (MULTIPOINT | MODULE DEC)? NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name  (MULTIPOINT | MODULE DEC)? NEWLINE 
+   { enterIface(_localctx.iname.getText()); }
+   interface_stanza_tail
+   { exitIface(); }
 //   { System.out.println("interface_stanza,"+_localctx.iname.getText() ); }
 ;
 
@@ -97,8 +100,8 @@ ip_address_if_stanza
 :
    IP ADDRESS
    (
-      ip = IP_ADDRESS subnet = IP_ADDRESS
-      | prefix = IP_PREFIX
+      ip = IP_ADDRESS subnet = IP_ADDRESS  { addIfaceSubnet(_localctx.ip.getText(), _localctx.subnet.getText()); }
+      | prefix = IP_PREFIX { addIfaceSubnet(_localctx.prefix.getText()); }
    )
    (
       STANDBY IP_ADDRESS

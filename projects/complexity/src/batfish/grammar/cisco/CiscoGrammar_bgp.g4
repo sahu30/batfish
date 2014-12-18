@@ -235,6 +235,7 @@ nexus_neighbor_address_family
 ;
 
 nexus_neighbor_inherit
+@after{ addBGPNeighborByTemplate(_localctx.name.getText()); }
 :
    INHERIT PEER name = VARIABLE NEWLINE
 ;
@@ -253,6 +254,7 @@ nexus_neighbor_rb_stanza
       | ip_prefix = IP_PREFIX
       | ipv6_prefix = IPV6_PREFIX
    )
+   { if(_localctx.ip_address!=null) enterNeighbor(_localctx.ip_address.getText()); }
    (
       REMOTE_AS asnum = DEC
    )? NEWLINE
@@ -263,6 +265,7 @@ nexus_neighbor_rb_stanza
       | nexus_neighbor_no_shutdown
       | remote_as_bgp_tail
    )+
+   { exitNeighbor(); }
 ;
 
 nexus_vrf_rb_stanza
@@ -385,6 +388,7 @@ prefix_list_bgp_tail
 ;
 
 remote_as_bgp_tail
+@after { addBGPNeighbor(_localctx.as.getText()); }
 :
    REMOTE_AS as = DEC NEWLINE
 ;
@@ -470,7 +474,7 @@ router_bgp_stanza
 @init{ enterStanza(stanza_type.ROUTER); }
 @after{ exitStanza("bgp_"+_localctx.procnum.getText()); }
 :
-   ROUTER BGP procnum = DEC NEWLINE
+   ROUTER BGP procnum = DEC NEWLINE  { enterBGP(_localctx.procnum.getText()); }
    (
       address_family_rb_stanza
       | always_compare_med_rb_stanza
@@ -487,6 +491,8 @@ router_bgp_stanza
       | template_peer_rb_stanza
       | nexus_vrf_rb_stanza
    )+
+
+   { exitBGP(); }
 ;
 
 router_id_bgp_tail
@@ -521,13 +527,14 @@ template_peer_address_family
 
 template_peer_rb_stanza
 :
-   TEMPLATE PEER name = VARIABLE NEWLINE
+   TEMPLATE PEER name = VARIABLE NEWLINE  { enterTemplate(_localctx.name.getText()); }
    (
       bgp_tail
       | remote_as_bgp_tail
       | template_inherit
       | template_peer_address_family
    )+
+   { exitTemplate(); }
 ;
 
 update_source_bgp_tail

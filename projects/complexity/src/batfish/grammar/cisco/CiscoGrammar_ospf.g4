@@ -134,7 +134,9 @@ passive_interface_default_ro_stanza
 ;
 
 passive_interface_ro_stanza
-@after{ AddReference(stanza_type.IFACE, _localctx.i.getText()); }
+@after{ AddReference(stanza_type.IFACE, _localctx.i.getText()); 
+addOSPFIface(_localctx.i.getText()); 
+}
 :
    NO? PASSIVE_INTERFACE i = VARIABLE NEWLINE
 ;
@@ -252,7 +254,9 @@ router_ospf_stanza
 @init{ enterStanza(stanza_type.ROUTER); }
 @after{ exitStanza("ospf_"+_localctx.procnum.getText()); }
 :
-   ROUTER OSPF procnum = DEC NEWLINE router_ospf_stanza_tail
+   ROUTER OSPF procnum = DEC NEWLINE  { enterOSPF(_localctx.procnum.getText()); }
+   router_ospf_stanza_tail
+   { exitOSPF(); }
 ;
 
 router_ospf_stanza_tail

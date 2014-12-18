@@ -45,33 +45,170 @@ import batfish.representation.*;
 			subnet other = (subnet)obj;
 			return ip==other.ip && mask == other.mask;
 		}
+      @Override
+      public String toString(){
+         return ip.toString()+"/"+mask.toString();
+   
+      }
 	}
 	
 	class bgp{
-		public Integer asnum;
-		public Set<Integer> neighbors;
-		public bgp(String as){
-			asnum =Integer.parseInt(as);
-			neighbors = new HashSet<Integer>();
-		}
-		public void AddNeighbor(int as){
-			neighbors.add(as);
-		}
+		public String asnum;
+		public Set<String> ibgp_neighbors;
+      public Set<String> ebgp_neighbors;
+      public Map<String, String> template_to_as;
 
+      public Ip current_neighbor;
+      public String current_template;
+		public bgp(String as){
+			asnum = as;
+			ibgp_neighbors = new HashSet<String>();
+         ebgp_neighbors = new HashSet<String>();
+         template_to_as = new HashMap<String, String>();
+
+         current_neighbor=null;
+         current_template=null;
+		}
+		public void addNeighbor(String as){
+         if(as.equals(asnum)){
+            // ibpg, please check
+            System.out.println("add an ibgp, check");
+         }
+         else{
+            ebgp_neighbors.add(as);
+         }
+//			neighbors.add(as);
+		}
+      @Override
+      public String toString(){
+         String out="";
+         out+=asnum+"(ebgp):";
+         for(String n: ebgp_neighbors){
+            out+=n+" ";
+         }
+         out+=", (ibgp):";
+         for(String n: ibgp_neighbors){
+            out+=n+" ";
+         }
+         return out;
+      }
 	}
+
+   public void enterTemplate(String name){
+      assert bgp_router!=null;
+      assert bgp_router.current_template==null;
+      bgp_router.current_template = name;
+   }
+   
+   public void exitTemplate(){
+      assert bgp_router!=null;
+      assert bgp_router.current_template!=null;
+      bgp_router.current_template = null;
+   }
+
+   public void addTemplateAs(String as){
+      assert bgp_router!=null;
+      assert bgp_router.current_template!=null;
+      bgp_router.template_to_as.put(bgp_router.current_template, as);
+   }
+
+   public void enterNeighbor(String _ip){
+      assert bgp_router!=null;
+      assert bgp_router.current_neighbor == null;
+      bgp_router.current_neighbor = new Ip(_ip);
+   }
+
+   public void exitNeighbor(){
+      assert bgp_router!=null;
+      assert bgp_router.current_neighbor != null;
+      bgp_router.current_neighbor = null;
+   }
+
+   private void printBGP(){
+      if(bgp_router==null) return;
+         System.out.println(bgp_router);
+   }
+   private void printOSPF(){
+      String out = "";
+      for(subnet s: subnet_of_ospf_iface){
+         out+=s.toString()+" ";
+      }
+      System.out.println(out);
+   }
 	
-	Map<String, subnet> iface_subnet = new HashMap<String, subnet>();
-	Map<String, String> ospf_to_iface = new HashMap<String, String>();
+	Map<String, subnet> iface_to_subnet = new HashMap<String, subnet>();
+//	Map<String, String> ospf_to_iface = new HashMap<String, String>();
 //	Map<String, subnet> ospf_to_subnet = new HashMap<String, subnet>();
 	public Set<subnet> subnet_of_ospf_iface = new HashSet<subnet>();
+   public Set<String> iface_of_ospf = new HashSet<String> ();
 	
 	public bgp bgp_router = null;
+   public String ospf_router = null;
+   public String iface = null;
+   public void enterBGP(String as){
+      assert bgp_router == null;
+      bgp_router = new bgp(as);
+   }
+
+   public void exitBGP(){
+      assert bgp_router != null;
+      bgp_router = null;
+   }
+
+   public void enterOSPF(String name){
+      assert ospf_router == null;
+      ospf_router = name;
+   }
+
+   public void exitOSPF(){
+      assert ospf_router !=null; 
+      ospf_router = null;
+   }
+
+   public void enterIface(String name){
+      assert iface ==null;
+      iface = name;
+   }
+
+   public void exitIface(){
+      assert iface !=null;
+      iface = null;
+   }
+
+   public void addBGPNeighbor(String neiAs){
+      assert bgp_router!=null;
+      bgp_router.addNeighbor(neiAs);
+   }
+
+   public void addBGPNeighborByTemplate(String temp_name){
+      assert bgp_router!=null;
+      String as = bgp_router.template_to_as.get(temp_name);
+      assert as!=null;
+      addBGPNeighbor(as);
+   }
+
+   public void addOSPFIface(String name){
+      assert ospf_router!=null;
+      iface_of_ospf.add(name);
+//      ospf_to_iface.put(osfp_router, 
+   }
+
+   public void addIfaceSubnet(String prefix){
+      assert iface != null;
+      subnet s = new subnet(prefix);
+      iface_to_subnet.put(iface, s);
+   }
+
+   public void addIfaceSubnet(String ip, String mask){
+      assert iface!=null;
+      subnet s =new subnet(ip, mask);
+      iface_to_subnet.put(iface, s);
+   }
 	
 	public void ProcessOspfReferences(){
 		subnet_of_ospf_iface.clear();
-		for(String ospf: ospf_to_iface.keySet()){
-			String iface = ospf_to_iface.get(ospf);
-			subnet sub = iface_subnet.get(iface);
+		for(String iface: iface_of_ospf){
+			subnet sub = iface_to_subnet.get(iface);
 			if( sub != null){
 //				ospf_to_subnet.put(ospf, sub);
 				subnet_of_ospf_iface.add(sub);
@@ -80,12 +217,25 @@ import batfish.representation.*;
 	}
 	
 	public boolean BgpReferenced(CiscoGrammar other){
+      System.out.println("===== BGP Reference ====");
+      printBGP();
+      other.printBGP();
 		if(bgp_router==null || other.bgp_router==null) 
 			return false;
-		return bgp_router.neighbors.contains(other.bgp_router.asnum);
+
+      if(bgp_router.asnum.equals(other.bgp_router.asnum)){
+         System.out.println("this is an ibgp example, look into it");
+         return false;
+      }
+      else{
+		   return bgp_router.ebgp_neighbors.contains(other.bgp_router.asnum);
+      }
 	}
 	
 	public boolean OspfReferenced(CiscoGrammar other){
+      System.out.println("==== OSPF Reference ====");
+      printOSPF();
+      other.printOSPF();
 		for(subnet sub: subnet_of_ospf_iface){
 			if(other.subnet_of_ospf_iface.contains(sub))
 				return true;
@@ -157,6 +307,7 @@ import batfish.representation.*;
 		}
 		return totalReferences;
 	}
+
 	
 	private void enterStanza(stanza_type t){
 		if(current !=null){
