@@ -192,8 +192,9 @@ neighbor_rb_stanza
    )
    (
       bgp_tail
-      | remote_as_bgp_tail
+      | rabt = remote_as_bgp_tail
    )
+   { if(_localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText());  }
 ;
 
 network_bgp_tail
@@ -257,13 +258,16 @@ nexus_neighbor_rb_stanza
    { if(_localctx.ip_address!=null) enterNeighbor(_localctx.ip_address.getText()); }
    (
       REMOTE_AS asnum = DEC
-   )? NEWLINE
+      { addBGPNeighbor(_localctx.asnum.getText()); }
+
+   )? NEWLINE  
    (
       bgp_tail
       | nexus_neighbor_address_family
       | nexus_neighbor_inherit
       | nexus_neighbor_no_shutdown
-      | remote_as_bgp_tail
+      | rabt = remote_as_bgp_tail
+      { if(_localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText());  }
    )+
    { exitNeighbor(); }
 ;
@@ -388,7 +392,6 @@ prefix_list_bgp_tail
 ;
 
 remote_as_bgp_tail
-@after { addBGPNeighbor(_localctx.as.getText()); }
 :
    REMOTE_AS as = DEC NEWLINE
 ;
@@ -530,9 +533,10 @@ template_peer_rb_stanza
    TEMPLATE PEER name = VARIABLE NEWLINE  { enterTemplate(_localctx.name.getText()); }
    (
       bgp_tail
-      | remote_as_bgp_tail
+      | rabt = remote_as_bgp_tail
       | template_inherit
       | template_peer_address_family
+      { if(_localctx.rabt!=null) addTemplateAs(_localctx.rabt.as.getText());  }
    )+
    { exitTemplate(); }
 ;
