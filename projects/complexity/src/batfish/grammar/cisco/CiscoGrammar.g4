@@ -25,7 +25,10 @@ import batfish.representation.*;
 		public Ip ip, mask;
 		public subnet(String prefix){
 			String tokens[] = prefix.split("/");
-			assert tokens.length == 2;
+			if(tokens.length != 2){
+            System.out.println("subnet should be a prefix, but is an IP");
+            assert false;
+         }
 			mask = new Ip(Long.parseLong(tokens[1]));
 			ip = new Ip(tokens[0]);
 		}
@@ -95,32 +98,62 @@ import batfish.representation.*;
 	}
 
    public void enterTemplate(String name){
-      assert bgp_router!=null;
-      assert bgp_router.current_template==null;
+      if(bgp_router==null){
+         System.out.println("enter Tamplate with bgp_router to be null");
+         assert false;
+      }
+      if(bgp_router.current_template!=null){
+         System.out.println("enter a template with template not null");
+         assert false;
+      }
       bgp_router.current_template = name;
    }
    
    public void exitTemplate(){
-      assert bgp_router!=null;
-      assert bgp_router.current_template!=null;
+      if(bgp_router==null){
+         System.out.println("exit template with bgp_router null");
+         assert false;
+      }
+      if(bgp_router.current_template==null){
+         System.out.println("exit template with current_teample null");
+         assert false;
+      }
       bgp_router.current_template = null;
    }
 
    public void addTemplateAs(String as){
-      assert bgp_router!=null;
-      assert bgp_router.current_template!=null;
+      if(bgp_router==null){
+         System.out.println("add template as with bgp_router null");
+         assert false;
+      }
+      if(bgp_router.current_template==null){
+         System.out.println("add template with current_template as null");
+         assert false;
+      }
       bgp_router.template_to_as.put(bgp_router.current_template, as);
    }
 
    public void enterNeighbor(String _ip){
-      assert bgp_router!=null;
-      assert bgp_router.current_neighbor == null;
+      if(bgp_router==null){
+         System.out.println("enter neighbor with bgp_router null");
+         assert false;
+      }
+      if(bgp_router.current_neighbor!=null){
+         System.out.println("enter neighbor with current_neighbor not null");
+         assert false;
+      }
       bgp_router.current_neighbor = new Ip(_ip);
    }
 
    public void exitNeighbor(){
-      assert bgp_router!=null;
-      assert bgp_router.current_neighbor != null;
+      if( bgp_router==null){
+         System.out.println("enter neighbor with bgp_router null");
+         assert false;
+      }
+      if(bgp_router.current_neighbor==null){
+         System.out.println("enter neighbor with current_neighbor null");
+         assert false;
+      }
       bgp_router.current_neighbor = null;
    }
 
