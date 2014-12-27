@@ -20,369 +20,83 @@ import batfish.representation.*;
 
 @members {
 
-
-	class subnet{
-		public Ip ip, mask;
-		public subnet(String prefix){
-			String tokens[] = prefix.split("/");
-			if(tokens.length != 2){
-            System.out.println("subnet should be a prefix, but is an IP");
-            assert false;
-         }
-			mask = new Ip(Long.parseLong(tokens[1]));
-			ip = new Ip(tokens[0]);
-		}
-		public subnet(String _ip, String _mask){
-			ip = new Ip(_ip);
-			mask = new Ip(_mask);
-		}
-		@Override 
-		public int hashCode(){
-			return ip.hashCode()+mask.hashCode();
-		}
-		@Override 
-		public boolean equals(Object obj){
-			if(!(obj instanceof subnet)){
-				return false;
-			}
-			subnet other = (subnet)obj;
-			return ip==other.ip && mask == other.mask;
-		}
-      @Override
-      public String toString(){
-         return ip.toString()+"/"+mask.toString();
-   
-      }
-	}
-	
-	class bgp{
-		public String asnum;
-		public Set<String> ibgp_neighbors;
-      public Set<String> ebgp_neighbors;
-      public Map<String, String> template_to_as;
-
-      public Ip current_neighbor;
-      public String current_template;
-		public bgp(String as){
-			asnum = as;
-			ibgp_neighbors = new HashSet<String>();
-         ebgp_neighbors = new HashSet<String>();
-         template_to_as = new HashMap<String, String>();
-
-         current_neighbor=null;
-         current_template=null;
-		}
-		public void addNeighbor(String as){
-         if(as.equals(asnum)){
-            // ibpg, please check
-            System.out.println("add an ibgp, check. bgp as: "+asnum+", neighbor as: "+as);
-         }
-         else{
-            ebgp_neighbors.add(as);
-         }
-//			neighbors.add(as);
-		}
-      @Override
-      public String toString(){
-         String out="";
-         out+=asnum+"(ebgp):";
-         for(String n: ebgp_neighbors){
-            out+=n+" ";
-         }
-         out+=", (ibgp):";
-         for(String n: ibgp_neighbors){
-            out+=n+" ";
-         }
-         return out;
-      }
-	}
-
-   public void enterTemplate(String name){
-      if(bgp_router==null){
-         System.out.println("enter Tamplate with bgp_router to be null");
-         assert false;
-      }
-      if(bgp_router.current_template!=null){
-         System.out.println("enter a template with template not null");
-         assert false;
-      }
-      bgp_router.current_template = name;
+   public complexityUtil comp = new complexityUtil();
+   // intra
+   void enterStanza(String type){
+      comp.enterStanza(type);
+   }
+   void exitStanza(String name){
+      comp.exitStanza(name);
    }
    
-   public void exitTemplate(){
-      if(bgp_router==null){
-         System.out.println("exit template with bgp_router null");
-         assert false;
-      }
-      if(bgp_router.current_template==null){
-         System.out.println("exit template with current_teample null");
-         assert false;
-      }
-      bgp_router.current_template = null;
+   void addStanzaReference(String type, String name){
+      comp.addStanzaReference(type, name);
    }
-
-   public void addTemplateAs(String as){
-      if(bgp_router==null){
-         System.out.println("add template as with bgp_router null");
-         assert false;
-      }
-      if(bgp_router.current_template==null){
-         System.out.println("add template with current_template as null");
-         assert false;
-      }
-      bgp_router.template_to_as.put(bgp_router.current_template, as);
+   
+   // inter, bgp
+   void enterBGP(String as){
+      comp.enterBGP(as);
    }
-
-   public void enterNeighbor(String _ip){
-      if(bgp_router==null){
-         System.out.println("enter neighbor with bgp_router null");
-         assert false;
-      }
-      if(bgp_router.current_neighbor!=null){
-         System.out.println("enter neighbor with current_neighbor not null");
-         assert false;
-      }
-      bgp_router.current_neighbor = new Ip(_ip);
+   
+   void exitBGP(){
+      comp.exitBGP();
    }
-
-   public void exitNeighbor(){
-      if( bgp_router==null){
-         System.out.println("exit neighbor with bgp_router null");
-         assert false;
-      }
-      if(bgp_router.current_neighbor==null){
-         System.out.println("exit neighbor with current_neighbor null");
-         assert false;
-      }
-      bgp_router.current_neighbor = null;
+   
+   void enterTemplate(String name){
+      comp.enterTemplate(name);
    }
-
-   private void printBGP(){
-      if(bgp_router==null) return;
-         System.out.println(bgp_router);
+   
+   void exitTemplate(){
+      comp.exitTemplate();
    }
-   private void printOSPF(){
-      String out = "";
-      for(subnet s: subnet_of_ospf_iface){
-         out+=s.toString()+" ";
-      }
-      System.out.println(out);
+   
+   void enterNeighbor(String nei){
+      comp.enterNeighbor(nei);
    }
-	
-	Map<String, subnet> iface_to_subnet = new HashMap<String, subnet>();
-//	Map<String, String> ospf_to_iface = new HashMap<String, String>();
-//	Map<String, subnet> ospf_to_subnet = new HashMap<String, subnet>();
-	public Set<subnet> subnet_of_ospf_iface = new HashSet<subnet>();
-   public Set<String> iface_of_ospf = new HashSet<String> ();
-	
-	public bgp bgp_router = null;
-   public String ospf_router = null;
-   public String iface = null;
-   public void enterBGP(String as){
-      if(bgp_router!=null){
-         System.out.println("enterBGP with bgp_router not null");
-         assert false;
-      }
-      bgp_router = new bgp(as);
+  
+   void exitNeighbor(){
+      comp.exitNeighbor();
    }
-
-   public void exitBGP(){
-      if(bgp_router==null){
-         System.out.println("exitBGP with bgp_router null");
-         assert false;
-      }
-   //   bgp_router = null;
+   
+   void addTemplateAs(String as){
+      comp.addTemplateAs(as);
    }
-
-   public void enterOSPF(String name){
-      if(ospf_router!=null){
-         System.out.println("enterOSPF with ospf_router not null");
-         assert false;
-      }
-      ospf_router = name;
+   
+   void addBGPNeighbor(String neiAs, String ip){
+      comp.addBGPNeighbor(neiAs, ip);
    }
-
-   public void exitOSPF(){
-      if(ospf_router==null){
-         System.out.println("exitOSPF with osfp_router null");
-         assert false;
-      }
-      ospf_router = null;
+   
+   void addBGPNeighborByTemplate(String template){
+      comp.addBGPNeighborByTemplate(template);
    }
-
-   public void enterIface(String name){
-      assert iface ==null;
-      iface = name;
+   
+   // inter, ospf
+   void enterOSPF(String name){
+      comp.enterOSPF(name);
    }
-
-   public void exitIface(){
-      assert iface !=null;
-      iface = null;
+   
+   void exitOSPF(){
+      comp.exitOSPF();
    }
-
-   public void addBGPNeighbor(String neiAs){
-      assert bgp_router!=null;
-      bgp_router.addNeighbor(neiAs);
+   
+   void enterIface(String name){
+      comp.enterIface(name);
    }
-
-   public void addBGPNeighborByTemplate(String temp_name){
-      assert bgp_router!=null;
-      String as = bgp_router.template_to_as.get(temp_name);
-      assert as!=null;
-      addBGPNeighbor(as);
+   void exitIface(){
+      comp.exitIface();
    }
-
-   public void addOSPFIface(String name){
-      assert ospf_router!=null;
-      iface_of_ospf.add(name);
-//      ospf_to_iface.put(osfp_router, 
+   
+   void addIfaceSubnet(String prefix){
+      comp.addIfaceSubnet(prefix);
    }
-
-   public void addIfaceSubnet(String prefix){
-      assert iface != null;
-      subnet s = new subnet(prefix);
-      iface_to_subnet.put(iface, s);
+   
+   void addIfaceSubnet(String ip, String mask){
+      comp.addIfaceSubnet(ip, mask);
+   } 
+   
+   void addOSPFIface(String name){
+      comp.addOSPFIface(name);
    }
-
-   public void addIfaceSubnet(String ip, String mask){
-      assert iface!=null;
-      subnet s =new subnet(ip, mask);
-      iface_to_subnet.put(iface, s);
-   }
-	
-	public void ProcessOspfReferences(){
-		subnet_of_ospf_iface.clear();
-		for(String iface: iface_of_ospf){
-			subnet sub = iface_to_subnet.get(iface);
-			if( sub != null){
-//				ospf_to_subnet.put(ospf, sub);
-				subnet_of_ospf_iface.add(sub);
-			}
-		}
-	}
-	
-	public boolean BgpReferenced(CiscoGrammar other){
-      System.out.println("===== BGP Reference ====");
-//      printBGP();
-//      other.printBGP();
-		if(bgp_router==null || other.bgp_router==null) 
-			return false;
-
-      if(bgp_router.asnum.equals(other.bgp_router.asnum)){  // ibgp
-         System.out.println("this is an ibgp example, look into it");
-         return false;
-      }
-      else{ // ebgp
-/*
-for(String n: bgp_router.ebgp_neighbors){
-   System.out.println("*"+n+"*");
-}
-System.out.println("++"+other.bgp_router.asnum+"++");
-*/
-		   return bgp_router.ebgp_neighbors.contains(other.bgp_router.asnum);
-      }
-	}
-	
-	public boolean OspfReferenced(CiscoGrammar other){
-      System.out.println("==== OSPF Reference ====");
-//      printOSPF();
-//      other.printOSPF();
-		for(subnet sub: subnet_of_ospf_iface){
-			if(other.subnet_of_ospf_iface.contains(sub))
-				return true;
-		}
-		return false;
-	}
-	
-	enum stanza_type{IFACE, ACL, ROUTEMAP, ROUTER};
-	class stanza{
-		public stanza_type type;
-		public String name;
-		List<reference_to> references;
-		public stanza(stanza_type t){
-			type = t;
-			name = null;
-			references = new ArrayList<reference_to>();
-		}
-		public stanza(stanza_type t, String n){
-			type = t;
-			name = n;
-		}
-		public void AddReference(stanza_type type, String name){
-			references.add(new reference_to(type, name));
-		}
-		@Override
-		public int hashCode(){
-			return type.hashCode()+name.hashCode();
-		}
-		@Override
-		public boolean equals(Object obj){
-			if( obj  instanceof stanza){
-				stanza stanza_obj = (stanza) obj;
-				return stanza_obj.type == this.type && stanza_obj.name.equals(this.name);
-			}
-			return false;
-		}
-		@Override
-		public String toString(){
-			return "stanza:"+name+"("+type.name()+")";
-		}
-	}
-	class reference_to{
-		public stanza_type type;
-		public String name;
-		public reference_to(stanza_type t, String n){
-			type = t;
-			name = n;
-		}
-	}
-	
-
-	Set<stanza> stanzas = new HashSet<stanza>();
-	stanza current = null;
-	
-	public Integer getComplexity(){
-//      return stanzas.size();
-		int totalReferences=0;
-		for(stanza s: stanzas){
-			List<reference_to> references = s.references;
-			for(reference_to to: references){
-				stanza dst = new stanza(to.type, to.name);
-				if(!stanzas.contains(dst)){
-					System.out.println(s+" references to a non-existing stanza: "+dst);
-				}
-				else{
-					totalReferences++;
-				}
-			}
-		}
-		return totalReferences;
-	}
-
-	
-	private void enterStanza(stanza_type t){
-		if(current !=null){
-			System.out.println("enter a new stanza without exiting the previous, please check. "+current);
-		}
-		current = new stanza(t);
-	}
-	private void exitStanza(String name){
-		if(current == null){
-			System.out.println("exit a null stanza, please check.");
-		}
-		current.name = name;
-		if(stanzas.contains(current)){
-			System.out.println("duplicated stanzas, please check: "+current);
-		}
-		else{
-			stanzas.add(current);
-		}
-		current = null;
-	}
-	private void AddReference(stanza_type type, String name) {
-		current.AddReference(type, name);
-//      System.out.println(current.type.name()+" references to "+type.name()+":"+name);
-	}
 
 }
 

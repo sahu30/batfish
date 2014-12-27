@@ -9,7 +9,7 @@ options {
 match_as_path_access_list_rm_stanza
 @after{
 	for(Token name: _localctx.name_list){
-		AddReference(stanza_type.ACL, name.getText());
+		addStanzaReference("acl", name.getText());
 	}
 }
 :
@@ -22,7 +22,7 @@ match_as_path_access_list_rm_stanza
 match_community_list_rm_stanza
 @after{
 	for(Token name: _localctx.name_list){
-		AddReference(stanza_type.ACL, name.getText());
+		addStanzaReference("acl", name.getText());
 	}
 }
 :
@@ -39,7 +39,7 @@ match_community_list_rm_stanza
 match_ip_access_list_rm_stanza
 @after{
 	for(Token name: _localctx.name_list){
-		AddReference(stanza_type.ACL, name.getText());
+		addStanzaReference("acl", name.getText());
 	}
 }
 :
@@ -56,7 +56,7 @@ match_ip_access_list_rm_stanza
 match_ip_prefix_list_rm_stanza
 @after{
 	for(Token name: _localctx.name_list){
-		AddReference(stanza_type.ACL, name.getText());
+		addStanzaReference("acl", name.getText());
 	}
 }
 :
@@ -136,7 +136,7 @@ locals [boolean again]
 ;
 
 route_map_stanza
-@init{ enterStanza(stanza_type.ROUTEMAP); }
+@init{ enterStanza("routemap"); }
 @after{ exitStanza(_localctx.named.name.getText()); }
 :
    named = route_map_named_stanza

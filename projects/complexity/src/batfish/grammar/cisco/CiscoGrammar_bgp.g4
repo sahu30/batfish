@@ -7,7 +7,7 @@ options {
 }
 
 access_list_bgp_tail
-@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+@after{ addStanzaReference("acl", _localctx.name.getText()); }
 :
    FILTER_LIST name = ~NEWLINE ( IN | OUT ) NEWLINE
 ;
@@ -145,7 +145,7 @@ default_metric_bgp_tail
 ;
 
 default_originate_bgp_tail
-@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
+@after{ if(_localctx.map!=null) addStanzaReference("routemap", _localctx.map.getText()); }
 :
    DEFAULT_ORIGINATE
    (
@@ -194,11 +194,11 @@ neighbor_rb_stanza
       bgp_tail
       | rabt = remote_as_bgp_tail
    )
-   { if(_localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText());  }
+   { if(_localctx.ip!=null && _localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText(), _localctx.ip.getText());  }
 ;
 
 network_bgp_tail
-@after{ if(_localctx.mapname!=null)AddReference(stanza_type.ROUTEMAP, _localctx.mapname.getText()); }
+@after{ if(_localctx.mapname!=null) addStanzaReference("routemap", _localctx.mapname.getText()); }
 :
    NETWORK
    (
@@ -255,10 +255,16 @@ nexus_neighbor_rb_stanza
       | ip_prefix = IP_PREFIX
       | ipv6_prefix = IPV6_PREFIX
    )
-   { enterNeighbor(_localctx.ip_address.getText()); }
+   { 
+   		if(_localctx.ip_address!=null) enterNeighbor(_localctx.ip_address.getText()); 
+   		else if(_localctx.ip_prefix!=null) enterNeighbor(_localctx.ip_prefix.getText());
+   }
    (
       REMOTE_AS asnum = DEC
-      { addBGPNeighbor(_localctx.asnum.getText()); }
+      { 
+      		if(_localctx.ip_address!=null) addBGPNeighbor(_localctx.asnum.getText(), _localctx.ip_address.getText()); 
+      		else if(_localctx.ip_prefix!=null) addBGPNeighbor(_localctx.asnum.getText(), _localctx.ip_prefix.getText());
+      }
 
    )? NEWLINE  
    (
@@ -267,7 +273,12 @@ nexus_neighbor_rb_stanza
       | nexus_neighbor_inherit
       | nexus_neighbor_no_shutdown
       | rabt = remote_as_bgp_tail
-      { if(_localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText());  }
+      { 
+      		if(_localctx.rabt!=null){
+      		 	if(_localctx.ip_address!=null) addBGPNeighbor(_localctx.rabt.as.getText(), _localctx.ip_address.getText());  
+      		 	else if(_localctx.ip_prefix!=null) addBGPNeighbor(_localctx.rabt.as.getText(), _localctx.ip_prefix.getText());
+      		}
+      }
    )+
    { exitNeighbor(); }
 ;
@@ -382,7 +393,7 @@ peer_group_creation_rb_stanza
 ;
 
 prefix_list_bgp_tail
-@after{ AddReference(stanza_type.ACL, _localctx.list_name.getText()); }
+@after{ addStanzaReference("acl", _localctx.list_name.getText()); }
 :
    PREFIX_LIST list_name = VARIABLE
    (
@@ -402,7 +413,7 @@ remove_private_as_bgp_tail
 ;
 
 route_map_bgp_tail
-@after{ AddReference(stanza_type.ROUTEMAP, _localctx.name.getText()); }
+@after{ addStanzaReference("routemap", _localctx.name.getText()); }
 :
    ROUTE_MAP name = VARIABLE
    (
@@ -422,7 +433,7 @@ redistribute_aggregate_bgp_tail
 ;
 
 redistribute_connected_bgp_tail
-@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
+@after{ if(_localctx.map!=null) addStanzaReference("routemap", _localctx.map.getText()); }
 :
    REDISTRIBUTE
    (
@@ -442,8 +453,8 @@ redistribute_connected_bgp_tail
 
 redistribute_ospf_bgp_tail
 @after{ 
-   if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); 
-   AddReference(stanza_type.ROUTER, "ospf_"+_localctx.procnum.getText());
+   if(_localctx.map!=null) addStanzaReference("routemap", _localctx.map.getText()); 
+   addStanzaReference("router", "ospf_"+_localctx.procnum.getText());
 }
 :
    REDISTRIBUTE OSPF procnum = DEC
@@ -459,7 +470,7 @@ redistribute_ospf_bgp_tail
 ;
 
 redistribute_static_bgp_tail
-@after{ if(_localctx.map!=null)AddReference(stanza_type.ROUTEMAP, _localctx.map.getText()); }
+@after{ if(_localctx.map!=null) addStanzaReference("routemap", _localctx.map.getText()); }
 :
    REDISTRIBUTE STATIC
    (
@@ -474,7 +485,7 @@ redistribute_static_bgp_tail
 ;
 
 router_bgp_stanza
-@init{ enterStanza(stanza_type.ROUTER); }
+@init{ enterStanza("router"); }
 @after{ exitStanza("bgp_"+_localctx.procnum.getText()); }
 :
    ROUTER BGP procnum = DEC NEWLINE  { enterBGP(_localctx.procnum.getText()); }
@@ -541,7 +552,7 @@ template_peer_rb_stanza
 ;
 
 update_source_bgp_tail
-@after{ AddReference(stanza_type.IFACE, _localctx.source.getText()); }
+@after{ addStanzaReference("iface", _localctx.source.getText()); }
 :
    UPDATE_SOURCE source = interface_name NEWLINE
 ;

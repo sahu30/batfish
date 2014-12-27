@@ -7,8 +7,15 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+
+
+
+
 
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -22,14 +29,19 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 import org.apache.commons.io.FileUtils;
 
 
+
+
+
+
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+import batfish.grammar.cisco.complexityUtil;
 
 
 
 public class Batfish {
 	//Map<String, Integer> complexity=new TreeMap<String, Integer>();
-	Map<String, CiscoGrammar> configs = new TreeMap<String, CiscoGrammar>();
+	Map<String, complexityUtil> configs = new TreeMap<String, complexityUtil>();
 	private String readFile(File file) throws Exception {
 		String text = null;
 		try {
@@ -100,7 +112,7 @@ public class Batfish {
 			try{
 				if (fileText.charAt(0) == '!') {
 					parser.cisco_configuration();
-					configs.put(currentFile.getName(), parser);
+					configs.put(currentFile.getName(), parser.comp);
 		//			complexity.put(currentFile.getName(), parser.getComplexity());
 					System.out.println("... OK");
 				} else {
@@ -120,7 +132,7 @@ public class Batfish {
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
 		    for(String net: configs.keySet()){
-		    	Integer comp= configs.get(net).getComplexity();
+		    	Integer comp= configs.get(net).getIntraComplexity();
 		    	writer.write(net+":"+comp+"\n");
 		    	total += comp;
 		    	count++;
@@ -132,36 +144,53 @@ public class Batfish {
 		}
 	}
 	public void outputInterFileComplexity(String path){
+	   /*
 		for(String net: configs.keySet()){
 			CiscoGrammar g = configs.get(net);
 			g.ProcessOspfReferences();
 		}
-		
+		*/
 		
 		String file = path+"/"+"inter_complexity.txt";
 		Writer writer  = null;
-		int count = 0;
-		
-		for(String net1: configs.keySet()){
-			for(String net2: configs.keySet()){
-				if(net1.equals(net2)) continue;
-            System.out.println("********from:"+net1+" to:"+net2+"*******");
-				CiscoGrammar g1 = configs.get(net1);
-				CiscoGrammar g2 = configs.get(net2);
-				if(g1.OspfReferenced(g2)){
-					count++;
-					continue;
-				}
-				else if(g1.BgpReferenced(g2)){
-System.out.println("find bgp reference");
-					count++;
-					continue;
-				}
-			}
+		int ibgpCount = 0;
+		int ebgpCount = 0;
+		int ospfCount = 0;
+		HashSet<String> ases = new HashSet<String>();
+		for(String net: configs.keySet()){
+		   complexityUtil comp = configs.get(net);
+		   // ibgp
+		   ibgpCount+=comp.ibgpNeighbors.size();
+		   // ebgp
+		   ases.add(comp.bgpAs);
 		}
+		// ebgp
+		for(String net: configs.keySet()){
+		   complexityUtil comp = configs.get(net);
+		   List<String> neighbors = comp.ebgpNeighbors;
+		   for(String n: neighbors){
+		      if(ases.contains(n))
+		         ebgpCount++;
+		   }
+		}
+		// ospf
+      for(String net1: configs.keySet()){
+         for(String net2: configs.keySet()){
+            if(net1.equals(net2)) continue;
+            complexityUtil comp1 = configs.get(net1);
+            complexityUtil comp2 = configs.get(net2);
+            if(comp1.OspfReferenced(comp2)){
+               ospfCount++;
+            }
+         }
+      }
+         
+		
+		
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		    writer.write(""+count);
+		    writer.write(""+ibgpCount+" "+ebgpCount+" "+ospfCount+" "+(ibgpCount+ebgpCount)
+		          +" "+(ibgpCount+ebgpCount+ospfCount));
 		    writer.close();
 		} catch (Exception ex) {
 		    

@@ -58,7 +58,7 @@ if_stanza
 ;
 
 interface_stanza
-@init{ enterStanza(stanza_type.IFACE); 
+@init{ enterStanza("iface"); 
 //System.out.println("enter interface stanza");
 }
 @after{ exitStanza(_localctx.iname.getText()); 
@@ -82,7 +82,7 @@ interface_stanza_tail
 ;
 
 ip_access_group_if_stanza
-@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+@after{ addStanzaReference("acl", _localctx.name.getText()); }
 :
    IP PORT? ACCESS_GROUP name = .
    (
@@ -129,13 +129,13 @@ ip_ospf_dead_interval_minimal_if_stanza
 ;
 
 ip_policy_if_stanza
-@after{ AddReference(stanza_type.ROUTEMAP, _localctx.name.getText()); }
+@after{ addStanzaReference("routemap", _localctx.name.getText()); }
 :
    IP POLICY ROUTE_MAP name = ~NEWLINE NEWLINE
 ;
 
 mac_access_group_if_stanza
-@after{ AddReference(stanza_type.ACL, _localctx.name.getText()); }
+@after{ addStanzaReference("acl", _localctx.name.getText()); }
 :
    MAC PORT? ACCESS_GROUP name = . NEWLINE
 ;
