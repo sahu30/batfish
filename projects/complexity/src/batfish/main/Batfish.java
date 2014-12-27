@@ -145,6 +145,7 @@ public class Batfish {
 		for(String net1: configs.keySet()){
 			for(String net2: configs.keySet()){
 				if(net1.equals(net2)) continue;
+            System.out.println("********from:"+net1+" to:"+net2+"*******");
 				CiscoGrammar g1 = configs.get(net1);
 				CiscoGrammar g2 = configs.get(net2);
 				if(g1.OspfReferenced(g2)){
@@ -152,6 +153,7 @@ public class Batfish {
 					continue;
 				}
 				else if(g1.BgpReferenced(g2)){
+System.out.println("find bgp reference");
 					count++;
 					continue;
 				}
@@ -159,7 +161,7 @@ public class Batfish {
 		}
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		    writer.write(count);
+		    writer.write(""+count);
 		    writer.close();
 		} catch (Exception ex) {
 		    

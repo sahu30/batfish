@@ -75,7 +75,7 @@ import batfish.representation.*;
 		public void addNeighbor(String as){
          if(as.equals(asnum)){
             // ibpg, please check
-            System.out.println("add an ibgp, check");
+            System.out.println("add an ibgp, check. bgp as: "+asnum+", neighbor as: "+as);
          }
          else{
             ebgp_neighbors.add(as);
@@ -185,7 +185,7 @@ import batfish.representation.*;
 
    public void exitBGP(){
       assert bgp_router != null;
-      bgp_router = null;
+   //   bgp_router = null;
    }
 
    public void enterOSPF(String name){
@@ -251,24 +251,30 @@ import batfish.representation.*;
 	
 	public boolean BgpReferenced(CiscoGrammar other){
       System.out.println("===== BGP Reference ====");
-      printBGP();
-      other.printBGP();
+//      printBGP();
+//      other.printBGP();
 		if(bgp_router==null || other.bgp_router==null) 
 			return false;
 
-      if(bgp_router.asnum.equals(other.bgp_router.asnum)){
+      if(bgp_router.asnum.equals(other.bgp_router.asnum)){  // ibgp
          System.out.println("this is an ibgp example, look into it");
          return false;
       }
-      else{
+      else{ // ebgp
+/*
+for(String n: bgp_router.ebgp_neighbors){
+   System.out.println("*"+n+"*");
+}
+System.out.println("++"+other.bgp_router.asnum+"++");
+*/
 		   return bgp_router.ebgp_neighbors.contains(other.bgp_router.asnum);
       }
 	}
 	
 	public boolean OspfReferenced(CiscoGrammar other){
       System.out.println("==== OSPF Reference ====");
-      printOSPF();
-      other.printOSPF();
+//      printOSPF();
+//      other.printOSPF();
 		for(subnet sub: subnet_of_ospf_iface){
 			if(other.subnet_of_ospf_iface.contains(sub))
 				return true;
@@ -363,7 +369,7 @@ import batfish.representation.*;
 	}
 	private void AddReference(stanza_type type, String name) {
 		current.AddReference(type, name);
-      System.out.println(current.type.name()+" references to "+type.name()+":"+name);
+//      System.out.println(current.type.name()+" references to "+type.name()+":"+name);
 	}
 
 }

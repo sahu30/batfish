@@ -533,10 +533,9 @@ template_peer_rb_stanza
    TEMPLATE PEER name = VARIABLE NEWLINE  { enterTemplate(_localctx.name.getText()); }
    (
       bgp_tail
-      | rabt = remote_as_bgp_tail
+      | rabt = remote_as_bgp_tail { addTemplateAs(_localctx.rabt.as.getText());  }
       | template_inherit
       | template_peer_address_family
-      { if(_localctx.rabt!=null) addTemplateAs(_localctx.rabt.as.getText());  }
    )+
    { exitTemplate(); }
 ;
