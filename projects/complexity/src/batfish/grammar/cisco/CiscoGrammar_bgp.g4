@@ -255,7 +255,7 @@ nexus_neighbor_rb_stanza
       | ip_prefix = IP_PREFIX
       | ipv6_prefix = IPV6_PREFIX
    )
-   { if(_localctx.ip_address!=null) enterNeighbor(_localctx.ip_address.getText()); }
+   { enterNeighbor(_localctx.ip_address.getText()); }
    (
       REMOTE_AS asnum = DEC
       { addBGPNeighbor(_localctx.asnum.getText()); }

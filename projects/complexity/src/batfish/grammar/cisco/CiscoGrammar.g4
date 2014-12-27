@@ -147,11 +147,11 @@ import batfish.representation.*;
 
    public void exitNeighbor(){
       if( bgp_router==null){
-         System.out.println("enter neighbor with bgp_router null");
+         System.out.println("exit neighbor with bgp_router null");
          assert false;
       }
       if(bgp_router.current_neighbor==null){
-         System.out.println("enter neighbor with current_neighbor null");
+         System.out.println("exit neighbor with current_neighbor null");
          assert false;
       }
       bgp_router.current_neighbor = null;
@@ -179,22 +179,34 @@ import batfish.representation.*;
    public String ospf_router = null;
    public String iface = null;
    public void enterBGP(String as){
-      assert bgp_router == null;
+      if(bgp_router!=null){
+         System.out.println("enterBGP with bgp_router not null");
+         assert false;
+      }
       bgp_router = new bgp(as);
    }
 
    public void exitBGP(){
-      assert bgp_router != null;
+      if(bgp_router==null){
+         System.out.println("exitBGP with bgp_router null");
+         assert false;
+      }
    //   bgp_router = null;
    }
 
    public void enterOSPF(String name){
-      assert ospf_router == null;
+      if(ospf_router!=null){
+         System.out.println("enterOSPF with ospf_router not null");
+         assert false;
+      }
       ospf_router = name;
    }
 
    public void exitOSPF(){
-      assert ospf_router !=null; 
+      if(ospf_router==null){
+         System.out.println("exitOSPF with osfp_router null");
+         assert false;
+      }
       ospf_router = null;
    }
 
@@ -678,7 +690,7 @@ null_block_substanza
          | IDLE_TIMEOUT
          | INSPECT
          | INSTANCE
- //        | INTERFACE {System.out.println("interface in null-block-substanza" + _input.LA(1));}
+         | ( INTERFACE  POLICY)
          |
          (
             (
