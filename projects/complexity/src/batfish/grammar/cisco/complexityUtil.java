@@ -131,6 +131,7 @@ public class complexityUtil {
    }
 
    public void addBGPNeighborByTemplate(String temp_name) {
+      System.out.println("addBGPNeighborByTemplate template name:"+temp_name);
       Assert(bgpAs!=null, "addBGPNeighborByTemplate with bgpAs null");
       Assert(currentNeighbor!=null, "addBGPNeighborByTemplate with currentNeighbor null");
       String as = templateToAs.get(temp_name);
