@@ -121,6 +121,7 @@ port
    | TACACS
    | TELNET
    | TFTP
+   | WHOIS
    | WWW
 ;
 

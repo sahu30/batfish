@@ -4002,6 +4002,11 @@ WEIGHT
    'weight'
 ;
 
+WHOIS
+:
+   'whois'
+;
+
 WINS_SERVER
 :
    'wins-server'
