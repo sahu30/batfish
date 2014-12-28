@@ -104,6 +104,7 @@ public class complexityUtil {
    }   
 
    public void enterNeighbor(String nei) {
+//System.out.println("enterNeighbor: "+nei);
       Assert(bgpAs!=null, "enterTemplate with bgpAs null");
       Assert(currentNeighbor==null, "enterNeighbor with currentNeighbor not null");
       currentNeighbor = nei;
@@ -111,7 +112,7 @@ public class complexityUtil {
 
    public void exitNeighbor() {
       Assert(bgpAs!=null, "enterTemplate with bgpAs null");
-      Assert(currentNeighbor==null, "exitNeighbor with currentNeighbor null");
+      Assert(currentNeighbor!=null, "exitNeighbor with currentNeighbor null");
       currentNeighbor = null;
    }
    
@@ -131,12 +132,13 @@ public class complexityUtil {
    }
 
    public void addBGPNeighborByTemplate(String temp_name) {
-      System.out.println("addBGPNeighborByTemplate template name:"+temp_name);
+//System.out.println("addBGPNeighborByTemplate template name:"+temp_name);
       Assert(bgpAs!=null, "addBGPNeighborByTemplate with bgpAs null");
       Assert(currentNeighbor!=null, "addBGPNeighborByTemplate with currentNeighbor null");
       String as = templateToAs.get(temp_name);
-      Assert(as!=null, "addBGPNeighborByTemplate without the template as");
-      addBGPNeighbor(as, currentNeighbor);
+      Warning(as!=null, "addBGPNeighborByTemplate without the template as existing");
+      if(as!=null)
+         addBGPNeighbor(as, currentNeighbor);
    }
 
    public int ebgpReferences(HashSet<String> ases) {
@@ -340,6 +342,12 @@ public class complexityUtil {
       if(!exp){
          System.out.println(info);
          assert false;
+      }
+   }
+   
+   private void Warning(boolean exp, String info){
+      if(!exp){
+         System.out.println("Waring: "+info);
       }
    }
 }
