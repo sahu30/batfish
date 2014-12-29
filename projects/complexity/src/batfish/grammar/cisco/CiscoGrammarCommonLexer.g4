@@ -3193,6 +3193,11 @@ REFLECT
    'reflect'
 ;
 
+RELOAD
+:
+   'reload'
+;
+
 RELOAD_DELAY
 :
    'reload-delay'

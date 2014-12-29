@@ -542,6 +542,7 @@ null_block_substanza
          | RECORD
          | RECORD_ENTRY
          | REDISTRIBUTE
+         | RELOAD
          | RELOAD_DELAY
          | REMARK
          | REMOTE_IP
