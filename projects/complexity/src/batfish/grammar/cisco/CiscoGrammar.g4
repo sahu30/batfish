@@ -214,6 +214,7 @@ module_stanza
    | probe_module_stanza
    | serverfarm_module_stanza
    | sticky_module_stanza
+   | null_module_standalone_stanza
    | vlan_module_stanza
    | vserver_module_stanza
    | xml_config_module_stanza
@@ -585,6 +586,13 @@ null_block_substanza
          remaining_tokens += ~NEWLINE
       )* NEWLINE
    )
+;
+
+null_module_standalone_stanza
+:
+   (
+      SCRIPT
+   ) ~NEWLINE* NEWLINE
 ;
 
 null_standalone_stanza

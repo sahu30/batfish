@@ -3358,6 +3358,11 @@ SCP
    'scp'
 ;
 
+SCRIPT
+:
+   'script'
+;
+
 SCRIPTING
 :
    'scripting'
