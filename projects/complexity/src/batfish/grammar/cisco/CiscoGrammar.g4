@@ -1103,7 +1103,7 @@ switching_mode_stanza
 
 vlan_module_stanza
 :
-   VLAN DEC ( SERVER | CLIENT )
+   VLAN DEC ( SERVER | CLIENT ) NEWLINE
    vlan_module_substanza+
 ;
 
