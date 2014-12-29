@@ -228,6 +228,7 @@ null_standalone_if_stanza
                   | MESSAGE_DIGEST_KEY
                   | NETWORK
                   | PRIORITY
+                  | PASSIVE_INTERFACE
                )
             )
             | NAT
