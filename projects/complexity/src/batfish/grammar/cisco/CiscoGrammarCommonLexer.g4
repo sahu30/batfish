@@ -1426,11 +1426,6 @@ FREQUENCY
    'frequency'
 ;
 
-FT
-:
-   'ft'
-;
-
 FTP
 :
    'ftp'
@@ -1529,11 +1524,6 @@ HARDWARE
 HASH
 :
    'hash'
-;
-
-HEARTBEAT_TIME
-:
-   'heartbeat-time'
 ;
 
 HELLO_MULTIPLIER

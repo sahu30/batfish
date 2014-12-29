@@ -273,7 +273,6 @@ null_block_stanza
       | MAP_CLASS
       | MAP_LIST
       | MLAG
-      | MODULE
       | NO_BANNER
       | OPENFLOW
       | PLAT
@@ -390,7 +389,6 @@ null_block_substanza
          | EXPORT_PROTOCOL
          | EXPORTER
          | FABRIC
-         | FAILOVER
          | FAIR_QUEUE
          | FALLBACK_DN
          | FILE_BROWSING
@@ -398,11 +396,9 @@ null_block_substanza
          | FLUSH_AT_ACTIVATION
          | FQDN
          | FRAMING
-         | FT
          | GROUP_ALIAS
          | GROUP_POLICY
          | GROUP_URL
-         | HEARTBEAT_TIME
          | HIDDEN
          | HIDDEN_SHARES
          | HIDEKEYS
@@ -473,7 +469,6 @@ null_block_substanza
          | POLICE
          | POLICY_MAP
          | PORT
-         | PREEMPT
          | PREFIX
          | PRI_GROUP
          | PRIORITY
