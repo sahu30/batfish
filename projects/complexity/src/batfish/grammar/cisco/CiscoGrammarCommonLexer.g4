@@ -1142,14 +1142,19 @@ ECHO_REQUEST
    'echo-request'
 ;
 
-EGP
+EHS
 :
-   'egp'
+   'ehs'
 ;
 
 EIGRP
 :
    'eigrp'
+;
+
+EGP
+:
+   'egp'
 ;
 
 EMPTY
