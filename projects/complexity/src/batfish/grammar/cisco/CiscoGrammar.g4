@@ -1028,7 +1028,7 @@ null_stanza
 policy_module_stanza
 :
    POLICY ~NEWLINE* NEWLINE
-   policy_module_substanza+
+   policy_module_substanza*
 ;
 
 policy_module_substanza
