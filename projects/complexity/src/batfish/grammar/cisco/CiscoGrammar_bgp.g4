@@ -388,6 +388,7 @@ null_bgp_tail
       | SEND_LABEL
       | SOFT_RECONFIGURATION
       | SYNCHRONIZATION
+      | TEMPLATE PEER_SESSION
       | TIMERS
       | TRANSPORT
       | VERSION
