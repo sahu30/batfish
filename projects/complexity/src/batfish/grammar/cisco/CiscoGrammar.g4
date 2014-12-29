@@ -1036,9 +1036,11 @@ probe_module_stanza
 probe_module_substanza
 :
    (
-      EXPECT
+      ADDRESS
+      | EXPECT
       | FAILED
       | INTERVAL
+      | NAME
       | OPEN
       | PORT
       | REQUEST
@@ -1048,15 +1050,15 @@ probe_module_substanza
 serverfarm_module_stanza
 :
    SERVERFARM ~NEWLINE* NEWLINE
-   serverfarm_module_substanza
+   serverfarm_module_substanza+
 ;
 
 serverfarm_module_substanza
 :
    (
-      INSERVICE
-      | NAT
-      | NO NAT
+      NO? INSERVICE
+      | NO? NAT
+      | PREDICTOR
       | PROBE
       | REAL
    ) ~NEWLINE* NEWLINE

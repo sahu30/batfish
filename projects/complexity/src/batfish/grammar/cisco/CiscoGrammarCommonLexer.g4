@@ -2838,6 +2838,11 @@ PRE_SHARED_KEY
    'pre-shared-key'
 ;
 
+PREDICTOR
+:
+   'predictor'
+;
+
 PREEMPT
 :
    'preempt'
