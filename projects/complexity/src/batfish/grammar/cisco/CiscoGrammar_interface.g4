@@ -228,6 +228,7 @@ null_standalone_if_stanza
          (
             ACCOUNTING
             | ARP
+            | BROADCAST_ADDRESS
             | CGMP
             | DHCP 
 //            {System.out.println("DHCP in IF null_standalone");}

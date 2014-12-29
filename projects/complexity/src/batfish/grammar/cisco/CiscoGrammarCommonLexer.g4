@@ -482,6 +482,11 @@ BROADCAST
    'broadcast'
 ;
 
+BROADCAST_ADDRESS
+:
+   'broadcast-address'
+;
+
 CA
 :
    'ca'
