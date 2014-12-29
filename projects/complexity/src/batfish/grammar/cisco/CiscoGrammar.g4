@@ -656,6 +656,7 @@ null_standalone_stanza
                   ENABLE
                   | KEY
                   | INVALID_SPI_RECOVERY
+                  | KEEPALIVE
                )
             )
          )
