@@ -137,9 +137,10 @@ locals [boolean again]
 
 route_map_stanza
 @init{ enterStanza("routemap"); }
-@after{ exitStanza(_localctx.named.name.getText()); }
+@after{ if(_localctx.named!=null) exitStanza(_localctx.named.name.getText()); }
 :
    named = route_map_named_stanza
+   | null_route_map_standalone_stanza
 ;
 
 route_map_tail
@@ -280,3 +281,7 @@ set_rm_stanza
    | set_weight_rm_stanza
 ;
 
+null_route_map_standalone_stanza
+:
+   ROUTE_MAP DHCP ~NEWLINE* NEWLINE
+;
