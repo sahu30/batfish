@@ -104,6 +104,7 @@ port
    | ISAKMP
    | LPD
    | MLAG
+   | NAMESERVER
    | NETBIOS_DGM
    | NETBIOS_NS
    | NETBIOS_SS
