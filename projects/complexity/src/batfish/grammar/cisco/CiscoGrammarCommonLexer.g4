@@ -3043,6 +3043,11 @@ REAL
    'real'
 ;
 
+RECEIVE
+:
+   'receive'
+;
+
 RECORD_ENTRY
 :
    'record-entry'
