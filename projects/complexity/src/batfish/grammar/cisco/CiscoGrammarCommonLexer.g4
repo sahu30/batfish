@@ -2733,6 +2733,11 @@ PARITY
    'parity'
 ;
 
+PARSE_LENGTH
+:
+   'parse-length'
+;
+
 PARSER
 :
    'parser'

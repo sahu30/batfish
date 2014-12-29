@@ -1214,6 +1214,7 @@ vserver_module_substanza
       IDLE
       | NO? INSERVICE
       | REPLICATE
+      | PARSE_LENGTH
       | PERSISTENT
       | SERVERFARM
       | SLB_POLICY
