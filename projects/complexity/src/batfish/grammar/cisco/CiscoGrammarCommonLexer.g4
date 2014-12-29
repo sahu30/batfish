@@ -1863,6 +1863,11 @@ KEY
    'key' -> pushMode(M_KEY)
 ;
 
+KEY_STRING
+:
+   'key-string'
+;
+
 KEYPAIR
 :
    'keypair'

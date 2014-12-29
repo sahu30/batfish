@@ -301,6 +301,7 @@ null_block_stanza
       (
          IPV6 ACCESS_LIST
       )
+      | KEY
       | L2TP_CLASS
       | LINE
       | MANAGEMENT
@@ -460,8 +461,10 @@ null_block_substanza
          | IPV6_ADDRESS_POOL
          | ISAKMP
          | KEEPALIVE_ENABLE
+         | KEY
          | KEYPAIR
          | KEYRING
+         | KEY_STRING
          | L2TP
          | LENGTH
          | LIMIT_RESOURCE
