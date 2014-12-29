@@ -178,6 +178,11 @@ filter_list_bgp_tail
    ) NEWLINE
 ;
 
+local_as_bgp_tail
+:
+   LOCAL_AS as = DEC NEWLINE
+;
+
 maximum_prefix_bgp_tail
 :
    MAXIMUM_PREFIX DEC NEWLINE
@@ -194,8 +199,12 @@ neighbor_rb_stanza
    (
       bgp_tail
       | rabt = remote_as_bgp_tail
+      | labt = local_as_bgp_tail
    )
-   { if(_localctx.ip!=null && _localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText(), _localctx.ip.getText());  }
+   { 
+      if(_localctx.ip!=null && _localctx.rabt!=null) addBGPNeighbor(_localctx.rabt.as.getText(), _localctx.ip.getText());  
+      if(_localctx.ip!=null && _localctx.labt!=null) addBGPNeighbor(_localctx.labt.as.getText(), _localctx.ip.getText());  
+   }
 ;
 
 network_bgp_tail
