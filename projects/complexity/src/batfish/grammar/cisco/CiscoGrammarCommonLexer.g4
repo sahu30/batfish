@@ -3995,6 +3995,11 @@ THREE_DES_SHA1
    '3des-sha1'
 ;
 
+THRESHOLD
+:
+   'threshold'
+;
+
 TIME_EXCEEDED
 :
    'time-exceeded'

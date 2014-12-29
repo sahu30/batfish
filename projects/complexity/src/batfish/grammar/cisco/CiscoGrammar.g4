@@ -347,6 +347,7 @@ null_block_stanza
          )
       )
       | TERMINAL
+      | TRACK
       | VDC
       |
       (
@@ -512,6 +513,7 @@ null_block_substanza
          | NETWORK
          | NODE
          | NOTIFY
+         | OBJECT
          | PARAMETERS
          | PARENT
          | PARITY
@@ -589,6 +591,7 @@ null_block_substanza
          | TB_VLAN1
          | TB_VLAN2
          | TERMINAL_TYPE
+         | THRESHOLD
          | TIMEOUT
          | TIMEOUTS
          | TIMER
