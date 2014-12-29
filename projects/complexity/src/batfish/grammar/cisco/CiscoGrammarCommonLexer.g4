@@ -277,6 +277,11 @@ AS_PATH
    'as-path'
 ;
 
+AS_SET
+:
+   'as-set'
+;
+
 ASA
 :
    'ASA'
