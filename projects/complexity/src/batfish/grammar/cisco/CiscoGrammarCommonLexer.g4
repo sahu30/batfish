@@ -3323,6 +3323,11 @@ RULE
    'rule' -> pushMode(M_Rule)
 ;
 
+SAID
+:
+   'said'
+;
+
 SAME_SECURITY_TRAFFIC
 :
    'same-security-traffic'
