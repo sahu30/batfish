@@ -1726,6 +1726,11 @@ ILMI_KEEPALIVE
    'ilmi-keepalive'
 ;
 
+IMPORT
+:
+   'import'
+;
+
 IN
 :
    'in'

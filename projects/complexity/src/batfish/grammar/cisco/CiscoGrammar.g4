@@ -461,6 +461,7 @@ null_block_substanza
          | HIGH_AVAILABILITY
          | HISTORY
          | IDLE_TIMEOUT
+         | IMPORT
          | INSPECT
          | INSTANCE
          | ( INTERFACE  POLICY)
