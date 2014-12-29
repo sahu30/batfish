@@ -940,6 +940,7 @@ null_standalone_stanza
       | SUBSCRIBE_TO
       | SUBSCRIBE_TO_ALERT_GROUP
       | SWITCH
+      | SWITCHNAME
       | SYSOPT
       | SYSTEM
       | TABLE_MAP
