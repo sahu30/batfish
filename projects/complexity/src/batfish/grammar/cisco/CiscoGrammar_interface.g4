@@ -233,6 +233,7 @@ null_standalone_if_stanza
             )
             | NAT
             | PIM
+            | PORT_UNREACHABLE
             | PROXY_ARP
             | REDIRECTS
             | RIP
