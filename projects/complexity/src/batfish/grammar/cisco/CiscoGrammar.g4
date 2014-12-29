@@ -1156,7 +1156,7 @@ vserver_module_substanza
 :
    (
       IDLE
-      | INSERVICE
+      | NO? INSERVICE
       | REPLICATE
       | PERSISTENT
       | SERVERFARM
