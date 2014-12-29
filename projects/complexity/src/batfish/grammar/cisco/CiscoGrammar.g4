@@ -871,6 +871,7 @@ null_standalone_stanza
       | PARSER
       | PARTICIPATE
       | PASSWORD
+      | PENDING
       | PERCENT
       | PHONE_PROXY
       | PLATFORM
@@ -879,6 +880,7 @@ null_standalone_stanza
       | POWER
       | POWEROFF
       | PRE_SHARED_KEY
+      | PRINTING
       | PRIORITY
       | PRIORITY_QUEUE
       | PRIVILEGE

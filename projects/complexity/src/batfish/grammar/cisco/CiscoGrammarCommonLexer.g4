@@ -2798,6 +2798,11 @@ PEER_SESSION
    'peer-session'
 ;
 
+PENDING
+:
+   'Pending'
+;
+
 PERMIT
 :
    'permit'
@@ -2956,6 +2961,11 @@ PREPEND
 PRI_GROUP
 :
    'pri-group'
+;
+
+PRINTING
+:
+   'Printing'
 ;
 
 PRIORITY
