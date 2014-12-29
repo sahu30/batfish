@@ -569,6 +569,7 @@ null_block_substanza
          | SWITCHBACK
          | SWITCHPORT
          | SYNC
+         | SYSTEM_PRIORITY
          | TB_VLAN1
          | TB_VLAN2
          | TERMINAL_TYPE

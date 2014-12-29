@@ -3870,6 +3870,11 @@ SYSTEM
    'system'
 ;
 
+SYSTEM_PRIORITY
+:
+   'system-priority'
+;
+
 TABLE_MAP
 :
    'table-map'
