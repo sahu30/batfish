@@ -1059,6 +1059,7 @@ probe_module_substanza
       | RECEIVE
       | REQUEST
       | RETRIES
+      | SCRIPT
    ) ~NEWLINE* NEWLINE
 ;
 
