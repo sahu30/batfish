@@ -425,6 +425,7 @@ null_block_substanza
          | EXEC_TIMEOUT
          | EXIT
          | EXIT_ADDRESS_FAMILY
+         | EXPORT
          | EXPORT_PROTOCOL
          | EXPORTER
          | FABRIC
