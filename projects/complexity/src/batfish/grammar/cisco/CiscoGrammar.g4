@@ -317,6 +317,7 @@ null_block_stanza
       | PSEUDOWIRE_CLASS
       | REDUNDANCY
       | ROLE
+      | SAMPLER
       |
       (
          SCCP CCM GROUP
