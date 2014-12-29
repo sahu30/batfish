@@ -58,7 +58,8 @@ appletalk_access_list_stanza
 extended_access_list_additional_feature
 :
    (
-      ECHO_REPLY
+      DSCP CS6
+      |ECHO_REPLY
       | ECHO_REQUEST
       | ECHO
       | ESTABLISHED

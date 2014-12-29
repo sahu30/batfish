@@ -767,6 +767,11 @@ CRL
    'crl'
 ;
 
+CS6
+:
+   'cs6'
+;
+
 CTL_FILE
 :
    'ctl-file'
@@ -1040,6 +1045,11 @@ DROP
 DS0_GROUP
 :
    'ds0-group'
+;
+
+DSCP
+:
+   'dscp'
 ;
 
 DSP
