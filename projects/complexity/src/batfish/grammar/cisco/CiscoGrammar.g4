@@ -1144,6 +1144,7 @@ vserver_module_substanza
    (
       IDLE
       | INSERVICE
+      | REPLICATE
       | PERSISTENT
       | SERVERFARM
       | SLB_POLICY
