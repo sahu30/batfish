@@ -94,6 +94,9 @@ import batfish.representation.*;
       comp.addIfaceSubnet(ip, mask);
    } 
    
+   void addOSPFSubnetInIface(){
+      comp.addOSPFSubnetInIface();
+   }
    void addOSPFIface(String name){
       comp.addOSPFIface(name);
    }

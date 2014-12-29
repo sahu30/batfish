@@ -52,6 +52,13 @@ public class complexityUtil {
       ifaceToSubnet.put(currentIface, s);
    }
 
+   public void addOSPFSubnetInIface(){
+      Assert(currentIface!=null, "addOSPFSubnetInIface with currentIface null");
+      subnet sub = ifaceToSubnet.get(currentIface);
+      Assert(sub!=null, "addOSPFSubnetIface with subnet of Iface null");
+      subnetOfOspfIface.add(sub);
+   }
+   
    public void addOSPFIface(String name) {
       Assert(ospf!=null, "addOSPFIface with ospf null");
  //     ifaceOfOspf.add(name);
@@ -234,7 +241,16 @@ public class complexityUtil {
             System.out.println("subnet should be a prefix, but is an IP");
             assert false;
          }
-         mask = new Ip(Long.parseLong(tokens[1]));
+         int maskLength = Integer.parseInt(tokens[1]);
+         long maskVal = 1;
+         for(int i = 0 ; i<maskLength-1; i++){
+            maskVal |= maskVal<<1;
+         }
+         for(int i = 0 ; i< 32-maskLength; i++){
+            maskVal<<=1;
+         }
+         
+         mask = new Ip(maskVal);
          ip = new Ip(tokens[0]);
       }
 
@@ -243,9 +259,13 @@ public class complexityUtil {
          mask = new Ip(_mask);
       }
 
+      public int prefix(){
+         return (int)(ip.asLong() & mask.asLong());
+      }
       @Override
       public int hashCode() {
-         return ip.hashCode() + mask.hashCode();
+         return prefix();
+   //      return ip.hashCode() + mask.hashCode();
       }
 
       @Override
@@ -254,7 +274,8 @@ public class complexityUtil {
             return false;
          }
          subnet other = (subnet) obj;
-         return ip == other.ip && mask == other.mask;
+         return this.prefix()==other.prefix();
+ //        return ip == other.ip && mask == other.mask;
       }
 
       @Override

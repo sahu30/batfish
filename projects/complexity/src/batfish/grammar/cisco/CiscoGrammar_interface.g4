@@ -40,6 +40,7 @@ if_stanza
    | ip_ospf_cost_if_stanza
    | ip_ospf_dead_interval_if_stanza
    | ip_ospf_dead_interval_minimal_if_stanza
+   | ip_ospf_router_if_stanza
    | ip_policy_if_stanza
    | mac_access_group_if_stanza
    | no_ip_address_if_stanza
@@ -126,6 +127,12 @@ ip_ospf_dead_interval_if_stanza
 ip_ospf_dead_interval_minimal_if_stanza
 :
    IP OSPF DEAD_INTERVAL MINIMAL HELLO_MULTIPLIER mult = DEC NEWLINE
+;
+
+ip_ospf_router_if_stanza
+@init{ addOSPFSubnetInIface(); }
+:
+   IP ROUTER OSPF procnum = DEC ~NEWLINE* NEWLINE
 ;
 
 ip_policy_if_stanza
@@ -238,7 +245,7 @@ null_standalone_if_stanza
             | REDIRECTS
             | RIP
             | ROUTE_CACHE
-            | ROUTER
+//            | ROUTER
             | TCP
             | UNNUMBERED
             | UNREACHABLES
