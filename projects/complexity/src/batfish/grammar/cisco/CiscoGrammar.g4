@@ -1046,6 +1046,7 @@ probe_module_substanza
       | OPEN
       | PORT
       | REQUEST
+      | RETRIES
    ) ~NEWLINE* NEWLINE
 ;
 

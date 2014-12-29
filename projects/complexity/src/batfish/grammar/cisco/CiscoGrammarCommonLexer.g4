@@ -3138,6 +3138,11 @@ RETRANSMIT
    'retransmit'
 ;
 
+RETRIES
+:
+   'retries'
+;
+
 REVERSE_ROUTE
 :
    'reverse-route'
