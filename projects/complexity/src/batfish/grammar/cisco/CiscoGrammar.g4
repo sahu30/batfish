@@ -740,6 +740,7 @@ null_standalone_stanza
             | TELNET
             | TFTP
             | VERIFY
+            | VRF
          )
       )
       | IP_ADDRESS_LITERAL
