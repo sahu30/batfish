@@ -497,6 +497,7 @@ null_block_substanza
          | NOTIFY
          | PARAMETERS
          | PARENT
+         | PARITY
          | PASSWORD
          | PASSWORD_STORAGE
          | PATH_JITTER
