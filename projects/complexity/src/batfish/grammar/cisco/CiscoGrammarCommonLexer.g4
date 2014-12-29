@@ -422,6 +422,11 @@ BASH
    'bash'
 ;
 
+BEACON
+:
+   'beacon'
+;
+
 BESTPATH
 :
    'bestpath'
