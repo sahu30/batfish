@@ -1046,7 +1046,7 @@ policy_module_substanza
 probe_module_stanza
 :
    PROBE ~NEWLINE* NEWLINE
-   probe_module_substanza+
+   probe_module_substanza*
 ;
 
 probe_module_substanza
