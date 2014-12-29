@@ -136,6 +136,22 @@ cisco_configuration
    )+ COLON? END? NEWLINE* EOF
 ;
 
+ft_module_stanza
+:
+   FT GROUP ~NEWLINE* NEWLINE
+   ft_module_substanza+
+;
+
+ft_module_substanza
+:
+   (
+      FAILOVER
+      | HEARTBEAT_TIME
+      | PREEMPT
+      | PRIORITY
+   ) ~NEWLINE* NEWLINE
+;
+
 hostname_stanza
 :
    HOSTNAME name = ~NEWLINE* NEWLINE
@@ -188,6 +204,24 @@ ip_route_vrfc_stanza
 macro_stanza
 :
    MACRO ~NEWLINE* NEWLINE
+;
+
+module_stanza
+:
+   ft_module_stanza
+   | natpool_module_stanza
+   | policy_module_stanza
+   | probe_module_stanza
+   | serverfarm_module_stanza
+   | sticky_module_stanza
+   | vlan_module_stanza
+   | vserver_module_stanza
+   | xml_config_module_stanza
+;
+
+natpool_module_stanza
+:
+   NATPOOL ~NEWLINE* NEWLINE
 ;
 
 no_ip_access_list_stanza
@@ -978,6 +1012,56 @@ null_stanza
    | vrf_context_stanza
 ;
 
+policy_module_stanza
+:
+   POLICY ~NEWLINE* NEWLINE
+   policy_module_substanza+
+;
+
+policy_module_substanza
+:
+   (
+      CLIENT_GROUP
+      | SERVERFARM
+      | STICKY_GROUP
+   ) ~NEWLINE* NEWLINE
+;
+
+probe_module_stanza
+:
+   PROBE ~NEWLINE* NEWLINE
+   probe_module_substanza+
+;
+
+probe_module_substanza
+:
+   (
+      EXPECT
+      | FAILED
+      | INTERVAL
+      | OPEN
+      | PORT
+      | REQUEST
+   ) ~NEWLINE* NEWLINE
+;
+
+serverfarm_module_stanza
+:
+   SERVERFARM ~NEWLINE* NEWLINE
+   serverfarm_module_substanza
+;
+
+serverfarm_module_substanza
+:
+   (
+      INSERVICE
+      | NAT
+      | NO NAT
+      | PROBE
+      | REAL
+   ) ~NEWLINE* NEWLINE
+;
+
 stanza
 :
    appletalk_access_list_stanza
@@ -994,6 +1078,7 @@ stanza
    | ipv6_router_ospf_stanza
    | ipx_sap_access_list_stanza
    | mac_access_list_stanza
+   | module_stanza
    | nexus_access_list_stanza
    | nexus_prefix_list_stanza
    | null_stanza
@@ -1006,9 +1091,30 @@ stanza
    | switching_mode_stanza
 ;
 
+sticky_module_stanza
+:
+   STICKY ~NEWLINE* NEWLINE
+;
+
 switching_mode_stanza
 :
    SWITCHING_MODE ~NEWLINE* NEWLINE
+;
+
+vlan_module_stanza
+:
+   VLAN DEC ( SERVER | CLIENT )
+   vlan_module_substanza+
+;
+
+vlan_module_substanza
+:
+   (
+      ALIAS
+      | GATEWAY
+      | IP ADDRESS
+      | ROUTE
+   ) ~NEWLINE* NEWLINE
 ;
 
 vrfc_stanza
@@ -1021,3 +1127,36 @@ vrf_context_stanza
    VRF CONTEXT name = ~NEWLINE NEWLINE vrfc_stanza*
 ;
 
+vserver_module_stanza
+:
+   VSERVER ~NEWLINE* NEWLINE
+   vserver_module_substanza+
+;
+
+vserver_module_substanza
+:
+   (
+      IDLE
+      | INSERVICE
+      | PERSISTENT
+      | SERVERFARM
+      | SLB_POLICY
+      | VIRTUAL
+      | VLAN
+   ) ~NEWLINE* NEWLINE
+;
+
+xml_config_module_stanza
+:
+   XML_CONFIG NEWLINE
+   xml_config_module_substanza+
+;
+
+xml_config_module_substanza
+:
+   (
+      CREDENTIALS
+      | INSERVICE
+      | VLAN
+   ) ~NEWLINE* NEWLINE
+;

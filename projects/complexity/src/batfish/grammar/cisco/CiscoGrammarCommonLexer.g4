@@ -617,6 +617,16 @@ CLI
    'cli'
 ;
 
+CLIENT
+:
+   'client'
+;
+
+CLIENT_GROUP
+:
+   'client-group'
+;
+
 CLNS
 :
    'clns'
@@ -755,6 +765,11 @@ COUNTER
 CPTONE
 :
    'cptone'
+;
+
+CREDENTIALS
+:
+   'credentials'
 ;
 
 CRYPTO
@@ -1252,6 +1267,11 @@ EXIT_ADDRESS_FAMILY
    'exit-address-family'
 ;
 
+EXPECT
+:
+   'expect'
+;
+
 EXPORT
 :
    'export'
@@ -1297,6 +1317,11 @@ FABRIC
 FACILITY_ALARM
 :
    'facility-alarm'
+;
+
+FAILED
+:
+   'failed'
 ;
 
 FAILOVER
@@ -1426,6 +1451,11 @@ FREQUENCY
    'frequency'
 ;
 
+FT
+:
+   'ft'
+;
+
 FTP
 :
    'ftp'
@@ -1524,6 +1554,11 @@ HARDWARE
 HASH
 :
    'hash'
+;
+
+HEARTBEAT_TIME
+:
+   'heartbeat-time'
 ;
 
 HELLO_MULTIPLIER
@@ -1631,6 +1666,11 @@ IDENTITY
    'identity'
 ;
 
+IDLE
+:
+   'idle'
+;
+
 IDLE_TIMEOUT
 :
    'idle-timeout'
@@ -1681,6 +1721,11 @@ INHERIT
    'inherit'
 ;
 
+INSERVICE
+:
+   'inservice'
+;
+
 INSPECT
 :
    'inspect'
@@ -1706,6 +1751,11 @@ INTERNAL
 INTERNET
 :
    'internet'
+;
+
+INTERVAL
+:
+   'interval'
 ;
 
 INVALID_SPI_RECOVERY
@@ -2338,6 +2388,11 @@ NATIVE
    'native'
 ;
 
+NATPOOL
+:
+   'natpool'
+;
+
 ND
 :
    'nd'
@@ -2513,6 +2568,11 @@ OBJECT_GROUP
    'object-group'
 ;
 
+OPEN
+:
+   'open'
+;
+
 OPENFLOW
 :
    'openflow'
@@ -2661,6 +2721,11 @@ PEER_SESSION
 PERMIT
 :
    'permit'
+;
+
+PERSISTENT
+:
+   'persistent'
 ;
 
 PHONE_PROXY
@@ -2823,6 +2888,11 @@ PRIVILEGE
    'privilege'
 ;
 
+PROBE
+:
+   'probe'
+;
+
 PROCESS
 :
    'process'
@@ -2943,6 +3013,11 @@ RECORD
    'record'
 ;
 
+REAL
+:
+   'real'
+;
+
 RECORD_ENTRY
 :
    'record-entry'
@@ -3016,6 +3091,11 @@ REMOTE_SPAN
 REMOVED
 :
    '<removed>'
+;
+
+REQUEST
+:
+   'request'
 ;
 
 RESOURCE
@@ -3258,6 +3338,11 @@ SERVER_TYPE
    'server-type'
 ;
 
+SERVERFARM
+:
+   'serverfarm'
+;
+
 SERVICE
 :
    'service'
@@ -3336,6 +3421,11 @@ SINGLE_ROUTER_MODE
 SLA
 :
    'sla'
+;
+
+SLB_POLICY
+:
+   'slb-policy'
 ;
 
 SMTP
@@ -3478,6 +3568,16 @@ STATISTICS
 STCAPP
 :
    'stcapp'
+;
+
+STICKY
+:
+   'sticky'
+;
+
+STICKY_GROUP
+:
+   'sticky-group'
 ;
 
 STOPBITS
@@ -3900,6 +4000,11 @@ VIOLATE_ACTION
    'violate-action'
 ;
 
+VIRTUAL
+:
+   'virtual'
+;
+
 VIRTUAL_REASSEMBLY
 :
    'virtual-reassembly'
@@ -3997,6 +4102,11 @@ VRRP
    'vrrp'
 ;
 
+VSERVER
+:
+   'vserver'
+;
+
 VTP
 :
    'vtp'
@@ -4070,6 +4180,11 @@ XLATE
 XML
 :
    'xml'
+;
+
+XML_CONFIG
+:
+   'xml-config'
 ;
 
 // commonly used to hide password and keys
