@@ -1164,6 +1164,7 @@ vserver_module_substanza
       | PERSISTENT
       | SERVERFARM
       | SLB_POLICY
+      | STICKY
       | VIRTUAL
       | VLAN
    ) ~NEWLINE* NEWLINE
