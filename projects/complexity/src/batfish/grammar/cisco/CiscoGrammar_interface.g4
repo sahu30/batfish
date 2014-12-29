@@ -259,6 +259,7 @@ null_standalone_if_stanza
       )
       | IPV6
       | ISDN
+      | ISIS
       | KEEPALIVE
       | LANE
       | LAPB

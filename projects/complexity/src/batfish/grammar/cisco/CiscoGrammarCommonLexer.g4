@@ -1838,6 +1838,11 @@ ISDN
    'isdn'
 ;
 
+ISIS
+:
+   'isis'
+;
+
 ISL
 :
    'isl'
