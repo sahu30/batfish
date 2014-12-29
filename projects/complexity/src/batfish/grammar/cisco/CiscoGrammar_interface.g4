@@ -14,6 +14,7 @@ description_if_stanza
 hsrp_stanza
 :
    HSRP group = DEC NEWLINE hsrp_stanza_tail
+   | HSRP VERSION DEC NEWLINE
 ;
 
 hsrp_stanza_tail
