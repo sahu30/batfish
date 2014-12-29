@@ -213,6 +213,7 @@ module_stanza
    | policy_module_stanza
    | probe_module_stanza
    | serverfarm_module_stanza
+   | static_module_stanza
    | sticky_module_stanza
    | null_module_standalone_stanza
    | vlan_module_stanza
@@ -1123,6 +1124,19 @@ stanza
    | router_rip_stanza
    | standard_access_list_stanza
    | switching_mode_stanza
+;
+
+static_module_stanza
+:
+   STATIC NAT VIRTUAL NEWLINE
+   static_module_substanza+
+;
+
+static_module_substanza
+:
+   (
+      REAL
+   ) ~NEWLINE* NEWLINE
 ;
 
 sticky_module_stanza
