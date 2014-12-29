@@ -303,6 +303,7 @@ null_block_stanza
          IPV6 ACCESS_LIST
       )
       | KEY
+      | KRON
       | L2TP_CLASS
       | LINE
       | MANAGEMENT
@@ -394,6 +395,7 @@ null_block_substanza
          | CHANNEL_GROUP
          | CHANNELIZED
          | CLASS
+         | CLI
          | CLOCK
          | COLLECT
          | CONFORM_ACTION
@@ -510,6 +512,7 @@ null_block_substanza
          | PERMIT
          | PICKUP
          | POLICE
+         | POLICY_LIST
          | POLICY_MAP
          | PORT
          | PREFIX

@@ -1908,6 +1908,11 @@ KEYRING
    'keyring'
 ;
 
+KRON
+:
+   'kron'
+;
+
 LACP
 :
    'lacp'
