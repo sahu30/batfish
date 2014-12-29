@@ -309,6 +309,7 @@ null_block_stanza
       | MAP_CLASS
       | MAP_LIST
       | MLAG
+      | MONITOR
       | NO_BANNER
       | OPENFLOW
       | PLAT
@@ -546,6 +547,7 @@ null_block_substanza
          | SESSION_TIMEOUT
          | SET
          | SHAPE
+         | SHUT
          | SHUTDOWN
          | SINGLE_ROUTER_MODE
          | SORT_BY

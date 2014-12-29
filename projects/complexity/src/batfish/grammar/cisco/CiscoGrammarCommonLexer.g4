@@ -3528,6 +3528,11 @@ SHELL
    'shell'
 ;
 
+SHUT
+:
+   'shut'
+;
+
 SHUTDOWN
 :
    'shutdown'
