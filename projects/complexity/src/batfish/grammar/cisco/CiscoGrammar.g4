@@ -954,6 +954,7 @@ null_standalone_stanza
       | SUBSCRIBER
       | SUBSCRIBE_TO
       | SUBSCRIBE_TO_ALERT_GROUP
+      | SVCLC
       | SWITCH
       | SWITCHNAME
       | SYSOPT
