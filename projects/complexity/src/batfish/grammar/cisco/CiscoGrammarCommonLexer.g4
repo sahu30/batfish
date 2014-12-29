@@ -3403,6 +3403,11 @@ SCP
    'scp'
 ;
 
+SCRAMBLE
+:
+   'scramble'
+;
+
 SCRIPT
 :
    'script'

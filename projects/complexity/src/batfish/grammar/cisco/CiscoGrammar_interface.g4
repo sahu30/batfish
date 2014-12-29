@@ -320,6 +320,7 @@ null_standalone_if_stanza
       | RATE_MODE
       | RCV_QUEUE
       | ROUTE_CACHE
+      | SCRAMBLE
       | SECURITY_LEVEL
       | SERIAL
       | SERVICE_MODULE
