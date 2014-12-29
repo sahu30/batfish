@@ -254,7 +254,7 @@ router_ospf_stanza
 @init{ enterStanza("router"); }
 @after{ exitStanza("ospf_"+_localctx.procnum.getText()); }
 :
-   ROUTER OSPF procnum = DEC ( VRF EHS )? NEWLINE  { enterOSPF(_localctx.procnum.getText()); }
+   ROUTER OSPF procnum = DEC ( VRF VARIABLE )? NEWLINE  { enterOSPF(_localctx.procnum.getText()); }
    router_ospf_stanza_tail
    { exitOSPF(); }
 ;

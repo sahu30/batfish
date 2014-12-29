@@ -1142,11 +1142,6 @@ ECHO_REQUEST
    'echo-request'
 ;
 
-EHS
-:
-   'ehs'
-;
-
 EIGRP
 :
    'eigrp'
