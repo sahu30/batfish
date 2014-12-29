@@ -547,7 +547,7 @@ template_peer_rb_stanza
       | rabt = remote_as_bgp_tail { addTemplateAs(_localctx.rabt.as.getText());  }
       | template_inherit
       | template_peer_address_family
-   )+
+   )*
    { exitTemplate(); }
 ;
 
