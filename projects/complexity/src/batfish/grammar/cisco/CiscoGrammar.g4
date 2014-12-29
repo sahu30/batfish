@@ -206,6 +206,17 @@ macro_stanza
    MACRO ~NEWLINE* NEWLINE
 ;
 
+map_module_stanza
+:
+   MAP ~NEWLINE* NEWLINE
+   map_module_substanza+
+;
+
+map_module_substanza
+:
+   MATCH PROTOCOL ~NEWLINE* NEWLINE
+;
+
 module_stanza
 :
    ft_module_stanza
@@ -215,7 +226,9 @@ module_stanza
    | serverfarm_module_stanza
    | static_module_stanza
    | sticky_module_stanza
+   | map_module_stanza
    | null_module_standalone_stanza
+   | real_module_stanza
    | vlan_module_stanza
    | vserver_module_stanza
    | xml_config_module_stanza
@@ -1083,6 +1096,19 @@ serverfarm_module_stanza
 :
    SERVERFARM ~NEWLINE* NEWLINE
    serverfarm_module_substanza+
+;
+
+real_module_stanza
+:
+   REAL ~NEWLINE* NEWLINE
+   real_module_substanza+
+;
+
+real_module_substanza
+:
+   (
+      INSERVICE
+   ) ~NEWLINE* NEWLINE
 ;
 
 serverfarm_module_substanza
