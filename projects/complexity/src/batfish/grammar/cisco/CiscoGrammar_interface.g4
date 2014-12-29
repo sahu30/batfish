@@ -69,7 +69,7 @@ interface_stanza
 :
 //   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
 //   INTERFACE iname = interface_name  ~NEWLINE* NEWLINE interface_stanza_tail
-   INTERFACE iname = interface_name  (MULTIPOINT | MODULE DEC)? NEWLINE 
+   INTERFACE iname = interface_name  (MULTIPOINT | MODULE DEC | POINT_TO_POINT )? NEWLINE 
    { enterIface(_localctx.iname.getText()); }
    interface_stanza_tail
    { exitIface(); }
@@ -160,6 +160,21 @@ null_standalone_hsrpc_stanza
 //   { System.out.println("hsrp track substanza"); }
 ;
 
+null_block_if_stanza
+:
+   (
+      FRAME_RELAY
+   ) ~NEWLINE* NEWLINE
+   null_block_if_substanza+
+;
+
+null_block_if_substanza
+:
+   (
+      CLASS
+   ) ~NEWLINE* NEWLINE
+;
+
 null_if_stanza
 :
    hsrp_stanza
@@ -167,6 +182,7 @@ null_if_stanza
    (
       NO? SWITCHPORT NEWLINE
    )
+   | null_block_if_stanza
    | null_standalone_if_stanza
 ;
 
@@ -299,6 +315,7 @@ null_standalone_if_stanza
       | QOS
       | QUEUE_SET
       | RANDOM_DETECT
+      | RATE_LIMIT
       | RATE_MODE
       | RCV_QUEUE
       | ROUTE_CACHE

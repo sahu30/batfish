@@ -2848,6 +2848,11 @@ PLATFORM
    'platform'
 ;
 
+POINT_TO_POINT
+:
+   'point-to-point'
+;
+
 POLICE
 :
    'police'
