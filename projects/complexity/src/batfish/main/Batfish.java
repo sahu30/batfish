@@ -169,8 +169,10 @@ public class Batfish {
 		   complexityUtil comp = configs.get(net);
 		   List<String> neighbors = comp.ebgpNeighbors;
 		   for(String n: neighbors){
-		      if(ases.contains(n))
+		      if(ases.contains(n)){
+//System.out.println("find ebgp: "+n);		         
 		         ebgpCount++;
+		      }
 		   }
 		}
 		// ospf

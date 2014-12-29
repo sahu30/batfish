@@ -53,7 +53,7 @@ address_family_rb_stanza
       | no_neighbor_shutdown_rb_stanza
       | peer_group_assignment_rb_stanza
       | peer_group_creation_rb_stanza
-   )+ address_family_footer
+   )* address_family_footer
 ;
 
 aggregate_address_bgp_tail
