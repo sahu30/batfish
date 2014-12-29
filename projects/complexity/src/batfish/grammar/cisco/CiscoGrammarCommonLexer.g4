@@ -165,6 +165,11 @@ ADMISSION
    'admission'
 ;
 
+ADVERTISE
+:
+   'advertise'
+;
+
 AES128_SHA1
 :
    'aes128-sha1'
@@ -1349,6 +1354,11 @@ FALLBACK_DN
    'fallback-dn'
 ;
 
+FAST_FLOOD
+:
+   'fast-flood'
+;
+
 FEATURE
 :
    'feature'
@@ -1569,6 +1579,11 @@ HASH
 HEARTBEAT_TIME
 :
    'heartbeat-time'
+;
+
+HELLO
+:
+   'hello'
 ;
 
 HELLO_MULTIPLIER
@@ -1848,6 +1863,11 @@ ISL
    'isl'
 ;
 
+IS_TYPE
+:
+   'is-type'
+;
+
 KEEPALIVE
 :
    'keepalive'
@@ -2073,6 +2093,16 @@ LRE
    'lre'
 ;
 
+LSP_GEN_INTERVAL
+:
+   'lsp-gen-interval'
+;
+
+LSP_REFRESH_INTERVAL
+:
+   'lsp-refresh-interval'
+;
+
 LT
 :
    'lt'
@@ -2148,6 +2178,11 @@ MATCH
    'match'
 ;
 
+MAX_LSP_LIFETIME
+:
+   'max-lsp-lifetime'
+;
+
 MAXIMUM
 :
    'maximum'
@@ -2216,6 +2251,11 @@ MESSAGE_LENGTH
 METRIC
 :
    'metric'
+;
+
+METRIC_STYLE
+:
+   'metric-style'
 ;
 
 METRIC_TYPE
@@ -2451,6 +2491,11 @@ NEIGHBOR
 NEQ
 :
    'neq'
+;
+
+NET
+:
+   'net'
 ;
 
 NET_UNREACHABLE
@@ -2861,6 +2906,11 @@ POWEROFF
 PPP
 :
    'ppp'
+;
+
+PRC_INTERVAL
+:
+   'prc-interval'
 ;
 
 PRE_SHARED_KEY
@@ -3433,6 +3483,16 @@ SET
    'set'
 ;
 
+SET_OVER
+:
+   'set-over'
+;
+
+SET_OVERLOAD_BIT
+:
+   'set-overload-bit'
+;
+
 SETUP
 :
    'setup'
@@ -3561,6 +3621,11 @@ SPD
 SPEED
 :
    'speed'
+;
+
+SPF_INTERVAL
+:
+   'spf-interval'
 ;
 
 SPLIT_TUNNEL_NETWORK_LIST
