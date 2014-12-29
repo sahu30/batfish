@@ -94,6 +94,7 @@ port
    | BOOTPS
    | BGP
    | CMD
+   | DAYTIME
    | DOMAIN
    | EXEC
    | FTP

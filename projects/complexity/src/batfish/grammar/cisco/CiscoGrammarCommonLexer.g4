@@ -807,6 +807,11 @@ DATABITS
    'databits'
 ;
 
+DAYTIME
+:
+   'daytime'
+;
+
 DBL
 :
    'dbl'
