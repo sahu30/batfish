@@ -30,6 +30,7 @@ address_family_header
    (
       UNICAST
       | MULTICAST
+      | MDT
    )?
    (
       VRF vrf_name = VARIABLE
