@@ -1066,6 +1066,7 @@ policy_module_substanza
       CLIENT_GROUP
       | SERVERFARM
       | STICKY_GROUP
+      | URL_MAP
    ) ~NEWLINE* NEWLINE
 ;
 
