@@ -1496,6 +1496,11 @@ GE
    'ge'
 ;
 
+GLBP
+:
+   'glbp'
+;
+
 GRACEFUL_RESTART
 :
    'graceful-restart'

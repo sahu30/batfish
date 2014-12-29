@@ -201,6 +201,7 @@ null_standalone_if_stanza
       | FLOWCONTROL
       | FRAMING
       | FULL_DUPLEX
+      | GLBP
       | GROUP_RANGE
       | HALF_DUPLEX
       | HOLD_QUEUE
