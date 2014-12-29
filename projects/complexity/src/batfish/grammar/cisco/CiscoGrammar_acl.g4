@@ -58,7 +58,7 @@ appletalk_access_list_stanza
 extended_access_list_additional_feature
 :
    (
-      DEC
+      DEC DEC?
       | DSCP CS6
       | ECHO_REPLY
       | ECHO_REQUEST
@@ -176,6 +176,7 @@ extended_access_list_tail
    )? dstipr = access_list_ip_range
    (
       alps_dst = port_specifier
+//{ System.out.println("extended_access_list_tail: "+_localctx.alps_dst.getText()); }
    )? feature = extended_access_list_additional_feature? NEWLINE
 ;
 
