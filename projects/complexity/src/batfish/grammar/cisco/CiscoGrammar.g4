@@ -353,6 +353,7 @@ null_block_stanza
 ;
 
 null_block_substanza
+//@init{ System.out.println("null_block_substanza init"); }
 :
    (
       NO?
@@ -566,6 +567,7 @@ null_block_substanza
          | TB_VLAN1
          | TB_VLAN2
          | TERMINAL_TYPE
+         | TIMEOUT
          | TIMEOUTS
          | TIMER
          | TIMING
