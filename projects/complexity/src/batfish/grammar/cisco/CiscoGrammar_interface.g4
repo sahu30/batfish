@@ -323,6 +323,7 @@ null_standalone_if_stanza
             (
                MODE PRIVATE_VLAN
             )
+            | MONITOR
             | NONEGOTIATE
             | PORT_SECURITY
             |
