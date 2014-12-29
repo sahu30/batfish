@@ -2498,6 +2498,11 @@ NEXT_HOP
    'next-hop'
 ;
 
+NEXTHOP
+:
+   'nexthop'
+;
+
 NEXT_HOP_SELF
 :
    'next-hop-self'
