@@ -762,7 +762,8 @@ null_standalone_stanza
       (
          IP
          (
-            ADDRESS_POOL
+         	ACCOUNTING_THRESHOLD
+            | ADDRESS_POOL
             | ADMISSION
             | ALIAS
             | ARP
