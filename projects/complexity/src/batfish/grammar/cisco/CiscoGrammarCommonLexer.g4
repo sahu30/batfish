@@ -2183,6 +2183,11 @@ MAX_LSP_LIFETIME
    'max-lsp-lifetime'
 ;
 
+MAX_METRIC
+:
+   'max-metric'
+;
+
 MAXIMUM
 :
    'maximum'

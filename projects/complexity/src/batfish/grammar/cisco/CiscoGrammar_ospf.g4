@@ -120,6 +120,7 @@ null_standalone_ro_stanza
 //      | DISTRIBUTE_LIST
       | LOG_ADJACENCY_CHANGES
       | NSF
+      | MAX_METRIC
    ) ~NEWLINE* NEWLINE
 ;
 
