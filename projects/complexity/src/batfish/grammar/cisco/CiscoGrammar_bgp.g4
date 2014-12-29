@@ -333,6 +333,11 @@ no_neighbor_shutdown_rb_stanza
    ) SHUTDOWN NEWLINE
 ;
 
+no_neighbor_transport_stanza
+:
+   NO NEIGHBOR peer = ~NEWLINE TRANSPORT ~NEWLINE* NEWLINE
+;
+
 no_redistribute_connected_rb_stanza
 :
    NO REDISTRIBUTE
@@ -509,6 +514,7 @@ router_bgp_stanza
       | nexus_neighbor_rb_stanza
       | no_neighbor_activate_rb_stanza
       | no_neighbor_shutdown_rb_stanza
+      | no_neighbor_transport_stanza
       | no_redistribute_connected_rb_stanza
       | peer_group_assignment_rb_stanza
       | peer_group_creation_rb_stanza
