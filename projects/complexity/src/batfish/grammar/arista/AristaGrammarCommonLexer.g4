@@ -4055,6 +4055,11 @@ TOP
    'top'
 ;
 
+TRACE
+:
+   'trace'
+;
+
 TRACK
 :
    'track'

@@ -1002,6 +1002,7 @@ null_standalone_stanza
       | THREAT_DETECTION
       | TIMEOUT
       | TLS_PROXY
+      | TRACE
       | TRACK
       | TRANSCEIVER
       | TRANSLATE
