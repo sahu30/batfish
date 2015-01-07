@@ -1002,6 +1002,7 @@ null_standalone_stanza
       | TIMEOUT
       | TLS_PROXY
       | TRACK
+      | TRANSCEIVER
       | TRANSLATE
       | TRANSPORT
       | TUNNEL_GROUP_LIST
