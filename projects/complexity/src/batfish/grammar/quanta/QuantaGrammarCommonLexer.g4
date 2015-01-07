@@ -145,6 +145,11 @@ ADDITIVE
    'additive'
 ;
 
+ADDPORT
+:
+   'addport'
+;
+
 ADDRESS
 :
    'address'
@@ -627,14 +632,19 @@ CLASS
    'class'
 ;
 
+CLASS_MAP
+:
+   'class-map'
+;
+
 CLASSLESS
 :
    'classless'
 ;
 
-CLASS_MAP
+CLASSOFSERVICE
 :
-   'class-map'
+   'classofservice'
 ;
 
 CLI
@@ -732,6 +742,11 @@ CONFIGURATION
    'configuration'
 ;
 
+CONFIGURE
+:
+   'configure'
+;
+
 CONFORM_ACTION
 :
    'conform-action'
@@ -825,6 +840,11 @@ CTS
 DAMPENING
 :
    'dampening'
+;
+
+DATABASE
+:
+   'database'
 ;
 
 DATABITS
@@ -2028,6 +2048,11 @@ LINECODE
    'linecode'
 ;
 
+LINECONFIG
+:
+   'lineconfig'
+;
+
 LISTEN
 :
    'listen'
@@ -2196,6 +2221,11 @@ MAP_GROUP
 MAP_LIST
 :
    'map-list'
+;
+
+MARK
+:
+   'mark'
 ;
 
 MASK
@@ -3663,6 +3693,11 @@ SNMPTRAP
    'snmptrap'
 ;
 
+SNTP
+:
+   'sntp'
+;
+
 SORT_BY
 :
    'sort-by'
@@ -3746,6 +3781,11 @@ SRR_QUEUE
 SSH
 :
    'ssh'
+;
+
+SSHCON
+:
+   'sshcon'
 ;
 
 SSL
@@ -4228,6 +4268,11 @@ USER_IDENTITY
 USERNAME
 :
    'username'
+;
+
+USERS
+:
+   'users'
 ;
 
 VALIDATION_USAGE

@@ -190,7 +190,8 @@ null_standalone_if_stanza
 :
    NO?
    (
-      ARP
+      ADDPORT
+      | ARP
       | ASYNC
       | ATM
       | AUTO

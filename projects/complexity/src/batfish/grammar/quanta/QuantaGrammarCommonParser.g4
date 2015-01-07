@@ -59,6 +59,10 @@ interface_name
          FORWARD_SLASH DEC
       )?
    )
+   |
+   (
+      DEC FORWARD_SLASH DEC
+   )
 ;
 
 port_specifier

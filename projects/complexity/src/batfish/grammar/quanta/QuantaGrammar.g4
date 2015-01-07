@@ -503,6 +503,7 @@ null_block_substanza
          | LOGGING
          | LOGIN
          | MAIN_CPU
+         | MARK
          | MATCH
          | MAXIMUM
          | MESSAGE_LENGTH
@@ -678,11 +679,13 @@ null_standalone_stanza
       | CHAT_SCRIPT
       | CIPC
       | CLASS_MAP
+      | CLASSOFSERVICE
       | CLOCK
       | CLUSTER
       | CNS
       | CODEC
       | CONFIG_REGISTER
+      | CONFIGURE
       | CONSOLE
       | CONTACT_EMAIL_ADDR
       | CRL
@@ -732,6 +735,7 @@ null_standalone_stanza
       | EVENT
       | EXCEPTION
       | EXEC
+      | EXIT
       | FABRIC
       | FACILITY_ALARM
       | FAILOVER
@@ -801,6 +805,7 @@ null_standalone_stanza
             | MULTICAST
             | MULTICAST_ROUTING
             | NAME_SERVER
+            | NAME
             | NAT
             |
             (
@@ -810,7 +815,6 @@ null_standalone_stanza
             | RADIUS
             | RCMD
             | ROUTING //might want to use this eventually
-
             | SAP
             | SCP
             | SLA
@@ -861,10 +865,10 @@ null_standalone_stanza
       | LDAP_SCOPE
       | LICENSE
       | LIFETIME
+      | LINECONFIG
       | LLDP
       | LOCATION
       | LOGGING
-//      | ( MAC x=~ACCESS_LIST  { System.out.println("MAC in null_standalone_stanza, x is |"+_localctx.x.getText()+"|"); })
       | MAC
       | MAC_ADDRESS_TABLE
       | MAIL_SERVER
@@ -965,6 +969,8 @@ null_standalone_stanza
       | SMTP_SERVER
       | SNMP
       | SNMP_SERVER
+      | SNMPTRAP
+      | SNTP
       | SOURCE
       | SOURCE_INTERFACE
       | SOURCE_IP_ADDRESS
@@ -974,6 +980,7 @@ null_standalone_stanza
       | SPEED
       | STOPBITS
       | SSH
+      | SSHCON
       | SSL
       | STATIC
       |
@@ -1017,6 +1024,7 @@ null_standalone_stanza
       | USER_IDENTITY
       | USE_VRF
       | USERNAME
+      | USERS
       | VALIDATION_USAGE
       | VERSION
       |
@@ -1027,6 +1035,8 @@ null_standalone_stanza
             | CONFIGURATION
             | DOT1Q
             | INTERNAL
+            | DATABASE
+            | NAME
          )
       )
       | VMPS
