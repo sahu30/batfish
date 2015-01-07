@@ -32,11 +32,15 @@ import org.apache.commons.io.FileUtils;
 
 
 
+
+
 import batfish.complexity.complexityUtil;
 import batfish.grammar.arista.AristaGrammar;
 import batfish.grammar.arista.AristaGrammarCommonLexer;
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+import batfish.grammar.quanta.QuantaGrammar;
+import batfish.grammar.quanta.QuantaGrammarCommonLexer;
 
 
 
@@ -128,6 +132,9 @@ public class Batfish {
 	   else if(filename.startsWith("arista")){
 	      return new AristaGrammarCommonLexer(inputStream);
 	   }
+	   else if(filename.startsWith("quanta")){
+	      return new QuantaGrammarCommonLexer(inputStream);
+	   }
 	   System.out.println("no lexer for file "+file);
 	   return null;
 	}
@@ -138,6 +145,9 @@ public class Batfish {
       }
       else if(filename.startsWith("arista")){
          return new AristaGrammar(tokens);
+      }
+      else if(filename.startsWith("quanta")){
+         return new QuantaGrammar(tokens);
       }
       System.out.println("no parser for file "+file);
       return null;
@@ -152,6 +162,10 @@ public class Batfish {
 	      AristaGrammar arista = (AristaGrammar) parser;
 	      arista.arista_configuration();
 	   }
+	   else if(filename.startsWith("quanta")){
+	      QuantaGrammar quanta = (QuantaGrammar) parser;
+	      quanta.quanta_configuration();
+	   }
 	   else{
 	      System.out.println("unknown device type Error");
 	   }
@@ -165,6 +179,10 @@ public class Batfish {
 	   else if(filename.startsWith("arista")){
 	      AristaGrammar arista = (AristaGrammar)parser;
 	      return arista.comp;
+	   }
+	   else if(filename.startsWith("quanta")){
+	      QuantaGrammar quanta = (QuantaGrammar)parser;
+	      return quanta.comp;
 	   }
 	   return null;
 	}
