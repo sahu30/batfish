@@ -3553,6 +3553,11 @@ SERVICE_TYPE
    'service-type'
 ;
 
+SERVICEPORT
+:
+   'serviceport'
+;
+
 SESSION_DISCONNECT_WARNING
 :
    'session-disconnect-warning' -> pushMode(M_COMMENT)

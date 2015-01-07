@@ -956,6 +956,7 @@ null_standalone_stanza
       | SERVER_TYPE
       | SERVICE
       | SERVICE_POLICY
+      | SERVICEPORT
       | SET
       | SETUP
       | SFLOW
