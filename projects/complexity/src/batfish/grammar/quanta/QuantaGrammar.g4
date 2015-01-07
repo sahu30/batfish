@@ -997,6 +997,7 @@ null_standalone_stanza
       | TAG
       | TAG_SWITCHING
       | TELNET
+      | TELNETCON
       | TEMPLATE
       | TFTP_SERVER
       | THREAT_DETECTION

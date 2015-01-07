@@ -3970,6 +3970,11 @@ TELNET
    'telnet'
 ;
 
+TELNETCON
+:
+   'telnetcon'
+;
+
 TEMPLATE
 :
    'template'
