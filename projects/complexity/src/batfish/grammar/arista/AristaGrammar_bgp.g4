@@ -340,7 +340,7 @@ no_neighbor_transport_stanza
 
 no_neighbor_maximum_routes_stanza
 :
-   NO NEIGHBOR peer = ~NEWLINE MAXIMUM_ROUTES
+   NO NEIGHBOR peer = ~NEWLINE MAXIMUM_ROUTES ~NEWLINE* NEWLINE
 ;
 
 no_redistribute_connected_rb_stanza
