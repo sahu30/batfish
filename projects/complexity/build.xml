@@ -115,9 +115,11 @@
 	<target name="grammarclean" description="Delete generated antlr files">
       <delete>
          <fileset dir="src" includes="**/*.tokens"/>
+         <fileset dir="src" includes="batfish/grammar/arista/AristaGrammar*.java"/>
          <fileset dir="src" includes="batfish/grammar/cisco/CiscoGrammar*.java"/>
          <fileset dir="src" includes="batfish/grammar/juniper/JuniperGrammar*.java"/>
          <fileset dir="src" includes="batfish/grammar/juniper/FlatJuniperGrammar*.java"/>
+         <fileset dir="src" includes="batfish/grammar/quanta/QuantaGrammar*.java"/>
          <fileset dir="src" includes="batfish/grammar/topology/BatfishTopologyParser*.java"/>
          <fileset dir="src" includes="batfish/grammar/topology/GNS3TopologyParser*.java"/>
          <fileset dir="src" includes="batfish/grammar/topology/BatfishTopologyLexer*.java"/>
@@ -239,6 +241,7 @@
       <parallel>
          <antlr4lexer grammar.name="CiscoGrammarCommonLexer" grammar.packagedir="batfish/grammar/cisco"/>
          <antlr4lexer grammar.name="AristaGrammarCommonLexer" grammar.packagedir="batfish/grammar/arista"/>
+         <antlr4lexer grammar.name="QuantaGrammarCommonLexer" grammar.packagedir="batfish/grammar/quanta"/>
       </parallel>
    </target>
 
@@ -271,6 +274,20 @@
                <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_ospf.g4"/>
                <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_rip.g4"/>
                <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_routemap.g4"/>
+            </dependencies>
+         </antlr4parser>
+         <antlr4parser grammar.name="QuantaGrammar" grammar.packagedir="batfish/grammar/quanta">
+            <dependencies>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammarCommonLexer.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammarCommonLexer.tokens"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammarCommonParser.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_acl.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_bgp.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_interface.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_ospf.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_rip.g4"/>
+               <fileset dir="src/batfish/grammar/quanta" includes="QuantaGrammar_routemap.g4"/>
             </dependencies>
          </antlr4parser>
       </parallel>
