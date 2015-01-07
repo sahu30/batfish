@@ -338,6 +338,11 @@ no_neighbor_transport_stanza
    NO NEIGHBOR peer = ~NEWLINE TRANSPORT ~NEWLINE* NEWLINE
 ;
 
+no_neighbor_maximum_routes_stanza
+:
+   NO NEIGHBOR peer = ~NEWLINE MAXIMUM_ROUTES
+;
+
 no_redistribute_connected_rb_stanza
 :
    NO REDISTRIBUTE
@@ -514,6 +519,7 @@ router_bgp_stanza
       | neighbor_rb_stanza
       | nexus_neighbor_rb_stanza
       | no_neighbor_activate_rb_stanza
+      | no_neighbor_maximum_routes_stanza
       | no_neighbor_shutdown_rb_stanza
       | no_neighbor_transport_stanza
       | no_redistribute_connected_rb_stanza
