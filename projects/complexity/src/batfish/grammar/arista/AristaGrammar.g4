@@ -831,6 +831,7 @@ null_standalone_stanza
          IPV6
          (
             CEF
+            | HARDWARE
             | HOST
             | LOCAL
             | MFIB
