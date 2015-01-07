@@ -13,14 +13,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-
-
-
-
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenSource;
@@ -33,9 +30,13 @@ import org.apache.commons.io.FileUtils;
 
 
 
+
+
+import batfish.complexity.complexityUtil;
+import batfish.grammar.arista.AristaGrammar;
+import batfish.grammar.arista.AristaGrammarCommonLexer;
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
-import batfish.grammar.cisco.complexityUtil;
 
 
 
@@ -84,12 +85,12 @@ public class Batfish {
 			String fileText = configurationData.get(currentFile);
 			String currentPath = currentFile.getAbsolutePath();
 
-			CiscoGrammarCommonLexer lexer;
-			CiscoGrammar parser;
+			Lexer lexer;
+			Parser parser;
 			ANTLRInputStream inputStream = new ANTLRInputStream(fileText);
-			lexer = new CiscoGrammarCommonLexer(inputStream);
+			lexer = createLexer(currentFile, inputStream);
 			CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
-			parser = new CiscoGrammar((TokenStream) tokens);
+			parser = createParser(currentFile, tokens);
 			parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 	//		CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
 
@@ -110,20 +111,64 @@ public class Batfish {
 			
 			System.out.print("parsing "+currentPath+" ");
 			try{
-				if (fileText.charAt(0) == '!') {
-					parser.cisco_configuration();
-					configs.put(currentFile.getName(), parser.comp);
-		//			complexity.put(currentFile.getName(), parser.getComplexity());
-					System.out.println("... OK");
-				} else {
-					System.out.println("... non-cisco Error\n");
-				}
+			   Parse(currentFile, parser);
+			   configs.put(currentFile.getName(), getComplexity(currentFile, parser));
+				System.out.println("... OK");
 			}
 			catch(Exception e){
 				System.out.println("... parse Error");
 			}
 		}
 	}
+	public Lexer createLexer(File file, ANTLRInputStream inputStream){
+	   String filename = file.getName();
+	   if(filename.startsWith("cisco")){
+	      return new CiscoGrammarCommonLexer(inputStream);
+	   }
+	   else if(filename.startsWith("arista")){
+	      return new AristaGrammarCommonLexer(inputStream);
+	   }
+	   System.out.println("no lexer for file "+file);
+	   return null;
+	}
+	public Parser createParser(File file, TokenStream tokens){
+	   String filename = file.getName();
+      if(filename.startsWith("cisco")){
+         return new CiscoGrammar(tokens);
+      }
+      else if(filename.startsWith("arista")){
+         return new AristaGrammar(tokens);
+      }
+      System.out.println("no parser for file "+file);
+      return null;
+	}
+	public void Parse(File file, Parser parser){
+	   String filename = file.getName();
+	   if(filename.startsWith("cisco")){
+	      CiscoGrammar cisco = (CiscoGrammar)parser;
+	      cisco.cisco_configuration();
+	   }
+	   else if(filename.startsWith("arista")){
+	      AristaGrammar arista = (AristaGrammar) parser;
+	      arista.arista_configuration();
+	   }
+	   else{
+	      System.out.println("unknown device type Error");
+	   }
+	}
+	public complexityUtil getComplexity(File file, Parser parser){
+	   String filename =file.getName();
+	   if(filename.startsWith("cisco")){
+	      CiscoGrammar cisco = (CiscoGrammar)parser;
+	      return cisco.comp;
+	   }
+	   else if(filename.startsWith("arista")){
+	      AristaGrammar arista = (AristaGrammar)parser;
+	      return arista.comp;
+	   }
+	   return null;
+	}
+	
 	public void outputIntraFileComplexity(String path){
 		String file = path+"/"+"intra_complexity.txt";
 		Writer writer  = null;

@@ -238,6 +238,7 @@
      description="Compile antlr4 lexer grammars">
       <parallel>
          <antlr4lexer grammar.name="CiscoGrammarCommonLexer" grammar.packagedir="batfish/grammar/cisco"/>
+         <antlr4lexer grammar.name="AristaGrammarCommonLexer" grammar.packagedir="batfish/grammar/arista"/>
       </parallel>
    </target>
 
@@ -256,6 +257,20 @@
                <fileset dir="src/batfish/grammar/cisco" includes="CiscoGrammar_ospf.g4"/>
                <fileset dir="src/batfish/grammar/cisco" includes="CiscoGrammar_rip.g4"/>
                <fileset dir="src/batfish/grammar/cisco" includes="CiscoGrammar_routemap.g4"/>
+            </dependencies>
+         </antlr4parser>
+         <antlr4parser grammar.name="AristaGrammar" grammar.packagedir="batfish/grammar/arista">
+            <dependencies>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammarCommonLexer.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammarCommonLexer.tokens"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammarCommonParser.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_acl.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_bgp.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_interface.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_ospf.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_rip.g4"/>
+               <fileset dir="src/batfish/grammar/arista" includes="AristaGrammar_routemap.g4"/>
             </dependencies>
          </antlr4parser>
       </parallel>

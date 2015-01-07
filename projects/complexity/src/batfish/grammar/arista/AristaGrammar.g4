@@ -1,15 +1,15 @@
-parser grammar CiscoGrammar;
+parser grammar AristaGrammar;
 
 import
-CiscoGrammarCommonParser, CiscoGrammar_acl, CiscoGrammar_bgp, CiscoGrammar_interface, CiscoGrammar_isis, CiscoGrammar_ospf, CiscoGrammar_rip, CiscoGrammar_routemap;
+AristaGrammarCommonParser, AristaGrammar_acl, AristaGrammar_bgp, AristaGrammar_interface, AristaGrammar_isis, AristaGrammar_ospf, AristaGrammar_rip, AristaGrammar_routemap;
 
 options {
 //  superClass = 'batfish.grammar.BatfishParser';
-   tokenVocab = CiscoGrammarCommonLexer;
+   tokenVocab = AristaGrammarCommonLexer;
 }
 
 @header {
-package batfish.grammar.cisco;
+package batfish.grammar.arista;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -130,7 +130,7 @@ certificate_stanza
    CERTIFICATE ~QUIT* QUIT NEWLINE
 ;
 
-cisco_configuration
+arista_configuration
 :
    (
       sl += stanza

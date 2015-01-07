@@ -21,6 +21,4 @@ public class Driver {
 		b.outputIntraFileComplexity(path);
 		b.outputInterFileComplexity(path);
 	}
-	
-	
 }
