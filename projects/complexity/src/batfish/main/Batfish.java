@@ -34,11 +34,15 @@ import org.apache.commons.io.FileUtils;
 
 
 
+
+
 import batfish.complexity.complexityUtil;
 import batfish.grammar.arista.AristaGrammar;
 import batfish.grammar.arista.AristaGrammarCommonLexer;
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+import batfish.grammar.flatjuniper.FlatJuniperLexer;
+import batfish.grammar.flatjuniper.FlatJuniperParser;
 import batfish.grammar.quanta.QuantaGrammar;
 import batfish.grammar.quanta.QuantaGrammarCommonLexer;
 
@@ -135,6 +139,9 @@ public class Batfish {
 	   else if(filename.startsWith("quanta")){
 	      return new QuantaGrammarCommonLexer(inputStream);
 	   }
+	   else if(filename.startsWith("juniper")){
+	      return new FlatJuniperLexer(inputStream);
+	   }
 	   System.out.println("no lexer for file "+file);
 	   return null;
 	}
@@ -148,6 +155,9 @@ public class Batfish {
       }
       else if(filename.startsWith("quanta")){
          return new QuantaGrammar(tokens);
+      }
+      else if(filename.startsWith("juniper")){
+         return new FlatJuniperParser(tokens);
       }
       System.out.println("no parser for file "+file);
       return null;
@@ -166,6 +176,10 @@ public class Batfish {
 	      QuantaGrammar quanta = (QuantaGrammar) parser;
 	      quanta.quanta_configuration();
 	   }
+	   else if(filename.startsWith("juniper")){
+	      FlatJuniperParser juniper = (FlatJuniperParser) parser;
+	      juniper.flat_juniper_configuration();
+	   }
 	   else{
 	      System.out.println("unknown device type Error");
 	   }
@@ -183,6 +197,10 @@ public class Batfish {
 	   else if(filename.startsWith("quanta")){
 	      QuantaGrammar quanta = (QuantaGrammar)parser;
 	      return quanta.comp;
+	   }
+	   else if(filename.startsWith("juniper")){
+	      FlatJuniperParser juniper = (FlatJuniperParser) parser;
+	      return juniper.comp;
 	   }
 	   return null;
 	}
