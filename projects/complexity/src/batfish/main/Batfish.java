@@ -211,15 +211,16 @@ public class Batfish {
 		double total = 0;
 		int count = 0;
 		try {
+		   String out = "";
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
 		    for(String net: configs.keySet()){
 		    	Integer comp= configs.get(net).getIntraComplexity();
-		    	writer.write(net+":"+comp+"\n");
+		    	out+=(net+":"+comp+"\n");
 		    	total += comp;
 		    	count++;
 		    }
-		    writer.write("average:"+(total/count)+"\n");
-		    writer.write("total:"+total);
+		    out=total+" "+count+"\n"+out;
+		    writer.write(out);
 		    writer.close();
 		} catch (Exception ex) {
 		    
@@ -272,9 +273,10 @@ public class Batfish {
 		
 		
 		try {
+		   String out = "";
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		    writer.write(""+ibgpCount+" "+ebgpCount+" "+ospfCount+" "+(ibgpCount+ebgpCount)
-		          +" "+(ibgpCount+ebgpCount+ospfCount));
+		    out= (ibgpCount+ebgpCount+ospfCount)+" "+(ibgpCount+ebgpCount)+" "+ibgpCount+" "+ebgpCount+" "+ospfCount+"\n";
+		    writer.write(out);
 		    writer.close();
 		} catch (Exception ex) {
 		    
