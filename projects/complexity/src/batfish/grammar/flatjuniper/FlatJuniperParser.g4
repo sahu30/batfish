@@ -29,7 +29,16 @@ flat_juniper_configuration
    (
       deactivate_line
       | set_line
+      | null_line
    )+ EOF
+;
+
+null_line
+:
+   (
+      UNSET
+      | EXIT
+   ) ~NEWLINE* NEWLINE
 ;
 
 statement
@@ -65,10 +74,12 @@ s_null
       BRIDGE_DOMAINS
       | CHASSIS
       | CLASS_OF_SERVICE
+      | CLOCK
       | EVENT_OPTIONS
       | FORWARDING_OPTIONS
       | SERVICES
       | SNMP
+      | VROUTER
    ) s_null_filler
 ;
 

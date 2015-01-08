@@ -226,6 +226,11 @@ CLASS_OF_SERVICE
    'class-of-service'
 ;
 
+CLOCK
+:
+   'clock'
+;
+
 CLUSTER
 :
    'cluster'
@@ -423,6 +428,11 @@ EXACT
 EXCEPT
 :
    'except'
+;
+
+EXIT
+:
+   'exit'
 ;
 
 EXP
@@ -1565,6 +1575,11 @@ UNREACHABLE
    'unreachable'
 ;
 
+UNSET
+:
+   'unset'
+;
+
 UPTO
 :
    'upto'
@@ -1623,6 +1638,11 @@ VLAN_TAGGING
 VPLS
 :
    'vpls'
+;
+
+VROUTER
+:
+   'vrouter'
 ;
 
 VRRP
