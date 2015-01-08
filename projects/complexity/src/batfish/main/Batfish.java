@@ -218,7 +218,8 @@ public class Batfish {
 		    	total += comp;
 		    	count++;
 		    }
-		    writer.write("average:"+(total/count));
+		    writer.write("average:"+(total/count)+"\n");
+		    writer.write("total:"+total);
 		    writer.close();
 		} catch (Exception ex) {
 		    

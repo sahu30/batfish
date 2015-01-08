@@ -1863,6 +1863,11 @@ LINE_COMMENT
    '#' F_NonNewlineChar* F_NewlineChar+ -> channel(HIDDEN)
 ;
 
+LINE_COMMENT2
+:
+   '!' F_NonNewlineChar* F_NewlineChar+ -> channel(HIDDEN)
+;
+
 MULTILINE_COMMENT
 :
    '/*' .*? '*/' -> channel(HIDDEN)
