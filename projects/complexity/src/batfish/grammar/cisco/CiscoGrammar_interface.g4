@@ -426,13 +426,13 @@ switchport_trunk_native_if_stanza
 ;
 
 vrf_forwarding_if_stanza
-@after{ System.out.println("VRF reference, not hanled yet."); }
+//@after{ System.out.println("VRF reference, not hanled yet."); }
 :
    VRF FORWARDING name=~NEWLINE NEWLINE
 ;
 
 vrf_member_if_stanza
-@after{ System.out.println("VRF reference, not hanled yet."); }
+//@after{ System.out.println("VRF reference, not hanled yet."); }
 :
    VRF MEMBER name=~NEWLINE NEWLINE
 ;
