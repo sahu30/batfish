@@ -458,7 +458,11 @@ switchport_trunk_native_if_stanza
 udld_if_stanza
 @after{ FindUDLDInstance(); }
 :
-   UDLD PORT AGGRESSIVE? NEWLINE
+   UDLD 
+   (
+      ENABLE
+      | ( PORT AGGRESSIVE? ) 
+   )NEWLINE
 ;
 
 vrf_forwarding_if_stanza
