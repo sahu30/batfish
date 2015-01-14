@@ -397,7 +397,7 @@ shutdown_if_stanza
 standby_ip_tail
 @after{ FindHSRPInstance(); }
 :
-   DEC IP IP_ADDRESS NEWLINE
+   DEC? IP IP_ADDRESS NEWLINE
 ;
 
 standby_if_stanza
@@ -411,7 +411,7 @@ standby_if_stanza
 
 standby_null_tail
 :
-   DEC ~IP ~NEWLINE* NEWLINE
+   DEC? ~IP ~NEWLINE* NEWLINE
 ;
 
 switchport_access_if_stanza
