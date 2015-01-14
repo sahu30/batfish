@@ -125,8 +125,12 @@ udld_stanza
 vlan_stanza
 :
    VLAN DEC NEWLINE  { FindVLANInstance(); }
+   vlan_substanza*
+;
+
+vlan_substanza
+:
    (
       NAME
    ) ~NEWLINE* NEWLINE
 ;
-
