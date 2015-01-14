@@ -244,6 +244,7 @@ null_standalone_if_stanza
             | ARP
             | BROADCAST_ADDRESS
             | CGMP
+            | DEFAULT_GATEWAY
             | DHCP 
             | DVMRP
             |
