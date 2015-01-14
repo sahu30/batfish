@@ -16,6 +16,10 @@ public class protocols {
    private int DHCPInstance = 0;
    private int HSRPInstance = 0;
    
+   public void FindMST(){
+      hasMSTP = 1;
+   }
+   
    public void FindUDLD(){
       hasUDLD = 1;
    }

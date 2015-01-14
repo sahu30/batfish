@@ -40,6 +40,9 @@ package batfish.grammar.cisco;
 	   }
 	}
 	
+	private void FindMST(){
+	   l2proto.FindMST();
+	}
 	private void FindUDLD(){
 	   l2proto.FindUDLD();
 	}
@@ -77,6 +80,7 @@ cisco_configuration
 :
    (
       interface_stanza
+      | mstp_configuration_stanza
       | mstp_stanza
       | udld_stanza
       | vlan_stanza
@@ -98,6 +102,12 @@ mstp_null_substanza
 ;
 
 mstp_stanza
+:
+   SPANNING_TREE MODE MST NEWLINE
+   { FindMST(); }
+;
+
+mstp_configuration_stanza
 :
    SPANNING_TREE MST CONFIGURATION NEWLINE
    (
