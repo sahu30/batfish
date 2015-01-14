@@ -17,9 +17,9 @@ description_if_stanza
 ;
 
 encapsulation_dot1q_if_stanza
-@after{ FindDOT1QInstance(); }
+@after{ if(_localctx.proto.getText().toLowerCase().equals("dot1q")) FindDOT1QInstance(); }
 :
-   ENCAPSULATION ( DOT1Q_ | DOT1Q ) ~NEWLINE* NEWLINE
+   ENCAPSULATION proto = ~NEWLINE ~NEWLINE* NEWLINE
 ;
 
 hsrp_stanza
@@ -397,21 +397,21 @@ shutdown_if_stanza
 standby_ip_tail
 @after{ FindHSRPInstance(); }
 :
-   DEC? IP IP_ADDRESS NEWLINE
+   IP IP_ADDRESS NEWLINE
 ;
 
 standby_if_stanza
 :
-   STANDBY
+   STANDBY DEC?
    (
       standby_ip_tail
       | standby_null_tail
-   )*
+   )
 ;
 
 standby_null_tail
 :
-   DEC? ~IP ~NEWLINE* NEWLINE
+   ~IP ~NEWLINE* NEWLINE
 ;
 
 switchport_access_if_stanza
@@ -445,7 +445,7 @@ switchport_trunk_allowed_if_stanza
 ;
 
 switchport_trunk_encapsulation_if_stanza
-@after{ if(_localctx.e.getText().equals("dot1q")) FindDOT1QInstance(); }
+@after{ if(_localctx.e.getText().toLowerCase().equals("dot1q")) FindDOT1QInstance(); }
 :
    SWITCHPORT TRUNK ENCAPSULATION e = switchport_trunk_encapsulation NEWLINE
 ;
