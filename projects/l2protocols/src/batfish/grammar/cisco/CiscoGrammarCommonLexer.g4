@@ -2686,6 +2686,11 @@ OBJECT_GROUP
    'object-group'
 ;
 
+ON
+:
+   'on'
+;
+
 OPEN
 :
    'open'
@@ -2774,6 +2779,11 @@ PARSER
 PARTICIPATE
 :
    'participate'
+;
+
+PASSIVE
+:
+   'passive'
 ;
 
 PASSIVE_INTERFACE

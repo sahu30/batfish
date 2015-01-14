@@ -168,8 +168,7 @@ subrange
 
 switchport_trunk_encapsulation
 :
-   DESIRABLE
-   | DOT1Q
+   DOT1Q
    | ISL
    | NEGOTIATE
 ;

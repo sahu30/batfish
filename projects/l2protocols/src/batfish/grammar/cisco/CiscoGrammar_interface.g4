@@ -7,7 +7,7 @@ options {
 channel_group_if_stanza
 @after{ FindLACPInstance(); }
 :
-   CHANNEL_GROUP DEC MODE ACTIVE NEWLINE
+   CHANNEL_GROUP DEC MODE ( ACTIVE | ON | DESIRABLE | PASSIVE ) NEWLINE
 ;
 
 description_if_stanza
