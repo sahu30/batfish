@@ -56,7 +56,7 @@ public class Batfish {
 	}
 
    public void parseVendorConfigurations() {
-      System.out.println("\n*** PARSING VENDOR CONFIGURATION FILES ***\n");
+//      System.out.println("\n*** PARSING VENDOR CONFIGURATION FILES ***\n");
       String currentPath = configFile.getAbsolutePath();
 
       Lexer lexer;
@@ -68,7 +68,7 @@ public class Batfish {
       parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 
       AddErrorListener(lexer, parser);
-      System.out.print("parsing " + currentPath + " ");
+//      System.out.print("parsing " + currentPath + " ");
       try {
          Parse(parser);
          Output(parser);
