@@ -456,14 +456,27 @@ switchport_trunk_native_if_stanza
    SWITCHPORT TRUNK NATIVE VLAN vlan = DEC NEWLINE
 ;
 
-udld_if_stanza
+udld_enable_if_stanza_tail
 @after{ FindUDLDInstance(); }
 :
-   UDLD 
    (
       ENABLE
       | ( PORT AGGRESSIVE? ) 
-   )NEWLINE
+   ) NEWLINE
+;
+
+udld_if_stanza
+:
+   UDLD
+   (
+      udld_enable_if_stanza_tail
+      | udld_null_if_stanza_tail
+   )
+;
+
+udld_null_if_stanza_tail
+:
+   PORT DISABLE NEWLINE
 ;
 
 vrf_forwarding_if_stanza
