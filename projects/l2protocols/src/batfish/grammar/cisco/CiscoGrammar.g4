@@ -9,6 +9,9 @@ options {
 
 @header {
 package batfish.grammar.cisco;
+
+
+import java.util.Map;
 }
 
 @members {
@@ -17,8 +20,8 @@ package batfish.grammar.cisco;
 		return l2proto.toString();
 	}
 	
-	public String OutputLinks(){
-		return linkCount.toString();
+	public Map<String, String> getLinks(){
+	   return linkCount.getLinks();
 	}
 	
 	private batfish.l2.protocols l2proto = new batfish.l2.protocols();
@@ -47,9 +50,6 @@ package batfish.grammar.cisco;
 	   l2proto.FindUDLD();
 	}
 	
-	private void FindVLANInstance(){
-	   l2proto.FindVLANInstance();
-	}
 	private void FindUDLDInstance(){
 	   l2proto.FindUDLDInstance();
 	}
@@ -83,7 +83,6 @@ cisco_configuration
       | mstp_configuration_stanza
       | mstp_stanza
       | udld_stanza
-      | vlan_stanza
    )+ NEWLINE* EOF
 ;
 
@@ -122,15 +121,3 @@ udld_stanza
    UDLD AGGRESSIVE NEWLINE
 ;
 
-vlan_stanza
-:
-   VLAN DEC NEWLINE  { FindVLANInstance(); }
-   vlan_substanza*
-;
-
-vlan_substanza
-:
-   (
-      NAME
-   ) ~NEWLINE* NEWLINE
-;

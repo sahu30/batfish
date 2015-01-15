@@ -8,7 +8,6 @@ public class protocols {
    private int hasDHCP = 0;
    private int hasHSRP = 0;
    
-   private int VLANInstance = 0;
    private int UDLDInstance = 0;
    private int MSTPInstance = 0;
    private int DOT1QInstance = 0;
@@ -24,9 +23,6 @@ public class protocols {
       hasUDLD = 1;
    }
    
-   public void FindVLANInstance(){
-      VLANInstance++;
-   }
    public void FindUDLDInstance(){
       hasUDLD = 1;
       UDLDInstance ++;
@@ -57,7 +53,6 @@ public class protocols {
       int protocolCount = hasUDLD+hasMSTP+hasDOT1Q
             +hasLACP+hasDHCP+hasHSRP;
       out+=protocolCount;
-      out+="\t"+VLANInstance;
       out+="\t"+hasUDLD;
       out+="\t"+hasMSTP;
       out+="\t"+hasDOT1Q;
@@ -70,6 +65,7 @@ public class protocols {
       out+="\t"+LACPInstance;
       out+="\t"+DHCPInstance;
       out+="\t"+HSRPInstance;
+      out+="\n";
       return out;
    }
 }

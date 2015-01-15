@@ -1,11 +1,8 @@
 package batfish.main;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+
+
+import java.util.Map;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -17,7 +14,6 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.apache.commons.io.FileUtils;
 
 import batfish.grammar.arista.AristaGrammar;
 import batfish.grammar.arista.AristaGrammarCommonLexer;
@@ -30,40 +26,22 @@ import batfish.grammar.quanta.QuantaGrammarCommonLexer;
 
 
 public class Batfish {
-   String configPath;
-   File configFile;
-   String configContent;
+   String vendor="";
+   String configContent="";
 
-	public void readConfigurationFiles(String testRigPath)
-			throws Exception {
-		configPath = testRigPath;
+   Lexer lexer;
+   Parser parser;
+   CommonTokenStream tokens;
+   
+	public Batfish(String vend, String content) {
+	   vendor = vend;
+	   configContent = content;
+   }
 
-      File configsPath = new File(new File(testRigPath), "configs");
-      File[] configFilePaths = configsPath.listFiles(new FilenameFilter() {
-         @Override
-         public boolean accept(File dir, String name) {
-            return !name.startsWith(".");
-         }
-      });
-      if (configFilePaths == null) {
-         throw new Exception("Error reading test rig configs directory");
-      }
-      assert configFilePaths.length == 1;
-      for (File file : configFilePaths) {
-         configFile = file;
-         configContent = FileUtils.readFileToString(file);
-      }
-	}
-
-   public void parseVendorConfigurations() {
-//      System.out.println("\n*** PARSING VENDOR CONFIGURATION FILES ***\n");
-      String currentPath = configFile.getAbsolutePath();
-
-      Lexer lexer;
-      Parser parser;
+   public boolean parseVendorConfigurations() {
       ANTLRInputStream inputStream = new ANTLRInputStream(configContent);
       lexer = createLexer(inputStream);
-      CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
+      tokens = new CommonTokenStream((TokenSource) lexer);
       parser = createParser(tokens);
       parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 
@@ -71,9 +49,10 @@ public class Batfish {
 //      System.out.print("parsing " + currentPath + " ");
       try {
          Parse(parser);
-         Output(parser);
       } catch (Exception e) {
+         return false;
       }
+      return true;
    }
    
    private void AddErrorListener(Lexer lexer, Parser parser){
@@ -99,54 +78,51 @@ public class Batfish {
    }
    
 	public Lexer createLexer(ANTLRInputStream inputStream){
-	   String filename = configFile.getName();
-	   if(filename.startsWith("Cisco")){
+	   if(vendor.startsWith("Cisco")){
 	      return new CiscoGrammarCommonLexer(inputStream);
 	   }
-	   else if(filename.startsWith("Arista")){
+	   else if(vendor.startsWith("Arista")){
 	      return new AristaGrammarCommonLexer(inputStream);
 	   }
-	   else if(filename.startsWith("Quanta")){
+	   else if(vendor.startsWith("Quanta")){
 	      return new QuantaGrammarCommonLexer(inputStream);
 	   }
-	   else if(filename.startsWith("Juniper")){
+	   else if(vendor.startsWith("Juniper")){
 	      return new FlatJuniperLexer(inputStream);
 	   }
-	   System.out.println("no lexer for file "+configFile);
+	   System.out.println("no lexer for "+vendor);
 	   return null;
 	}
 	public Parser createParser(TokenStream tokens){
-	   String filename = configFile.getName();
-      if(filename.startsWith("Cisco")){
+      if(vendor.startsWith("Cisco")){
          return new CiscoGrammar(tokens);
       }
-      else if(filename.startsWith("Arista")){
+      else if(vendor.startsWith("Arista")){
          return new AristaGrammar(tokens);
       }
-      else if(filename.startsWith("Quanta")){
+      else if(vendor.startsWith("Quanta")){
          return new QuantaGrammar(tokens);
       }
-      else if(filename.startsWith("Juniper")){
+      else if(vendor.startsWith("Juniper")){
          return new FlatJuniperParser(tokens);
       }
-      System.out.println("no parser for file "+configFile);
+      System.out.println("no parser for "+vendor);
       return null;
 	}
 	public void Parse(Parser parser){
-	   String filename = configFile.getName();
-	   if(filename.startsWith("Cisco")){
+	   if(vendor.startsWith("Cisco")){
 	      CiscoGrammar cisco = (CiscoGrammar)parser;
 	      cisco.cisco_configuration();
 	   }
-	   else if(filename.startsWith("Arista")){
+	   else if(vendor.startsWith("Arista")){
 	      AristaGrammar arista = (AristaGrammar) parser;
 	      arista.arista_configuration();
 	   }
-	   else if(filename.startsWith("Quanta")){
+	   else if(vendor.startsWith("Quanta")){
 	      QuantaGrammar quanta = (QuantaGrammar) parser;
 	      quanta.quanta_configuration();
 	   }
-	   else if(filename.startsWith("Juniper")){
+	   else if(vendor.startsWith("Juniper")){
 	      FlatJuniperParser juniper = (FlatJuniperParser) parser;
 	      juniper.flat_juniper_configuration();
 	   }
@@ -155,40 +131,53 @@ public class Batfish {
 	   }
 	}
 	
-	public void Output(Parser parser){
-      String filename = configFile.getName();
-      String l2 = "NA";
-      String links = "";
-      if(filename.startsWith("Cisco")){
+	public String OutputL2(String prefix){
+      String l2 = "";
+      if(vendor.startsWith("Cisco")){
          CiscoGrammar cisco = (CiscoGrammar)parser;
-         l2 = cisco.OutputL2();
-         links = cisco.OutputLinks();
+         l2 = prefix+cisco.OutputL2();
       }
-      else if(filename.startsWith("Arista")){
+      else if(vendor.startsWith("Arista")){
          AristaGrammar arista = (AristaGrammar) parser;
       }
-      else if(filename.startsWith("Quanta")){
+      else if(vendor.startsWith("Quanta")){
          QuantaGrammar quanta = (QuantaGrammar) parser;
       }
-      else if(filename.startsWith("Juniper")){
+      else if(vendor.startsWith("Juniper")){
          FlatJuniperParser juniper = (FlatJuniperParser) parser;
       }
       else{
          System.out.println("unknown device type Error");
          assert false;
       }
-      WriteToFile(l2, configPath+"/l2protocols.txt");
-      WriteToFile(links, configPath+"/links.txt");
+      return l2;
 	}
-	
-	private void WriteToFile(String content, String file){
-      Writer writer  = null;
-      try {
-          writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-          writer.write(content);
-          writer.close();
-      } catch (Exception ex) {
-          
-      }   
-	}
+
+   public String OutputLinks(String prefix){
+      String out = "";
+      Map<String, String> links=null;
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         links = cisco.getLinks();
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      
+      for(String key: links.keySet()){
+         String value = links.get(key);
+         out+=prefix+key+"\t"+value+"\n";
+      }
+      return out;
+   }
 }

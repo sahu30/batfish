@@ -10,13 +10,8 @@ public class LinkCount {
       links.put(src, dst);
    }
    
-   @Override
-   public String toString(){
-      String out="";
-      for(String key: links.keySet()){
-         String value = links.get(key);
-         out+=key+"\t"+value+"\n";
-      }
-      return out.trim();
+   public Map<String, String> getLinks(){
+      return links;
    }
+   
 }
