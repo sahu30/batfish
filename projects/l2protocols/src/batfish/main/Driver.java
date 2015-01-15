@@ -2,22 +2,23 @@ package batfish.main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
+import batfish.main.Preprocessor;
 
 public class Driver {
 
    
    // arguemnts: <file list> <root path> <output path>
-   // file list format :  stamp, device, config
+   // file list format :  stamp, device, config, vendor
 	public static void main(String []args) throws Exception{
 	   
 	   long startTime = System.nanoTime();    
 		if(args.length!=3){
+		   System.out.println("Error intput argument number: "+args.length);
 			System.out.println("Usage: l2protocols <config_list file> <src root> <output path>");
+			System.out.println("list_file format: stamp device config vendor");
 			System.exit(1);
 		}
 		
