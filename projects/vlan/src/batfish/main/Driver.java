@@ -21,7 +21,7 @@ public class Driver {
 	   long startTime = System.nanoTime();    
 		if(args.length!=3){
 		   System.out.println("Error intput argument number: "+args.length);
-			System.out.println("Usage: l2protocols <config_list file> <src root> <output path>");
+			System.out.println("Usage: vlans <config_list file> <src root> <output path>");
 			System.out.println("list_file format: stamp device config vendor");
 			System.exit(1);
 		}
