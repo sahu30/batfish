@@ -14,6 +14,10 @@ public class Driver {
    // file list format :  stamp, device, config, vendor
 	public static void main(String []args) throws Exception{
 	   
+	   boolean debug = false;
+	   int debugFileIndex = 310;
+	   
+	   
 	   long startTime = System.nanoTime();    
 		if(args.length!=3){
 		   System.out.println("Error intput argument number: "+args.length);
@@ -33,6 +37,8 @@ public class Driver {
 		String linksout = "";
 		String failure = "";
 		
+		
+		
 		// clean files
       WriteToFile(failure, outputPath+"/failures.txt", false);
       WriteToFile(l2out, outputPath+"/l2protocols.txt", false);
@@ -41,7 +47,15 @@ public class Driver {
 		BufferedReader br = new BufferedReader(new FileReader(fileList));  
 		String line = null;  
 		while ((line = br.readLine()) != null)  
-		{  
+		{
+         count++;
+      //   System.out.println(count);
+         if(debug){
+            if(count!=debugFileIndex)
+               continue;
+         }
+         
+		   
 		   String[] fields = line.split("\t");
 		   if(fields.length!=4)
 		      continue;
@@ -58,10 +72,16 @@ public class Driver {
 	         linksout+=b.OutputLinks(line+"\t");
 	      }
 	      else{
+	         System.out.println("failure, file index: "+count);
 	         failure += line+"\n";
 	      }
 
-	      count++;
+	      if(debug){
+	         WriteToFile(content, outputPath+"/debug.cfg", false);
+	         System.exit(0);
+	      }
+	      
+	      
 	      if(count%STEP==0){
 	         WriteToFile(failure, outputPath+"/failures.txt", true);
 	         WriteToFile(l2out, outputPath+"/l2protocols.txt", true);

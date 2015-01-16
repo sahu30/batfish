@@ -7,7 +7,7 @@ options {
 channel_group_if_stanza
 @after{ FindLACPInstance(); }
 :
-   CHANNEL_GROUP DEC MODE ( ACTIVE | ON | DESIRABLE | PASSIVE ) NEWLINE
+   CHANNEL_GROUP DEC ( MODE ( ACTIVE | ON | DESIRABLE | PASSIVE ) )? NEWLINE
 ;
 
 description_if_stanza
@@ -229,6 +229,7 @@ null_standalone_if_stanza
       | DUPLEX
 //      | ( ENCAPSULATION ~DOT1Q)
       | FAIR_QUEUE
+      | FRAME_RELAY
       | FLOWCONTROL
       | FRAMING
       | FULL_DUPLEX
@@ -264,7 +265,9 @@ null_standalone_if_stanza
                OSPF
                (
                   AUTHENTICATION
+                  | AUTHENTICATION_KEY
                   | MESSAGE_DIGEST_KEY
+                  | MTU_IGNORE
                   | NETWORK
                   | PRIORITY
                   | PASSIVE_INTERFACE
@@ -392,7 +395,7 @@ priority_stanza
 
 shutdown_if_stanza
 :
-   NO? SHUTDOWN NEWLINE
+   NO? SHUTDOWN FORCE? NEWLINE
 ;
 
 standby_ip_tail
@@ -460,7 +463,8 @@ udld_enable_if_stanza_tail
 @after{ FindUDLDInstance(); }
 :
    (
-      ENABLE
+      AGGRESSIVE
+      | ENABLE
       | ( PORT AGGRESSIVE? ) 
    ) NEWLINE
 ;
@@ -476,7 +480,7 @@ udld_if_stanza
 
 udld_null_if_stanza_tail
 :
-   PORT DISABLE NEWLINE
+   PORT? DISABLE NEWLINE
 ;
 
 vrf_forwarding_if_stanza

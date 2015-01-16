@@ -83,7 +83,7 @@ cisco_configuration
       | mstp_configuration_stanza
       | mstp_stanza
       | udld_stanza
-   )+ NEWLINE* EOF
+   )* NEWLINE* EOF
 ;
 
 mstp_instance_substanza

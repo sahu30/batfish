@@ -330,6 +330,11 @@ AUTHENTICATION
    'authentication'
 ;
 
+AUTHENTICATION_KEY
+:
+   'authentication-key'
+;
+
 AUTHENTICATION_PORT
 :
    'authentication-port'
@@ -1449,6 +1454,11 @@ FLUSH_AT_ACTIVATION
    'flush-at-activation'
 ;
 
+FORCE
+:
+   'force'
+;
+
 FORWARD_PROTOCOL
 :
    'forward-protocol'
@@ -2424,6 +2434,11 @@ MTA
 MTU
 :
    'mtu'
+;
+
+MTU_IGNORE
+:
+   'mtu-ignore'
 ;
 
 MULTICAST
