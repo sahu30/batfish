@@ -29,14 +29,17 @@ public class Driver {
 		String srcRoot = args[1];
 		String outputPath = args[2];
 		Preprocessor prep = new Preprocessor();
-		String l2out="";
-		String linksout = "";
+		
+		String vlanInstanceCount = "";
+		String vlanUsed = "";
+		String vlanIfaceRanges = "";
 		String failure = "";
 		
 		// clean files
+      WriteToFile(vlanInstanceCount, outputPath+"/vlanInstanceCount.txt", false);
+      WriteToFile(vlanUsed, outputPath+"/vlanUsed.txt", false);
+      WriteToFile(vlanIfaceRanges, outputPath+"/IfaceVlanRanges.txt", false);
       WriteToFile(failure, outputPath+"/failures.txt", false);
-      WriteToFile(l2out, outputPath+"/l2protocols.txt", false);
-      WriteToFile(linksout, outputPath+"/links.txt", false);
 		
 		BufferedReader br = new BufferedReader(new FileReader(fileList));  
 		String line = null;  
@@ -54,8 +57,9 @@ public class Driver {
 		   Batfish b = new Batfish(vendor, content);
 	      boolean success = b.parseVendorConfigurations();
 	      if(success){
-	         l2out+=b.OutputL2(line+"\t");
-	         linksout+=b.OutputLinks(line+"\t");
+	         vlanInstanceCount += b.OutputVlanInstanceCount(line+"\t");
+	         vlanUsed += b.OutputVlans(line+"\t");
+	         vlanIfaceRanges += b.OutputIfaceRanges(line+"\t");
 	      }
 	      else{
 	         failure += line+"\n";
@@ -63,22 +67,29 @@ public class Driver {
 
 	      count++;
 	      if(count%STEP==0){
+
+	         WriteToFile(vlanInstanceCount, outputPath+"/vlanInstanceCount.txt", true);
+	         WriteToFile(vlanUsed, outputPath+"/vlanUsed.txt", true);
+	         WriteToFile(vlanIfaceRanges, outputPath+"/IfaceVlanRanges.txt", true);
 	         WriteToFile(failure, outputPath+"/failures.txt", true);
-	         WriteToFile(l2out, outputPath+"/l2protocols.txt", true);
-	         WriteToFile(linksout, outputPath+"/links.txt", true);
+	         
+	         vlanInstanceCount = "";
+	         vlanUsed = "";
+	         vlanIfaceRanges = "";
 	         failure = "";
-	         linksout="";
-	         l2out="";
+	         
 	         long estimatedTime = System.nanoTime() - startTime;
 	         System.out.println(count+" files processed, time elapsed(ms): "+estimatedTime/1000000);
 	      }
 		} 
 
+
+      WriteToFile(vlanInstanceCount, outputPath+"/vlanInstanceCount.txt", true);
+      WriteToFile(vlanUsed, outputPath+"/vlanUsed.txt", true);
+      WriteToFile(vlanIfaceRanges, outputPath+"/IfaceVlanRanges.txt", true);
       WriteToFile(failure, outputPath+"/failures.txt", true);
-      WriteToFile(l2out, outputPath+"/l2protocols.txt", true);
-      WriteToFile(linksout, outputPath+"/links.txt", true);
 	   long estimatedTime = System.nanoTime() - startTime;
-	   System.out.println("finally, "+count+" files processed,time elapsed(ms): "+estimatedTime/1000000);
+	   System.out.println("finally, "+count+" files processed,time elapsed(s): "+estimatedTime/1000000000);
 	}
 
    private static void WriteToFile(String content, String file, boolean append){
