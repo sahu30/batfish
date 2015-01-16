@@ -24,6 +24,8 @@ public class vlans {
    }
    
    public void FindVLANRange(String range){
+      if(range.equals("none"))
+         return ;
       currentIfaceRanges.add(range);
    }
    
