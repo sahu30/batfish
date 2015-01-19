@@ -509,7 +509,61 @@ public class protocols {
    /********************************************************
     * BGP
     ********************************************************/
+   // neighborType
+   final String IPV4_ADDR_T = "ipv4_addr";
+   final String IPV6_ADDR_T = "ipv6_addr";
+   final String IPV4_PREFIX_T = "ipv4_prefix";
+   final String IPV6_PREFIX_T = "ipv6_prefix";
+   final String GROUP_T = "group";
+   // netType
+   final String IPV4_MASK_T = "ipv4_mask";
+   final String IPV4_T = "ipv4";
+   final String IPv4_PREFIX_T = "ipv4_prefix";
+   final String IPV6_T = "ipv6";
    
+   public void BgpAfHeader(String afType){}
+   public void Bgp(String asNum){}
+   public void BgpExit(){}
+   
+   public void BgpAf(){}
+   public void BgpAfExit(){}
+   public void BgpAfNetwork(String type, String net){}
+   public void BgpAfRedistribute(){}
+   public void BgpAfNeighbor(String type, String neighbor){}
+   public void BgpAfNeighborExit(){}
+   public void BgpAfList(String type, String name){}
+   public void BgpAfPeerGroup(String group){}
+   public void BgpAfNeighborRemoteAs(String asNum){}
+   
+   public void BgpNetwork(String type, String net){}
+   public void BgpNeighbor(String type, String neighbor){}
+   public void BgpNeighborExit(){}
+   public void BgpList(String type, String name){}
+   public void BgpPeerGroup(String group){}
+   public void BgpNeighborRemoteAs(String asNum){}
+   
+   public void BgpNeighborNexus(String type, String net, String asNum){}
+   public void BgpNeighborNexusExit(){}
+   public void BgpNeighborNexusAf(){}
+   public void BgpNeighborNexusAfExit(){}
+   public void BgpNeighborNexusAfList(String type, String name){}
+   public void BgpNeighborNexusInherit(String template){}
+   
+   public void BgpTemplate(String template){}
+   public void BgpTemplateExit(){}
+   public void BgpTemplateAf(){}
+   public void BgpTemplateAfExit(){}
+   public void BgpTemplateAfList(String type, String name){}
+   public void BgpTemplateRemoteAs(String asNum){}
+   
+   public void BgpVrfNexus(String name){}
+   public void BgpVrfNexusExit(){}
+   public void BgpVrfAf(){}
+   public void BgpVrfAfExit(){}
+   public void BgpVrfAfNetwork(String type, String net){}
+   public void BgpVrfNeighborNexus(String net){}
+   public void BgpVrfNeighborNexusExit(){}
+   public void BgpVrfNeighborNexusInherit(String template){}
    
 }
 

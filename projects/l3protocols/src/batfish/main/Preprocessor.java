@@ -22,6 +22,7 @@ public class Preprocessor {
       boolean inOspfStanza=false;
       String INTERFACE = "interface";
       String OSPF = "router ospf";
+      String BGP = "router bgp";
       
       String out = "";
       BufferedReader br = new BufferedReader(new FileReader(file));  
@@ -32,10 +33,17 @@ public class Preprocessor {
             if(line.startsWith(INTERFACE)){
                inStanza = true;
                inIfaceStanza = true;
+               inOspfStanza = false;
             }
             else if(line.startsWith(OSPF) ){
                inStanza = true;
                inOspfStanza = true;
+               inIfaceStanza = false;
+            }
+            else if(line.startsWith(BGP)){
+               inStanza = true;
+               inOspfStanza = false;
+               inIfaceStanza = false;
             }
             else{
                inStanza = false;
@@ -48,7 +56,7 @@ public class Preprocessor {
                out+=line+"\n";
             }
             else if(inIfaceStanza){
-               if(line.contains("ospf")|| line.contains("ip address"))
+               if(line.contains("ospf") || line.contains("ip address"))
                   out+=line+"\n";
             }
             else{

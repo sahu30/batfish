@@ -14,8 +14,8 @@ public class Driver {
    // file list format :  stamp, device, config, vendor
 	public static void main(String []args) throws Exception{
 	   
-	   boolean debug = false;
-	   int debugFileIndex = 33;
+	   boolean debug = true;
+	   int debugFileIndex = 1;
 	   
 	   
 	   long startTime = System.nanoTime();    
