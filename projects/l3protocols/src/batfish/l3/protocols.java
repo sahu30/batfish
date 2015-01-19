@@ -521,41 +521,89 @@ public class protocols {
    final String IPv4_PREFIX_T = "ipv4_prefix";
    final String IPV6_T = "ipv6";
    
-   public void BgpAfHeader(String afType){}
-   public void Bgp(String asNum){}
-   public void BgpExit(){}
    
-   public void BgpAf(){}
-   public void BgpAfExit(){}
-   public void BgpAfNetwork(String type, String net){}
-   public void BgpAfRedistribute(){}
-   public void BgpAfNeighbor(String type, String neighbor){}
-   public void BgpAfNeighborExit(){}
-   public void BgpAfList(String type, String name){}
-   public void BgpAfPeerGroup(String group){}
-   public void BgpAfNeighborRemoteAs(String asNum){}
-   
-   public void BgpNetwork(String type, String net){}
-   public void BgpNeighbor(String type, String neighbor){}
-   public void BgpNeighborExit(){}
-   public void BgpList(String type, String name){}
-   public void BgpPeerGroup(String group){}
-   public void BgpNeighborRemoteAs(String asNum){}
-   
+   // BGP 
+   Bgp currentBgp=null;
+   public void Bgp(String asNum){
+      Assert(currentBgp == null, "Bgp: currentBgp not null");
+      currentBgp = new Bgp(asNum);
+   }
+   public void BgpExit(){
+      Assert(currentBgp!=null, "BgpExit: currentBgp null");
+   }
+   String afHeader; 
+   public void BgpAfHeader(String afType){
+      afHeader = afType;
+   }
+   // address-family stanza
+   AddressFamily currentAddressFamily=null;
+   public void BgpAf(){
+      Assert(currentAddressFamily==null, "BgpAf: currentAddressFamily not null");
+      Assert(afHeader!=null, "Bgp: afHeader null");
+      currentAddressFamily = new AddressFamily(afHeader);
+   }
+   public void BgpAfExit(){
+      Assert(currentAddressFamily!=null, "BgpAfExit: currentAddressFamily null");
+      currentBgp.AddAddressFamily(currentAddressFamily);
+      currentAddressFamily=null;
+   }
+   public void BgpAfNetwork(String type, String net){ // network
+      currentAddressFamily.Network(type, net);
+   }
+   public void BgpAfRedistribute(){ // redistribute
+      currentAddressFamily.Redistribute();
+   }
+   public void BgpAfNeighbor(String type, String neighbor){// neighbor
+      currentAddressFamily.Neighbor(type, neighbor);
+   }
+   public void BgpAfNeighborExit(){
+      currentAddressFamily.NeighborExit();
+   }
+   public void BgpAfList(String type, String name){ // tail
+      currentAddressFamily.List(type,name);
+   }
+   public void BgpAfPeerGroup(String groupname){ // tail
+      currentAddressFamily.PeerGroup(groupname);
+   }
+   public void BgpAfNeighborRemoteAs(String asNum){ // tail
+      currentAddressFamily.RemoteAs(asNum);
+   }
+   // standalone configs
+   public void BgpNetwork(String type, String net){
+      currentBgp.Network(type, net);
+   }
+   public void BgpNeighbor(String type, String neighbor){
+      currentBgp.Neighbor(type, neighbor);
+   }
+   public void BgpNeighborExit(){
+      currentBgp.NeighborExit();
+   }
+   public void BgpList(String type, String name){ // tail
+      currentBgp.List(type, name);
+   }
+   public void BgpPeerGroup(String groupname){  // tail
+      currentBgp.PeerGroup(groupname);
+   }
+   public void BgpNeighborRemoteAs(String asNum){ // tail
+      currentBgp.RemoteAs(asNum);
+   }
+   // nexus configs
    public void BgpNeighborNexus(String type, String net, String asNum){}
    public void BgpNeighborNexusExit(){}
    public void BgpNeighborNexusAf(){}
    public void BgpNeighborNexusAfExit(){}
-   public void BgpNeighborNexusAfList(String type, String name){}
+   public void BgpNeighborNexusAfList(String type, String name){
+      
+   }
    public void BgpNeighborNexusInherit(String template){}
-   
+   // template configs
    public void BgpTemplate(String template){}
    public void BgpTemplateExit(){}
    public void BgpTemplateAf(){}
    public void BgpTemplateAfExit(){}
    public void BgpTemplateAfList(String type, String name){}
    public void BgpTemplateRemoteAs(String asNum){}
-   
+   // VRF configs
    public void BgpVrfNexus(String name){}
    public void BgpVrfNexusExit(){}
    public void BgpVrfAf(){}
@@ -565,5 +613,110 @@ public class protocols {
    public void BgpVrfNeighborNexusExit(){}
    public void BgpVrfNeighborNexusInherit(String template){}
    
+   
+   private class Bgp{
+      String asNum;
+      public Bgp(String num){
+         asNum = num;
+      }
+      String currentNeighborType = null;
+      String currentNeighbor = null;
+      public void Neighbor(String type, String neighbor) {
+         Assert(currentNeighbor==null, "Bgp:Neighbor currentNeighbor not null");
+         currentNeighbor = neighbor;
+         currentNeighborType = type;
+      }
+      public void NeighborExit() {
+         Assert(currentNeighbor!=null, "Bgp:NeighborExit currentNeighbor null");
+         currentNeighbor = null;
+         currentNeighborType = null;
+      }
+      // <neighborType, neighbor, asNum>
+      List<String[]> neighborRemoteAs = new ArrayList<String[]>();
+      public void RemoteAs(String asNum2) {
+         Assert(currentNeighbor!=null, "Bgp:RemoteAs currentNeighbor null");
+         neighborRemoteAs.add(new String[]{currentNeighborType, currentNeighbor, asNum2});
+         // TODO Auto-generated method stub
+         
+      }
+      // <neighborType, neighbor, groupname>
+      List<String[]> neighborGroup = new ArrayList<String[]>();
+      public void PeerGroup(String groupname) {
+         Assert(currentNeighbor!=null, "Bgp:PeerGroup currentNeighbor null");
+         Assert(!currentNeighborType.equals(GROUP_T), "Bgp:PeerGroup currentNeighborType group");
+         neighborGroup.add(new String[]{currentNeighborType, currentNeighbor, groupname});
+      }
+      // <neighborType, neighbor, listType, listName>
+      List<String[]> neighborList = new ArrayList<String[]>();
+      public void List(String type, String name) {
+         Assert(currentNeighbor!=null, "Bgp:List currentNeighbor null");
+         neighborList.add(new String[]{currentNeighborType, currentNeighbor, type, name});
+      }
+      // <networkType, network>
+      List<String[]> networks = new ArrayList<String[]>();
+      public void Network(String type, String net) {
+         networks.add(new String[]{type, net});
+      }
+      List<AddressFamily> addressFamilyList = new ArrayList<AddressFamily>();
+      public void AddAddressFamily(AddressFamily af){
+         addressFamilyList.add(af);
+      }
+   }
+   private class AddressFamily{
+      String afType;
+      String currentNeighborType=null;
+      String currentNeighbor=null;
+      public AddressFamily(String type){
+         afType = type;
+      }
+      public void NeighborExit() {
+         Assert(currentNeighbor!=null, "AddressFamily:NeighborExit currentNeighbor null");
+         currentNeighbor = null;
+         currentNeighborType = null;
+      }public void Neighbor(String type, String neighbor) {
+         Assert(currentNeighbor==null, "AddressFamily:Neighbor currentNeighbor not null");
+         currentNeighbor = neighbor;
+         currentNeighborType = type;
+      }
+      // <neighborType, neighbor, asNum>
+      List<String[]> neighborRemoteAs = new ArrayList<String[]>();
+      public void RemoteAs(String asNum) {
+         Assert(currentNeighbor!=null, "AddressFamily:NeighborExit currentNeighbor null");
+         neighborRemoteAs.add(new String[]{currentNeighborType, currentNeighbor, asNum});
+      }
+      // <neighborType, neighbor, groupname> 
+      List<String[]> neighborsGroup = new ArrayList<String[]>();
+      public void PeerGroup(String groupname) {
+         Assert(currentNeighbor!=null, "AddressFamily:NeighborExit currentNeighbor null");
+         Assert(!currentNeighborType.equals(GROUP_T), "AddressFamily:PeerGroup currentNeighborType is group");
+         neighborsGroup.add(new String[]{currentNeighborType, currentNeighbor, groupname});
+      }
+      // <neighborTYpe, neighbor, listType, list>
+      List<String[]> neighborList = new ArrayList<String[]>();
+      public void List(String type, String name) {
+         Assert(currentNeighbor!=null, "AddressFamily:NeighborExit currentNeighbor null");
+         neighborList.add(new String[]{currentNeighborType, currentNeighbor, type, name});
+         
+      }
+      // redistributeCount
+      int redistributeCount = 0;
+      public void Redistribute() {
+         redistributeCount++;
+      }
+      // <type, network>
+      List<String[]> networks = new ArrayList<String[]>();
+      public void Network(String type, String net) {
+         networks.add(new String[]{type, net});
+      }
+   }
+   private class NeighborNexus{
+      
+   }
+   private class Template{
+      
+   }
+   private class Vrf{
+      
+   }
 }
 
