@@ -263,4 +263,202 @@ public class Batfish {
       }
       return out;
    }
+
+   public String OutputRuleList(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputRuleList(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputNeighborAs(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputNeighborAs(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputGroupAs(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputGroupAs(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputGroupNeighbor(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputGroupNeighbor(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputNetworks(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputNetworks(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputNeighborTemplate(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputNeighborTemplate(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputAddressFamily(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputAddressFamily(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputTemplateRemoteAs(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputTemplateRemoteAs(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
+
+   public String OutputVrf(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputVrf(prefix);
+      }
+      else if(vendor.startsWith("Arista")){
+         AristaGrammar arista = (AristaGrammar) parser;
+      }
+      else if(vendor.startsWith("Quanta")){
+         QuantaGrammar quanta = (QuantaGrammar) parser;
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
 }

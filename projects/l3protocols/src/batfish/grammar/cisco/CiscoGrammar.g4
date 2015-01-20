@@ -16,11 +16,22 @@ import java.util.Map;
 
 @members {
 public String OutputStat(String prefix) { return proto.OutputStat(prefix); }
+public String OutputWarning(String prefix) { return proto.OutputWarning(prefix); }
+
 public String OutputIfaceIp(String prefix) { return proto.OutputIfaceIp(prefix); }
 public String OutputOspfNetworkArea(String prefix) { return proto.OutputOspfNetworkArea(prefix); }
 public String OutputOspfPassiveIface(String prefix) { return proto.OutputOspfPassiveIface(prefix);}
 public String OutputOspfPassiveIfaceDefault(String prefix){ return proto.OutputOspfPassiveIfaceDefault(prefix); }
-public String OutputWarning(String prefix) { return proto.OutputWarning(prefix); }
+
+public String OutputRuleList(String prefix){ return proto.OutputRuleList(prefix); }
+public String OutputNeighborAs(String prefix){ return proto.OutputNeighborAs(prefix); }
+public String OutputGroupAs(String prefix){ return proto.OutputGroupAs(prefix); }
+public String OutputGroupNeighbor(String prefix){ return proto.OutputGroupNeighbor(prefix); }
+public String OutputNetworks(String prefix){ return proto.OutputNetworks(prefix); }
+public String OutputNeighborTemplate(String prefix){ return proto.OutputNeighborTemplate(prefix); }
+public String OutputAddressFamily(String prefix){ return proto.OutputAddressFamily(prefix); }
+public String OutputTemplateRemoteAs(String prefix){ return proto.OutputTemplateRemoteAs(prefix); }
+public String OutputVrf(String prefix){ return proto.OutputVrf(prefix); }
 
 batfish.l3.protocols proto = new batfish.l3.protocols();
 private void EnterIface(String ifacename){ proto.EnterIface(ifacename); }
@@ -92,7 +103,7 @@ private void BgpVrfNexusExit(){ proto.BgpVrfNexusExit(); }
 private void BgpVrfAf(){ proto.BgpVrfAf(); }
 private void BgpVrfAfExit(){ proto.BgpVrfAfExit(); }
 private void BgpVrfAfNetwork(String type, String net){ proto.BgpVrfAfNetwork(type, net); } 
-private void BgpVrfNeighborNexus(String net){ proto.BgpVrfNeighborNexus(net); }
+private void BgpVrfNeighborNexus(String type, String net){ proto.BgpVrfNeighborNexus(type, net); }
 private void BgpVrfNeighborNexusExit(){ proto.BgpVrfNeighborNexusExit(); }
 private void BgpVrfNeighborNexusInherit(String template){ proto.BgpVrfNeighborNexusInherit(template); }
 

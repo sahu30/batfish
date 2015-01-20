@@ -13,7 +13,7 @@ if(_localctx.ipv4!=null){ f = _localctx.ipv4.getText(); }
 else if(_localctx.ipv6!=null){ f = _localctx.ipv6.getText(); }
 else if(_localctx.vpnv4!=null){ f = _localctx.vpnv4.getText(); }
 else{ f = _localctx.vpnv6.getText(); }
-String n = "";
+String n = "NA";
 if(_localctx.unicast!=null){ n = "unicast"; }
 else if(_localctx.multicast!=null){ n = "multicast"; }
 else if(_localctx.mdt!=null){ n = "mdt"; }
@@ -237,7 +237,8 @@ neighbor_nexus_substanza
       neighbor_nexus_address_family_substanza
       | neighbor_nexus_inherit_substanza
       | neighbor_nexus_null_substanza
-   )*
+   )+
+   { BgpNeighborNexusExit(); }
 ;
 
 af_neighbor_null_tail
@@ -470,7 +471,7 @@ vrf_af_null_substanza
 vrf_neighbor_nexus_stanza
 :
    NEIGHBOR neighbor = IP_ADDRESS NEWLINE
-   { BgpVrfNeighborNexus(_localctx.neighbor.getText()); }
+   { BgpVrfNeighborNexus(IPV4_ADDR_T, _localctx.neighbor.getText()); }
    (
       vrf_neighbor_inherit_substanza
       | vrf_neighbor_null_substanza
