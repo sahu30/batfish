@@ -13,9 +13,9 @@ import batfish.util.Util;
 public class protocols {
    String warning = "";
    public String OutputStat(String prefix) {
-      //return prefix+OutputOSPFStat()+"\t"+OutputBGPStat()+"\n";
-      if(currentBgp==null) return "";
-      return prefix+OutputBGPStat()+"\n";
+      return prefix+OutputOSPFStat()+"\t"+OutputBGPStat()+"\n";
+ //     if(currentBgp==null) return "";
+ //     return prefix+OutputBGPStat()+"\n";
    }
    /*******************************************************
     * Interface

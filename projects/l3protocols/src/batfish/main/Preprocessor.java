@@ -16,14 +16,12 @@ public class Preprocessor {
       return null;
    }
    public String CiscoProcess(String file) throws IOException{
-      
       boolean inStanza=false;
       boolean inIfaceStanza=false;
       boolean inOspfStanza=false;
       String INTERFACE = "interface";
       String OSPF = "router ospf";
       String BGP = "router bgp";
-      
       String out = "";
       BufferedReader br = new BufferedReader(new FileReader(file));  
       String line = null;  
