@@ -185,7 +185,7 @@ public class Driver {
             WriteToFile(ifaceIp, outputPath+"/ifaceIp.txt", true);
             WriteToFile(ospfNetworkArea, outputPath+"/ospfNetworkArea.txt", true);
             WriteToFile(ospfPassiveIface, outputPath+"/ospfPassiveIface.txt", true);
-            WriteToFile(ospfPassiveIfaceDefault, outputPath+"/ospfPassiveIfaceDefault", true);
+            WriteToFile(ospfPassiveIfaceDefault, outputPath+"/ospfPassiveIfaceDefault.txt", true);
             // bgp
             WriteToFile(bgpRule, outputPath+"/bgpRule.txt", true);
             WriteToFile(bgpNeighborAs, outputPath+"/bgpNeighborAs.txt", true);
