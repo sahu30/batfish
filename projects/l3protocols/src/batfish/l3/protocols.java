@@ -1044,7 +1044,7 @@ public class protocols {
          int numNeighborAs = 0, numGroupAs = 0, numNeighborGroup = 0, 
                numNeighborTemplate = 0, numTemplate = 0, BGPInst = 0,
                BGPInstAlone = 0, BGPInstInGroup = 0, BGPInstByTemplate = 0;
-         Set<String> neighborNexusWithAs = new HashSet<String>();
+         Set<String> neighborWithAs = new HashSet<String>();
          // direct
          for(String[] item: neighborAsList){
             String asNum = item[2];
@@ -1052,10 +1052,8 @@ public class protocols {
                numNeighborAs++;
                BGPInstAlone++;
                String stanza_type = item[3];
-               if(stanza_type.equals("neighborNexus")){
-                  String neighbor = item[0]+"_"+item[1];
-                  neighborNexusWithAs.add(neighbor);
-               }
+               String neighbor = item[0]+"_"+item[1];
+               neighborWithAs.add(neighbor);
             }
          }         
          // inherit group
@@ -1066,9 +1064,15 @@ public class protocols {
          }
          for(String[] item: neighborGroupList){
             numNeighborGroup++;
+            String neighbor = item[0]+"_"+item[1];
+            if(neighborWithAs.contains(neighbor)){
+               //System.out.println("duplication1");
+               continue;
+            }
             String group = item[2];
             if(groups_with_as.contains(group)){
                BGPInstInGroup++;
+               neighborWithAs.add(neighbor);
             }
          }
          // inherit template
@@ -1083,14 +1087,17 @@ public class protocols {
          for(String[] item: neighborTemplateList){
             numNeighborTemplate++;
             String neighbor = item[0]+"_"+item[1];
-            if(neighborNexusWithAs.contains(neighbor))
+            if(neighborWithAs.contains(neighbor)){
+               //System.out.println("duplication2");
                continue;
+            }
             String template = item[2];
             if(template_with_as.contains(template)){
                BGPInstByTemplate++;
+               neighborWithAs.add(neighbor);
             }
          }
-         BGPInst = BGPInstAlone+BGPInstInGroup+BGPInstByTemplate;
+         BGPInst = neighborWithAs.size();
          return new int[]{numNeighborAs, numGroupAs, numNeighborGroup, numNeighborTemplate, 
                numTemplate, BGPInst, BGPInstAlone, BGPInstInGroup, BGPInstByTemplate};
       }

@@ -15,7 +15,7 @@ import batfish.main.Preprocessor;
 
 public class Driver {
    boolean debug = false;
-   int fileIndex = 145;
+   int fileIndex = 112;
    boolean test = false;
    
    int numThreads = 5;
@@ -119,6 +119,7 @@ public class Driver {
          while(!lines.isEmpty()){
             String line = lines.remove();
             localCount++;
+            //System.out.println(localCount);
             if(debug){
                if(localCount<fileIndex)
                   continue;
