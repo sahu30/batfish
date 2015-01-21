@@ -83,6 +83,7 @@ private void BgpNeighborExit(){ proto.BgpNeighborExit(); }
 private void BgpList(String type, String name){ proto.BgpList(type, name); }
 private void BgpPeerGroup(String group){ proto.BgpPeerGroup(group); }
 private void BgpNeighborRemoteAs(String asNum){ proto.BgpNeighborRemoteAs(asNum); }
+private void BgpRedistribute(){ proto.BgpRedistribute(); }
 
 private void BgpNeighborNexus(String type, String net, String asNum){ proto.BgpNeighborNexus(type, net, asNum); }
 private void BgpNeighborNexusExit(){ proto.BgpNeighborNexusExit(); }
@@ -90,6 +91,8 @@ private void BgpNeighborNexusAf(){ proto.BgpNeighborNexusAf(); }
 private void BgpNeighborNexusAfExit(){ proto.BgpNeighborNexusAfExit(); }
 private void BgpNeighborNexusAfList(String type, String name){ proto.BgpNeighborNexusAfList(type, name); }
 private void BgpNeighborNexusInherit(String template){ proto.BgpNeighborNexusInherit(template); }
+private void BgpNeighborNexusRemoteAs(String asNum){ proto.BgpNeighborNexusRemoteAs(asNum); }
+private void BgpNeighborNexusNoAs(String asNum){ proto.BgpNeighborNexusNoAs(asNum); }
 
 private void BgpTemplate(String template){ proto.BgpTemplate(template); }
 private void BgpTemplateExit(){ proto.BgpTemplateExit(); }
@@ -97,6 +100,7 @@ private void BgpTemplateAf(){ proto.BgpTemplateAf(); }
 private void BgpTemplateAfExit(){ proto.BgpTemplateAfExit(); }
 private void BgpTemplateAfList(String type, String name){ proto.BgpTemplateAfList(type, name); }
 private void BgpTemplateRemoteAs(String asNum){ proto.BgpTemplateRemoteAs(asNum); }
+private void BgpTemplateInherit(String inherit){ proto.BgpTemplateInherit(inherit); }
 
 private void BgpVrfNexus(String name){ proto.BgpVrfNexus(name); }
 private void BgpVrfNexusExit(){ proto.BgpVrfNexusExit(); }

@@ -1,8 +1,10 @@
 package batfish.l3;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -666,6 +668,10 @@ public class protocols {
       Assert(currentBgp!=null, "BgpNeighborRemoteAs: currentBgp null");
       currentBgp.RemoteAs(asNum);
    }
+   public void BgpRedistribute(){
+      Assert(currentBgp!=null, "BgpRedistribute: currentBgp null");
+      currentBgp.Redistribute();
+   }
    // nexus configs
    NeighborNexus currentNeighborNexus= null;
    public void BgpNeighborNexus(String type, String net, String asNum){ // asNum may be null, assume type is not GROUP_T
@@ -692,6 +698,14 @@ public class protocols {
    public void BgpNeighborNexusInherit(String template){
       Assert(currentNeighborNexus!=null, "BgpNeighborNexusInherit: currentNeighborNexus null");
       currentNeighborNexus.Inherit(template);
+   }
+   public void BgpNeighborNexusRemoteAs(String asNum){
+      Assert(currentNeighborNexus!=null, "BgpNeighborNexusRemoteAs: currentNeighborNexus null");
+      currentNeighborNexus.RemoteAs(asNum);
+   }
+   public void BgpNeighborNexusNoAs(String asNum){
+      Assert(currentNeighborNexus!=null, "BgpNeighborNexusNoAs: currentNeighborNexus null");
+      currentNeighborNexus.NoAs(asNum);
    }
    // template configs
    Template currentTemplate = null;
@@ -720,6 +734,10 @@ public class protocols {
    public void BgpTemplateRemoteAs(String asNum){
       Assert(currentTemplate!=null, "BgpTemplateRemoteAs: currentTemplate null");
       currentTemplate.RemoteAs(asNum);
+   }
+   public void BgpTemplateInherit(String inherit){
+      Assert(currentTemplate!=null, "BgpTemplateInherit: currentTamplate null");
+      currentTemplate.Inherit(inherit);
    }
    // VRF configs
    VrfNexus currentVrfNexus = null;
@@ -819,16 +837,50 @@ public class protocols {
                String[] neighborTemplate = nn.getNeighborTemplate();
                if(neighborTemplate!=null) neighborTemplateList.add(neighborTemplate);
             }
-            for(Template t: templateList){
-               t.Aggregate();
-               ruleList.addAll(t.getRuleList());
-               templateRemoteAsList.add(t.getTemplateRemoteAs());
-            }
             for(VrfNexus vn: vrfNexusList){
                vn.Aggregate();   
                networkList.addAll(vn.getNetworkList());
                neighborTemplateList.addAll(vn.getNeighborTemplateList());
                vrfList.add(vn.getVrf());
+            }
+            Map<String, String> template2As = new HashMap<String, String>();
+            Map<String, String> template2Inherit = new HashMap<String, String>();
+            Map<String, Template> name2Template = new HashMap<String, Template>();
+            for(Template t: templateList){
+               String[] tempAs = t.getTemplateAs();
+               String[] tempInh = t.getTemplateInh();
+               template2As.put(tempAs[0], tempAs[1]);
+               template2Inherit.put(tempInh[0], tempInh[1]);
+               name2Template.put(t.getName(), t);
+            }
+            // resolve template inherit
+            for(String templ: template2As.keySet()){
+               String asNum = template2As.get(templ);
+               if(!asNum.equals("NA")) continue;
+               String inhe = template2Inherit.get(templ);
+               if(inhe.equals("NA")) continue;
+               boolean found=false;
+               String inheritedAs = "NA";
+               while(true){
+                  inheritedAs = template2As.get(inhe);
+                  if(!inheritedAs.equals("NA")){
+                     found = true;
+                     break;
+                  }
+                  inhe = template2Inherit.get(inhe);
+                  if(inhe.equals("NA")){
+                     break;
+                  }
+               }
+               if(found){
+                  name2Template.get(templ).RemoteAs(inheritedAs);
+               }
+            }
+            // then aggregate
+            for(Template t: templateList){
+               t.Aggregate();
+               ruleList.addAll(t.getRuleList());
+               templateRemoteAsList.add(t.getTemplateRemoteAs());
             }
             aggregated = true;
          }
@@ -984,7 +1036,7 @@ public class protocols {
          for(String[] item: addressFamilyRedistributeList){
             count+= Integer.parseInt(item[1]);
          }
-         return count;
+         return count+redistributeCount;
       }
       // <numNeighborAs, numGroupAs, numNeighborGroup, numNeighborTemplate, 
       // numTemplate, BGPInst, BGPInstAlone, BGPInstInGroup, BGPInstByTemplate>
@@ -992,15 +1044,21 @@ public class protocols {
          int numNeighborAs = 0, numGroupAs = 0, numNeighborGroup = 0, 
                numNeighborTemplate = 0, numTemplate = 0, BGPInst = 0,
                BGPInstAlone = 0, BGPInstInGroup = 0, BGPInstByTemplate = 0;
+         Set<String> neighborNexusWithAs = new HashSet<String>();
          // direct
          for(String[] item: neighborAsList){
             String asNum = item[2];
             if(!asNum.equals("NA")){
                numNeighborAs++;
                BGPInstAlone++;
+               String stanza_type = item[3];
+               if(stanza_type.equals("neighborNexus")){
+                  String neighbor = item[0]+"_"+item[1];
+                  neighborNexusWithAs.add(neighbor);
+               }
             }
          }         
-         // inherit template
+         // inherit group
          Set<String> groups_with_as = new HashSet<String>();
          for(String[] item: groupAsList){
             numGroupAs++;
@@ -1024,6 +1082,9 @@ public class protocols {
          }
          for(String[] item: neighborTemplateList){
             numNeighborTemplate++;
+            String neighbor = item[0]+"_"+item[1];
+            if(neighborNexusWithAs.contains(neighbor))
+               continue;
             String template = item[2];
             if(template_with_as.contains(template)){
                BGPInstByTemplate++;
@@ -1091,6 +1152,11 @@ public class protocols {
       public void Network(String type, String net) {
          networks.add(new String[]{type, net});
       }
+      int redistributeCount = 0;
+      public void Redistribute() {
+         redistributeCount++;
+      }
+      
       // addressFamilyList
       List<AddressFamily> addressFamilyList = new ArrayList<AddressFamily>();
       public void AddAddressFamily(AddressFamily af){
@@ -1212,7 +1278,10 @@ public class protocols {
       // <neighborType, neighbor, templateName, stanza_type, stanza_name>  
       public String[] getNeighborTemplate(){
          if(inherit==null) return null;
-         return new String[]{ type, neighbor, inherit, "neighborNexus", "NA"};
+         String t = inherit;
+         if(asCancelled)
+            t+="_cancelled";
+         return new String[]{ type, neighbor, t, "neighborNexus", "NA"};
       }
       public void Aggregate() {
          for(String[] item: afList){
@@ -1250,6 +1319,16 @@ public class protocols {
          Assert(inherit==null, "NeighborNexus:Inherit inherit not null");
          inherit = template;
       }
+      // asNum
+      public void RemoteAs(String asNum2) {
+         Assert(asNum.equals("NA"), "NeighborNexus:RemoteAs asNum not NA");
+         asNum = asNum2;
+      }
+      boolean asCancelled = false;
+      public void NoAs(String asNum2) {
+         asCancelled = true;
+         asNum = "NA";
+      }
    }
    private class Template{
       // acl-list: <neighborType, neighbor, listType, listName, 
@@ -1271,6 +1350,9 @@ public class protocols {
       public Template(String templatename) {
          name = templatename;
       }
+      public String getName() {
+         return name;
+      }
       String currentAf=null;;
       public void Af(String afHeader) {
          Assert(currentAf==null, "Template:Af currentAf not null");
@@ -1291,6 +1373,17 @@ public class protocols {
       public void AfList(String type, String name) {
          Assert(currentAf!=null, "Template:AfList currentAf null");
          afList.add(new String[]{currentAf, type, name});
+      }
+      // inherit
+      String inherit = "NA";
+      public void Inherit(String i) {
+         inherit = i;
+      }
+      public String[] getTemplateInh() {
+         return new String[]{name, inherit};
+      }
+      public String[] getTemplateAs() {
+         return new String[]{name, remoteAs};
       }
    }
    private class VrfNexus{

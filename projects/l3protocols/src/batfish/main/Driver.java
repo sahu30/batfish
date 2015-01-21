@@ -14,11 +14,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import batfish.main.Preprocessor;
 
 public class Driver {
+   boolean debug = false;
+   int fileIndex = 145;
+   boolean test = false;
+   
+   int numThreads = 5;
    int count=0;
    
    private class batfishProcess implements Runnable{
-      boolean debug = false;
-      
       Lock inputLock, outputLock;
       Queue<String> files;
       String outputPath;
@@ -33,7 +36,7 @@ public class Driver {
          srcRoot = srcR;
          name = n;
          startTime = st;
-      }      
+      }
       
       int countInRound;
       int localCount = 0;
@@ -62,9 +65,6 @@ public class Driver {
       Queue<String> lines = new LinkedList<String>();
       @Override
       public void run() {
-         if(debug){
-            System.out.println(name+" start to run");
-         }
          init();
          while(true){
             // input
@@ -109,9 +109,6 @@ public class Driver {
             if(countInRound>=PROCESSSTEP) break;
          }
          inputLock.unlock();
-         if(debug){
-            System.out.println(name+" reads "+countInRound+" files");
-         }
          if(countInRound==0) return false;
          else return true;
       }
@@ -121,6 +118,15 @@ public class Driver {
       private void process(){
          while(!lines.isEmpty()){
             String line = lines.remove();
+            localCount++;
+            if(debug){
+               if(localCount<fileIndex)
+                  continue;
+               else if(localCount>fileIndex)
+                  break;
+            }
+            
+            
             String[] fields = line.split("\t");
             if(fields.length!=4){
                failure += line+"\n";
@@ -163,19 +169,18 @@ public class Driver {
                warning += b.OutputWarning(prefix);
             }
             else{
-               System.out.println("failure, file index: "+count);
+               System.out.println("failure, file index: "+localCount);
                failure += line+"\n";
             }
-            
+            if(debug){
+               WriteToFile(content, outputPath+"/debug.cfg", false);
+            }
          }
       }
       private void output(boolean last){
          outputLock.lock();
          count+=countInRound;
-         localCount+=countInRound;
-         if(debug){
-            System.out.println("in "+name+" ouput, count/localCount is "+count+"/"+localCount);
-         }
+    //     localCount+=countInRound;
          if(last || count % REPORTSTEP==0){
             // total
             WriteToFile(stat, outputPath+"/stat.txt", true);
@@ -255,22 +260,27 @@ public class Driver {
       Lock inputLock = new ReentrantLock();
       Lock outputLock = new ReentrantLock();
       Queue<String> files = new LinkedList<String>();
-      Integer count = new Integer(0);   
       String outputPath = args[2];
       String srcRoot = args[1];      
       
 		// prepare file_list
 		String fileList = args[0];	
+		if(test){
+		   fileList = "testcase/test.txt";
+		}
 		BufferedReader br = new BufferedReader(new FileReader(fileList));  
 		String line = null;  
 		while ((line = br.readLine()) != null)  
 		   files.add(line);
-		int numThreads = 4;
-		batfishProcess p[] = new batfishProcess[4];
+		if(debug){
+		   numThreads = 1;
+		}
+		
+		batfishProcess p[] = new batfishProcess[numThreads];
 		for(int i = 0; i<numThreads; i++){
 		   p[i] = new batfishProcess(inputLock, outputLock, files, outputPath, srcRoot, "thread"+i, startTime);
 		}
-		Thread t[] = new Thread[4];
+		Thread t[] = new Thread[numThreads];
 		for(int i = 0; i<numThreads; i++){
 		   t[i] = new Thread(p[i], "thread"+i);
 		}

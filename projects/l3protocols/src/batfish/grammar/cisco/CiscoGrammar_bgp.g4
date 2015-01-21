@@ -81,7 +81,7 @@ af_neighbor_prefix_list_tail
 af_neighbor_remote_as_tail
 @after{ BgpAfNeighborRemoteAs(_localctx.asNum.getText()); }
 :
-   REMOTE_AS asNum = DEC NEWLINE
+   ( LOCAL_AS | REMOTE_AS ) asNum = DEC NEWLINE
 ;
 
 af_neighbor_route_map_tail
@@ -134,7 +134,8 @@ af_network_substanza
       ( ip = IP_ADDRESS ( MASK mask =IP_ADDRESS )? ) 
       | prefix = IP_PREFIX
       | ipv6 = IPV6_PREFIX
-   )
+   ) 
+   ( ROUTE_MAP VARIABLE )?
    NEWLINE
 ;
 
@@ -206,11 +207,22 @@ neighbor_nexus_af_route_map_substanza
    ROUTE_MAP map = VARIABLE ( IN | OUT )? NEWLINE
 ;
 
-
 neighbor_nexus_inherit_substanza
 @after{ BgpNeighborNexusInherit(_localctx.peer.getText()); }
 :
    INHERIT PEER peer = VARIABLE NEWLINE
+;
+
+neighbor_nexus_no_remote_as_substanza
+@after{ BgpNeighborNexusNoAs(_localctx.asNum.getText()); }
+:
+   NO REMOTE_AS asNum = DEC NEWLINE
+;
+
+neighbor_nexus_remote_as_substanza
+@after{ BgpNeighborNexusRemoteAs(_localctx.asNum.getText()); }
+:
+   REMOTE_AS asNum = DEC NEWLINE
 ;
 
 neighbor_nexus_substanza
@@ -236,8 +248,10 @@ neighbor_nexus_substanza
    (  
       neighbor_nexus_address_family_substanza
       | neighbor_nexus_inherit_substanza
+      | neighbor_nexus_no_remote_as_substanza
       | neighbor_nexus_null_substanza
-   )+
+      | neighbor_nexus_remote_as_substanza
+   )*
    { BgpNeighborNexusExit(); }
 ;
 
@@ -254,6 +268,17 @@ template_af_null_subsubstanza
 template_null_substanza
 :
    neighbor_null_tail
+   | ( NO 
+         (
+            DESCRIPTION
+            | SHUTDOWN
+         ) ~NEWLINE* NEWLINE 
+     )
+;
+
+neighbor_empty_tail
+:
+   NEWLINE
 ;
 
 neighbor_nexus_af_null_substanza
@@ -264,6 +289,13 @@ neighbor_nexus_af_null_substanza
 neighbor_nexus_null_substanza
 :
    neighbor_null_tail
+   | ( 
+        NO 
+        (
+           ROUTE_MAP
+           | SHUTDOWN
+        ) ~NEWLINE* NEWLINE 
+     ) 
 ;
 
 neighbor_null_tail
@@ -354,7 +386,9 @@ network_substanza
    BgpNetwork(addressType, value); 
 }
 :
-   NETWORK ( ip = IP_ADDRESS ( MASK mask = IP_ADDRESS )? ) NEWLINE
+   NETWORK ( ip = IP_ADDRESS ( MASK mask = IP_ADDRESS )? ) 
+   ( ROUTE_MAP VARIABLE )?
+   NEWLINE
 ;
 
 no_neighbor_substanza
@@ -380,11 +414,19 @@ null_bgp_substanza
       | AUTO_SUMMARY
       | BESTPATH
       | BGP
+      | DEFAULT_INFORMATION
       | LOG_NEIGHBOR_CHANGES
       | MAXIMUM_PATHS
       | SHUTDOWN
       | SYNCHRONIZATION
+      | ( TEMPLATE PEER_SESSION )
    ) ~NEWLINE* NEWLINE
+;
+
+redistribute_substanza
+@after{ BgpRedistribute(); }
+:
+   REDISTRIBUTE ( STATIC | CONNECTED ) ( ROUTE_MAP VARIABLE )? NEWLINE
 ;
 
 // !!!!!!!!!!!!!!! router bgp
@@ -398,6 +440,7 @@ router_bgp_stanza
       | network_substanza
       | no_neighbor_substanza
       | null_bgp_substanza
+      | redistribute_substanza
       | template_peer_substanza
       | vrf_nexus_substanza
    )*
@@ -410,6 +453,7 @@ template_peer_substanza
    { BgpTemplate(_localctx.name.getText()); }
    (
       template_address_family_substanza
+      | template_inherit_substanza
       | template_null_substanza
       | template_remote_as_substanza
    )*
@@ -427,15 +471,28 @@ template_address_family_substanza
    { BgpTemplateAf(); }
    (
       template_af_null_subsubstanza
+      | template_af_prefix_list_substanza
       | template_af_route_map_subsubstanza
    )*
    { BgpTemplateAfExit(); }
+;
+
+template_af_prefix_list_substanza
+@after{ BgpTemplateAfList("prefix-list", _localctx.list.getText()); }
+:
+   PREFIX_LIST list = VARIABLE ( IN | OUT )? NEWLINE
 ;
 
 template_af_route_map_subsubstanza
 @after{ BgpTemplateAfList("route-map", _localctx.map.getText()); }
 :
    ROUTE_MAP map = VARIABLE ( IN | OUT )? NEWLINE
+;
+
+template_inherit_substanza
+@after{ BgpTemplateInherit(_localctx.inherit.getText()); }
+:
+   INHERIT PEER_SESSION inherit = VARIABLE NEWLINE
 ;
 
 template_remote_as_substanza
@@ -456,9 +513,19 @@ vrf_address_family_nexus_stanza
 ;
 
 vrf_af_network_substanza
-@after{ BgpVrfAfNetwork(IPV4_PREFIX_T, _localctx.net.getText()); }
+@after{
+   String type = null;
+   String value = null;
+   if(_localctx.prefix!=null){ type = IPV4_PREFIX_T; value = _localctx.prefix.getText(); }
+   else{ type = IPV6_ADDR_T; value = _localctx.ipv6.getText(); }
+   BgpVrfAfNetwork(type, value); 
+}
 :
-   NETWORK net = IP_PREFIX NEWLINE
+   NETWORK 
+   (
+      prefix = IP_PREFIX
+      | ipv6 = IPV6_ADDRESS
+   ) NEWLINE
 ;
 
 vrf_af_null_substanza
@@ -470,8 +537,18 @@ vrf_af_null_substanza
 
 vrf_neighbor_nexus_stanza
 :
-   NEIGHBOR neighbor = IP_ADDRESS NEWLINE
-   { BgpVrfNeighborNexus(IPV4_ADDR_T, _localctx.neighbor.getText()); }
+   NEIGHBOR
+   (
+      ip = IP_ADDRESS
+      | ipv6 = IPV6_ADDRESS
+   )
+   NEWLINE
+   { 
+      String type, value; 
+      if(_localctx.ip!=null){ type = IPV4_ADDR_T; value = _localctx.ip.getText(); }
+      else{ type = IPV6_ADDR_T; value = _localctx.ipv6.getText(); }
+      BgpVrfNeighborNexus(type, value); 
+   }
    (
       vrf_neighbor_inherit_substanza
       | vrf_neighbor_null_substanza
@@ -489,6 +566,7 @@ vrf_neighbor_null_substanza
 :
    (
       DESCRIPTION
+      | DEFAULT
    ) ~NEWLINE* NEWLINE
 ;
 
@@ -499,6 +577,14 @@ vrf_nexus_substanza
    (      
       vrf_address_family_nexus_stanza
       | vrf_neighbor_nexus_stanza
+      | vrf_null_stanza
    )*
    { BgpVrfNexusExit(); }
+;
+
+vrf_null_stanza
+:
+   (
+      ROUTER_ID
+   ) ~NEWLINE* NEWLINE
 ;
