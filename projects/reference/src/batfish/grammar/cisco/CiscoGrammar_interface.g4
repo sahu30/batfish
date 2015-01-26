@@ -394,7 +394,7 @@ priority_stanza
 
 shutdown_if_stanza
 :
-   NO? SHUTDOWN FORCE? NEWLINE
+   NO? SHUTDOWN FORCE? ~NEWLINE* NEWLINE
 ;
 
 standby_ip_tail

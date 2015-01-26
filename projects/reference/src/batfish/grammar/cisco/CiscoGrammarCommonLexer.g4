@@ -1330,6 +1330,11 @@ EXTCOMM_LIST
    'extcomm-list'
 ;
 
+EXTCOMMUNITY
+:
+   'extcommunity'
+;
+
 EXTCOMMUNITY_LIST
 :
    'extcommunity-list'
@@ -3404,6 +3409,11 @@ ROUTING
 RSAKEYPAIR
 :
    'rsakeypair'
+;
+
+RT
+:
+   'rt'
 ;
 
 RTR

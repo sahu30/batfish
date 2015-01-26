@@ -51,6 +51,7 @@ public void FindAcl(String name, String type){ ref.FindAcl(name, type);  }
 public void EnterRoutemap(String name){  ref.EnterRoutemap(name); }
 public void ExitRoutemap(){  ref.ExitRoutemap(); }
 public void RoutemapAcl(String acl){ ref.RoutemapAcl(acl);  }
+public void RoutemapIface(String iface){ ref.RoutemapIface(iface); }
 // interface
 public void EnterIface(String iface){ ref.EnterIface(iface);  }
 public void ExitIface(){ ref.ExitIface();  }
@@ -128,8 +129,10 @@ mstp_configuration_stanza
 
 null_stanza
 :
+   NO? 
    (
       HARDWARE
+      | LOGGING
    ) ~NEWLINE* NEWLINE
 ;
 

@@ -25,6 +25,25 @@ match_community_list_rm_stanza
    )+ NEWLINE
 ;
 
+match_extcommunity_rm_stanza
+:
+   MATCH EXTCOMMUNITY
+   (
+      (
+         ( name = VARIABLE { RoutemapAcl(_localctx.name.getText()); } )
+         | ( name = DEC { RoutemapAcl(_localctx.name.getText()); } )
+      )     
+   )+ NEWLINE
+;
+
+match_interface_rm_stanza
+:
+   MATCH INTERFACE
+   (
+      name = VARIABLE { RoutemapIface(_localctx.name.getText()); }
+   )* NEWLINE
+;
+
 match_ip_access_list_rm_stanza
 :
    MATCH IP ADDRESS
@@ -73,6 +92,8 @@ match_rm_stanza
 :
    match_as_path_access_list_rm_stanza
    | match_community_list_rm_stanza
+   | match_extcommunity_rm_stanza
+   | match_interface_rm_stanza
    | match_ip_access_list_rm_stanza
    | match_ip_multicast_rm_stanza
    | match_ip_prefix_list_rm_stanza
@@ -114,7 +135,7 @@ locals [boolean again]
 		_input.LT(2).getType() == VARIABLE &&
 		_input.LT(2).getText().equals($name.text);
 	}
-
+   { ExitRoutemap(); }
    (
       {$again}?
 
@@ -122,7 +143,6 @@ locals [boolean again]
       |
       {!$again}?
    )
-   { ExitRoutemap(); }
 ;
 
 route_map_stanza
@@ -185,6 +205,14 @@ set_community_rm_stanza
    SET COMMUNITY
    (
       comm = community { RoutemapAcl(_localctx.comm.getText()); }
+   )+ NEWLINE
+;
+
+set_extcommunity_stanza
+:
+   SET EXTCOMMUNITY RT
+   (
+      comm = ~NEWLINE { RoutemapAcl(_localctx.comm.getText()); }
    )+ NEWLINE
 ;
 
@@ -266,6 +294,7 @@ set_rm_stanza
    | set_comm_list_delete_rm_stanza
    | set_community_rm_stanza
    | set_community_additive_rm_stanza
+   | set_extcommunity_stanza
    | set_extcomm_list_rm_stanza
 //   | set_interface_rm_stanza
    | set_ip_df_rm_stanza

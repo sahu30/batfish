@@ -57,7 +57,7 @@ public class reference {
       if(bgpNeighbors.size()==0) return "";
       String out="";
       for(String[] neighbor: bgpNeighbors){
-         out+=prefix+neighbor[0]+"\t"+neighbor[1]+"\t"+neighbor[2]+"\n";
+         out+=prefix+neighbor[0]+"\t"+neighbor[1]+"\t"+neighbor[2]+"\t"+neighbor[3]+"\n";
       }
       return out;
    }
@@ -97,7 +97,7 @@ public class reference {
    String warning = "";
    public void Likely(boolean exp, String msg){
       if(!exp){
-         warning+=msg;
+         warning+=msg+",";
       }
    }
    public String OutputWarning(String prefix){
@@ -128,7 +128,7 @@ public class reference {
    // Routemap
    String currentRoutemap = null;
    public void EnterRoutemap(String name){
-      Likely(currentRoutemap == null, "EnterRouteMap: currentRoutemap not null");
+      Likely(currentRoutemap == null, "EnterRouteMap: currentRoutemap not null (name is "+name+", currentRoutemap is "+currentRoutemap+")");
       currentRoutemap = name;
       routemaps.add(name);
    }
@@ -139,6 +139,11 @@ public class reference {
    public void RoutemapAcl(String acl){
       Likely(currentRoutemap!=null, "RoutemapAcl: currentRoutemap null");
       intraRef.add(new String[]{ROUTEMAP_T, currentRoutemap, ACL_T, acl});
+   }
+   
+   public void RoutemapIface(String iname){
+      Likely(currentRoutemap!=null, "RoutemapIface: currentRoutemap null");
+      intraRef.add(new String[]{ ROUTEMAP_T, currentRoutemap, IFACE_T, iname });
    }
    
    // interface
