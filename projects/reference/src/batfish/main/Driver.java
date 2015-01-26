@@ -15,7 +15,7 @@ import batfish.main.Preprocessor;
 
 public class Driver {
    boolean debug = false;
-   int fileIndex = 112;
+   int fileIndex = 61;
    boolean test = false;
    
    int numThreads = 5;
@@ -43,29 +43,27 @@ public class Driver {
       int REPORTSTEP = 100;
       int PROCESSSTEP = 10;
       // stat
-      String stat ="";
       String warning = "";
       String failure = "";
-      // ospf
+      // acl
+      String acl = "";
+      // Routemap
+      String routemap = "";
+      // iface
       String ifaceIp = "";
-      String ospfNetworkArea= "";
-      String ospfPassiveIface = "";
-      String ospfPassiveIfaceDefault= "";
       // bgp
-      String bgpRule = "";
+      String bgpAs = "";
       String bgpNeighborAs = "";
-      String bgpGroupAs = "";
-      String bgpNeighborGroup = "";
-      String bgpNetworks = "";
-      String bgpNeighborTemplate = "";
-      String bgpAddressFamily = "";
-      String bgpTemplate = "";
-      String bgpVrf = "";     
-
+      // ospf
+      String ospfProc = "";
+      String ospfNetwork = "";
+      // reference
+      String intraReference = "";
+      
       Queue<String> lines = new LinkedList<String>();
       @Override
       public void run() {
-         init();
+//         init();
          while(true){
             // input
             boolean hasData = input();
@@ -78,27 +76,6 @@ public class Driver {
          output(true);
       }
       
-      private void init(){// clean files
-         // total
-         WriteToFile(stat, outputPath+"/stat.txt", false);
-         WriteToFile(warning, outputPath+"/warnings.txt", false);
-         WriteToFile(failure, outputPath+"/failures.txt", false);
-         // ospf
-         WriteToFile(ifaceIp, outputPath+"/ifaceIp.txt", false);
-         WriteToFile(ospfNetworkArea, outputPath+"/ospfNetworkArea.txt", false);
-         WriteToFile(ospfPassiveIface, outputPath+"/ospfPassiveIface.txt", false);
-         WriteToFile(ospfPassiveIfaceDefault, outputPath+"/ospfPassiveIfaceDefault.txt", false);
-         // bgp
-         WriteToFile(bgpRule, outputPath+"/bgpRule.txt", false);
-         WriteToFile(bgpNeighborAs, outputPath+"/bgpNeighborAs.txt", false);
-         WriteToFile(bgpGroupAs, outputPath+"/bgpGroupAs.txt", false);
-         WriteToFile(bgpNeighborGroup, outputPath+"/bgpNeighborGroup.txt", false);
-         WriteToFile(bgpNetworks, outputPath+"/bgpNetworks.txt", false);
-         WriteToFile(bgpNeighborTemplate, outputPath+"/bgpNeighborTemplate.txt", false);
-         WriteToFile(bgpAddressFamily, outputPath+"/bgpAddressFamily.txt", false);
-         WriteToFile(bgpTemplate, outputPath+"/bgpTemplate.txt", false);
-         WriteToFile(bgpVrf, outputPath+"/bgpVrf.txt", false);         
-      }
       private boolean input(){
          inputLock.lock();
          countInRound = 0;
@@ -125,8 +102,7 @@ public class Driver {
                   continue;
                else if(localCount>fileIndex)
                   break;
-            }
-            
+            }            
             
             String[] fields = line.split("\t");
             if(fields.length!=4){
@@ -150,24 +126,23 @@ public class Driver {
             boolean success = b.parseVendorConfigurations();
             if(success){
                String prefix = line+'\t';
-               // ospf
-               ifaceIp += b.OutputIfaceIp(prefix);
-               ospfNetworkArea += b.OutputOspfNetworkArea(prefix);
-               ospfPassiveIface += b.OutputOspfPassiveIface(prefix);
-               ospfPassiveIfaceDefault += b.OutputOspfPassiveIfaceDefault(prefix);
-               // bgp
-               bgpRule += b.OutputRuleList(prefix);
-               bgpNeighborAs += b.OutputNeighborAs(prefix);
-               bgpGroupAs+= b.OutputGroupAs(prefix);
-               bgpNeighborGroup += b.OutputGroupNeighbor(prefix);
-               bgpNetworks += b.OutputNetworks(prefix);
-               bgpNeighborTemplate += b.OutputNeighborTemplate(prefix);
-               bgpAddressFamily += b.OutputAddressFamily(prefix);
-               bgpTemplate += b.OutputTemplateRemoteAs(prefix);
-               bgpVrf += b.OutputVrf(prefix); 
-               // total
-               stat += b.OutputStat(prefix);
+
+               // stat
                warning += b.OutputWarning(prefix);
+               // acl
+               acl += b.OutputAcl(prefix);
+               // Routemap
+               routemap += b.OutputRoutemap(prefix);
+               // iface
+               ifaceIp += b.OutputIfaceIp(prefix);
+               // bgp
+               bgpAs += b.OutputBgpAs(prefix);
+               bgpNeighborAs += b.OutputBgpNeighborAs(prefix);
+               // ospf
+               ospfProc += b.OutputOspfProc(prefix);
+               ospfNetwork += b.OutputOspfNeitworks(prefix);
+               // reference
+               intraReference += b.OutputIntraReference(prefix);
             }
             else{
                System.out.println("failure, file index: "+localCount);
@@ -182,66 +157,50 @@ public class Driver {
          outputLock.lock();
          count+=countInRound;
     //     localCount+=countInRound;
-         if(last || count % REPORTSTEP==0){
-            // total
-            WriteToFile(stat, outputPath+"/stat.txt", true);
+         if(last || count % REPORTSTEP==0){         // total
             WriteToFile(warning, outputPath+"/warnings.txt", true);
             WriteToFile(failure, outputPath+"/failures.txt", true);
-            // ospf
+            // acl
+            WriteToFile(acl, outputPath+"/acl.txt", true);
+            // routemap
+            WriteToFile(routemap, outputPath+"/routemap.txt", true);
+            // iface
             WriteToFile(ifaceIp, outputPath+"/ifaceIp.txt", true);
-            WriteToFile(ospfNetworkArea, outputPath+"/ospfNetworkArea.txt", true);
-            WriteToFile(ospfPassiveIface, outputPath+"/ospfPassiveIface.txt", true);
-            WriteToFile(ospfPassiveIfaceDefault, outputPath+"/ospfPassiveIfaceDefault.txt", true);
             // bgp
-            WriteToFile(bgpRule, outputPath+"/bgpRule.txt", true);
+            WriteToFile(bgpAs, outputPath+"/bgpAs.txt", true);
             WriteToFile(bgpNeighborAs, outputPath+"/bgpNeighborAs.txt", true);
-            WriteToFile(bgpGroupAs, outputPath+"/bgpGroupAs.txt", true);
-            WriteToFile(bgpNeighborGroup, outputPath+"/bgpNeighborGroup.txt", true);
-            WriteToFile(bgpNetworks, outputPath+"/bgpNetworks.txt", true);
-            WriteToFile(bgpNeighborTemplate, outputPath+"/bgpNeighborTemplate.txt", true);
-            WriteToFile(bgpAddressFamily, outputPath+"/bgpAddressFamily.txt", true);
-            WriteToFile(bgpTemplate, outputPath+"/bgpTemplate.txt", true);
-            WriteToFile(bgpVrf, outputPath+"/bgpVrf.txt", true);
-
+            // ospf
+            WriteToFile(ospfProc, outputPath+"/ospfProc.txt", true);
+            WriteToFile(ospfNetwork, outputPath+"/ospfNetwork.txt", true);
+            // itnraReference
+            WriteToFile(intraReference, outputPath+"/intraReference.txt", true);
             
+      //      System.out.print(routemap);
             
             long endTime = System.nanoTime();    
             long elapsed = (endTime - startTime)/1000000000; // in second
             System.out.println(count+" file processed in "+elapsed+" second, report from "+name+" localCount is "+localCount);
-           // total
-            // stat
-            stat ="";
+            // total      // stat
             warning = "";
             failure = "";
-            // ospf
+            // acl
+            acl = "";
+            // Routemap
+            routemap = "";
+            // iface
             ifaceIp = "";
-            ospfNetworkArea= "";
-            ospfPassiveIface = "";
-            ospfPassiveIfaceDefault= "";
             // bgp
-            bgpRule = "";
+            bgpAs = "";
             bgpNeighborAs = "";
-            bgpGroupAs = "";
-            bgpNeighborGroup = "";
-            bgpNetworks = "";
-            bgpNeighborTemplate = "";
-            bgpAddressFamily = "";
-            bgpTemplate = "";
-            bgpVrf = "";  
+            // ospf
+            ospfProc = "";
+            ospfNetwork = "";
+            // reference
+            intraReference = "";
          }
          outputLock.unlock();
       }
 
-      private void WriteToFile(String content, String file, boolean append){
-         Writer writer  = null;
-         try {
-             writer = new BufferedWriter(new FileWriter(file, append));
-             writer.write(content);
-             writer.close();
-         } catch (Exception ex) {
-             System.out.println("cannot write to file "+file);
-         }   
-      }
    }
    
    // arguemnts: <file list> <root path> <output path>
@@ -254,7 +213,7 @@ public class Driver {
 	   long startTime = System.nanoTime();    
 		if(args.length!=3){
 		   System.out.println("Error intput argument number: "+args.length);
-			System.out.println("Usage: l3protocols <config_list file> <src root> <output path>");
+			System.out.println("Usage: reference <config_list file> <src root> <output path>");
 			System.out.println("list_file format: stamp device config vendor");
 			System.exit(1);
 		}
@@ -277,6 +236,9 @@ public class Driver {
 		   numThreads = 1;
 		}
 		
+		// prepare output
+		init(outputPath);
+		// process
 		batfishProcess p[] = new batfishProcess[numThreads];
 		for(int i = 0; i<numThreads; i++){
 		   p[i] = new batfishProcess(inputLock, outputLock, files, outputPath, srcRoot, "thread"+i, startTime);
@@ -292,4 +254,35 @@ public class Driver {
 		   t[i].join();
 		}
 	}
+
+   private void init(String outputPath){// clean files
+      String blank = "";
+      // total
+      WriteToFile(blank, outputPath+"/warnings.txt", false);
+      WriteToFile(blank, outputPath+"/failures.txt", false);
+      // acl
+      WriteToFile(blank, outputPath+"/acl.txt", false);
+      // routemap
+      WriteToFile(blank, outputPath+"/routemap.txt", false);
+      // iface
+      WriteToFile(blank, outputPath+"/ifaceIp.txt", false);
+      // bgp
+      WriteToFile(blank, outputPath+"/bgpAs.txt", false);
+      WriteToFile(blank, outputPath+"/bgpNeighborAs.txt", false);
+      // ospf
+      WriteToFile(blank, outputPath+"/ospfProc.txt", false);
+      WriteToFile(blank, outputPath+"/ospfNetwork.txt", false);
+      // itnraReference
+      WriteToFile(blank, outputPath+"/intraReference.txt", false);
+   }
+   private void WriteToFile(String content, String file, boolean append){
+      Writer writer  = null;
+      try {
+          writer = new BufferedWriter(new FileWriter(file, append));
+          writer.write(content);
+          writer.close();
+      } catch (Exception ex) {
+          System.out.println("cannot write to file "+file);
+      }   
+   }
 }

@@ -570,8 +570,8 @@ public class protocols {
    // numTemplate, numVRF, numNetwork, BGPInstAlone, BGPInstInGroup, BGPInstByTemplate>
    private String OutputBGPStat(){
       if(currentBgp==null){ 
-         return "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t"+
-                  "0\t0\t0\t0\t0\t0\t0\t0\t0\t0";
+         return "0\t0\t0\t0\t0\t0\t0\t0\t"+
+                "0\t0\t0\t0\t0\t0\t0\t0";
       }
       return currentBgp.OutputStat();      
    }
