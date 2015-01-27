@@ -23,7 +23,7 @@ public class Postprocessor {
 
    Lock inputLock, outputLock;
    
-   int numThreads = 1;
+   int numThreads = 5;
    int stampCount = 0;
    long startTime;
    private class processThread implements Runnable{
@@ -123,12 +123,15 @@ public class Postprocessor {
          double totalPeering = ospfPeering+bgpPeering;
          double totalInternal = ospfInternal+bgpInternal;
          double totalExternal = ospfExternal+bgpExternal;
-         stat = stamp+"\t"+numDevice+"\t"+(mstpInst.size()+1)+"\t"+totalPeering+"\t"+
-               totalInternal+"\t"+totalExternal+"\t"+ospfInst.size()+"\t"+ospfPeering+"\t"+
-               avgOspfSize+"\t"+bgpInst.size()+"\t"+bgpPeering+"\t"+
-               avgBgpSize+"\t"+ospfInternal+"\t"+ospfExternal+"\t"+
-               bgpInternal+"\t"+bgpExternal+"\t"+bgpInternalIbgp+"\t"+bgpInternalEbgp+"\t"+
-               bgpExternalIbgp+"\t"+bgpExternalEbgp+"\t"+intraRefCount+"\n";
+         stat = stamp+"\t"+numDevice+"\t"+(mstpInst.size()+1)+"\t"+
+               totalPeering+"\t"+totalInternal+"\t"+totalExternal+"\t"+
+               ospfInst.size()+"\t"+ospfPeering+"\t"+avgOspfSize+"\t"+
+               bgpInst.size()+"\t"+bgpPeering+"\t"+avgBgpSize+"\t"+
+               ospfInternal+"\t"+ospfExternal+"\t"+
+               bgpInternal+"\t"+bgpExternal+"\t"+
+               bgpInternalIbgp+"\t"+bgpInternalEbgp+"\t"+
+               bgpExternalIbgp+"\t"+bgpExternalEbgp+"\t"+
+               intraRefCount+"\n";
          
          statMstp = stamp +"\t" + SetToString(mstpInst)+"\n";
          statBgpInst = stamp+"\t" + SetToString(bgpInst)+"\n";
@@ -212,6 +215,10 @@ public class Postprocessor {
          List<String[]> s_bgpNeighbor = stamp_bgpNeighbors.get(stamp);
          if(s_bgpNeighbor==null) return ;
          for(String[] n: s_bgpNeighbor){
+            // filter dynamic bgp
+            String neighborMask = n[6];
+            if(!neighborMask.equals("255.255.255.255"))
+               continue;
             String device = n[1];
             String localAs = n[4];
             String ip = n[5];
