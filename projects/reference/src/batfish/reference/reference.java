@@ -81,6 +81,16 @@ public class reference {
       }
       return out;
    }
+   // MSTP <instance, range>
+   List<String[]> mstpInstances = new ArrayList<String[]>();
+   public String OutputMstpInstance(String prefix){
+      if(mstpInstances.size()==0) return prefix+"NA\tNA\n";
+      String out = "";
+      for(String[] i: mstpInstances){
+         out+=prefix+i[0]+"\t"+i[1]+"\n";
+      }
+      return out;
+   }
    
    // Intra-ref <from_type, from_name, to_type, to_name>
    List<String[]> intraRef = new ArrayList<String[]>();
@@ -102,7 +112,7 @@ public class reference {
    }
    public String OutputWarning(String prefix){
       if (warning.equals("")) return "";
-      return prefix+warning;
+      return prefix+warning+"\n";
    }
    
 
@@ -196,6 +206,7 @@ public class reference {
       Likely(currentBgp==null, "EnterBgp: currentBgp not null");
       currentBgp = asNum;
       bgpAses.add(asNum);
+      neighborAs.clear();
    }
    public void ExitBgp(){
       Likely(currentBgp!=null, "ExitBgp: currentBgp null");
@@ -280,7 +291,7 @@ public class reference {
       }
    }
    public void BgpNeighborGroup(String group) {
-      Likely(currentNeighborIp!=null, "BgpNeighborGroup: currentNeighborIp null");
+      Likely(currentNeighborIp!=null, "BgpNeighborGroup: currentNeighborIp null, group is "+group);
       if(groupAs.containsKey(group)){
          String asNum = groupAs.get(group);
          neighborAs.put(currentNeighborIp+"/"+currentNeighborMask, new String[]{currentBgp, currentNeighborIp, currentNeighborMask, asNum});         
@@ -344,7 +355,13 @@ public class reference {
       ospfNetworks.add(new String[]{currentOspf, ip, mask});
    }
    
+   // MSTP
+   public void MstpInstance(String id, String range){
+      mstpInstances.add(new String[]{id, range});
+   }
    
+   
+   // Util
    private String[] FormatValue2IpMask(String format, String value){
       String ip, mask;
       if(format.equals(IP_F)){

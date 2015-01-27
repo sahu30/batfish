@@ -21,6 +21,7 @@ public class Preprocessor {
       String OSPF = "router ospf";
       String BGP = "router bgp";
       String ROUTE_MAP = "route-map";
+      String MSTP = "spanning-tree mst configuration";
       String ACCESS_LIST = "access-list";
       String PREFIX_LIST = "prefix-list";
       String COMMUNITY_LIST = "community-list";
@@ -31,7 +32,8 @@ public class Preprocessor {
       {
          if(!line.startsWith(" ")){
             if(line.startsWith(INTERFACE) || line.startsWith(OSPF) ||
-                  line.startsWith(BGP) || line.startsWith(ROUTE_MAP)){
+                  line.startsWith(BGP) || line.startsWith(ROUTE_MAP) ||
+                  line.startsWith(MSTP)){
                inStanza = true;
             }
             else{

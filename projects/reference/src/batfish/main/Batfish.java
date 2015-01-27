@@ -253,4 +253,21 @@ public class Batfish {
       }
       return out;
    }
+   
+
+   public String OutputMstpInstance(String prefix) {
+      String out = "";
+      if(vendor.startsWith("Cisco")){
+         CiscoGrammar cisco = (CiscoGrammar)parser;
+         out += cisco.OutputMstpInstance(prefix);
+      }
+      else if(vendor.startsWith("Juniper")){
+         FlatJuniperParser juniper = (FlatJuniperParser) parser;
+      }
+      else{
+         System.out.println("unknown device type Error");
+         assert false;
+      }
+      return out;
+   }
 }

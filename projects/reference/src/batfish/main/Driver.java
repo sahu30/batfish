@@ -15,8 +15,9 @@ import batfish.main.Preprocessor;
 
 public class Driver {
    boolean debug = false;
-   int fileIndex = 11;
+   int fileIndex = 14;
    boolean test = false;
+   boolean RefOnly = false;
    
    int numThreads = 5;
    int count=0;
@@ -57,6 +58,8 @@ public class Driver {
       // ospf
       String ospfProc = "";
       String ospfNetwork = "";
+      // mstp
+      String mstpInstance = "";
       // reference
       String intraReference = "";
       
@@ -141,6 +144,8 @@ public class Driver {
                // ospf
                ospfProc += b.OutputOspfProc(prefix);
                ospfNetwork += b.OutputOspfNeitworks(prefix);
+               // mspt
+               mstpInstance +=b.OutputMstpInstance(prefix);
                // reference
                intraReference += b.OutputIntraReference(prefix);
             }
@@ -172,6 +177,8 @@ public class Driver {
             // ospf
             WriteToFile(ospfProc, outputPath+"/ospfProc.txt", true);
             WriteToFile(ospfNetwork, outputPath+"/ospfNetwork.txt", true);
+            // mstp
+            WriteToFile(mstpInstance, outputPath+"/mstpInstance.txt", true);
             // itnraReference
             WriteToFile(intraReference, outputPath+"/intraReference.txt", true);
             
@@ -195,6 +202,8 @@ public class Driver {
             // ospf
             ospfProc = "";
             ospfNetwork = "";
+            // mstp
+            mstpInstance = "";
             // reference
             intraReference = "";
          }
@@ -228,6 +237,12 @@ public class Driver {
 		if(test){
 		   fileList = "testcase/test.txt";
 		}
+		
+		if(RefOnly){
+		   PostProcess(outputPath, fileList);
+		   return ;
+		}
+		
 		BufferedReader br = new BufferedReader(new FileReader(fileList));  
 		String line = null;  
 		while ((line = br.readLine()) != null)  
@@ -253,8 +268,20 @@ public class Driver {
 		for(int i = 0; i< numThreads; i++){
 		   t[i].join();
 		}
+		// post process
+		PostProcess(outputPath,fileList);
+
 	}
 
+   private void PostProcess(String outputPath, String fileList){
+      long startTime = System.nanoTime();    
+      System.out.println("start to count references");
+      Postprocessor post = new Postprocessor(outputPath, fileList);
+      post.Process();
+      System.out.println("done");
+      System.out.println("time(s): "+ (System.nanoTime()-startTime)/1000000000);
+   }
+   
    private void init(String outputPath){// clean files
       String blank = "";
       // total
@@ -272,6 +299,8 @@ public class Driver {
       // ospf
       WriteToFile(blank, outputPath+"/ospfProc.txt", false);
       WriteToFile(blank, outputPath+"/ospfNetwork.txt", false);
+      // mstp
+      WriteToFile(blank, outputPath+"/mstpInstance.txt", false);
       // itnraReference
       WriteToFile(blank, outputPath+"/intraReference.txt", false);
    }

@@ -43,6 +43,7 @@ public String OutputIfaceIp(String prefix){ return ref.OutputIfaceIp(prefix);  }
 public String OutputBgpNeighborAs(String prefix){  return ref.OutputBgpNeighborAs(prefix); }   
 public String OutputOspfNetworks(String prefix){ return ref.OutputOspfNetworks(prefix);  }
 public String OutputWarning(String prefix){ return ref.OutputWarning(prefix); }
+public String OutputMstpInstance(String prefix){ return ref.OutputMstpInstance(prefix); }
 
 batfish.reference.reference ref = new batfish.reference.reference();
 // Acl
@@ -86,6 +87,9 @@ public void ExitOspf(){ ref.ExitOspf(); }
 public void OspfRoutemap(String routemap){ ref.OspfRoutemap(routemap);  }
 public void OspfAcl(String acl){  ref.OspfAcl(acl); }
 public void OspfNetwork(String format, String value){ ref.OspfNetwork(format, value); }
+
+//
+public void MstpInstance(String i, String r){ ref.MstpInstance(i, r); }
 }
 
 cisco_configuration
@@ -93,6 +97,7 @@ cisco_configuration
    (
       acl_stanza
       | interface_stanza
+      | mstp_configuration_stanza
       | null_stanza
       | route_map_stanza
       | router_bgp_stanza
@@ -102,7 +107,8 @@ cisco_configuration
 
 mstp_instance_substanza
 :
-   INSTANCE DEC VLAN ~NEWLINE* NEWLINE
+   INSTANCE d = DEC VLAN r = range NEWLINE
+   { MstpInstance(_localctx.d.getText(), _localctx.r.getText()); }
 ;
 
 mstp_null_substanza
