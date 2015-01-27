@@ -273,7 +273,7 @@ public class Driver {
 
 	}
 
-   private void PostProcess(String outputPath, String fileList){
+   private void PostProcess(String outputPath, String fileList) throws InterruptedException{
       long startTime = System.nanoTime();    
       System.out.println("start to count references");
       Postprocessor post = new Postprocessor(outputPath, fileList);

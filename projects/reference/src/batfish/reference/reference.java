@@ -64,6 +64,10 @@ public class reference {
    // OSPF proc <proc>
    Set<String> ospfProcs = new HashSet<String>();
    public String OutputOspfProc(String prefix){
+      for(String[] n: ospfNetworks){
+         String proc = n[0];
+         ospfProcs.add(proc);
+      }
       if(ospfProcs.size()==0) return prefix+ "NA\n";
       String out = "";
       for(String proc: ospfProcs){
