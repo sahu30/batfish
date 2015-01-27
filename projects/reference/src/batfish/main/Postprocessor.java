@@ -104,7 +104,7 @@ public class Postprocessor {
       // ospfInternalPeering, ospfExternalPeering,
       // bgpInternalPeering, bgpExternalPeering,
       // ibgpInternal, ebgpInternal
-      // ibgpExternal, ibgpExternal
+      // ibgpExternal, ebgpExternal
       // intraRef
       
 
